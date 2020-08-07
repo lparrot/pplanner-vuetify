@@ -1,0 +1,71 @@
+package fr.lauparr.pplanner.server.entities;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import fr.lauparr.pplanner.server.pojos.ModifiableEntity;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Collection;
+
+@Data
+@Entity
+@Table(name = "members")
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+public class Member extends ModifiableEntity implements UserDetails {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  private String username;
+  @JsonIgnore
+  private String password;
+  @ManyToOne
+  private Group group;
+
+  private String firstName;
+  private String lastName;
+  private String avatar;
+  private LocalDate birthday;
+
+  @Builder
+  public Member(String username, String firstName, String lastName, LocalDate birthday, String avatar, Group group) {
+    this.username = username;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.birthday = birthday;
+    this.avatar = avatar;
+    this.group = group;
+  }
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return this.group.getRoles();
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
+}
