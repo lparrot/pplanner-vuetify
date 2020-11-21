@@ -1,9 +1,14 @@
 <template>
-  <section>
-        Index
-  </section>
+  <div>
+    <Button>Cliquez ici</Button>
+  </div>
 </template>
 
 <script>
-export default {}
+import Button from '../components/Button'
+
+export default {
+  components: { Button },
+  auth: false,
+}
 </script>

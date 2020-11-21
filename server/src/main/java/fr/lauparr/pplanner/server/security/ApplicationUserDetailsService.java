@@ -19,7 +19,6 @@ public class ApplicationUserDetailsService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) {
-    System.out.println("ApplicationUserDetailsService.loadUserByUsername");
     return this.memberRepository.findByUsernameAndDateSuppressionIsNull(username).orElseThrow(() -> new UsernameNotFoundException("Bad login or password"));
   }
 }

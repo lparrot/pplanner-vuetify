@@ -17,7 +17,9 @@ public class Group extends ModifiableEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   private String name;
+
   @Enumerated(EnumType.STRING)
   @ElementCollection(fetch = FetchType.EAGER)
   private List<Role> roles = new ArrayList<>();

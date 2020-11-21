@@ -1,29 +1,32 @@
 package fr.lauparr.pplanner.server.controllers;
 
+import fr.lauparr.pplanner.server.params.ProjectPatchParams;
 import fr.lauparr.pplanner.server.pojos.AbstractController;
-import fr.lauparr.pplanner.server.repositories.ProjectRepository;
+import fr.lauparr.pplanner.server.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "${info.api.prefix}/projects")
 public class ProjectController extends AbstractController {
 
   @Autowired
-  private ProjectRepository projectRepository;
+  private ProjectService projectService;
 
   @GetMapping
-  public ResponseEntity getAll() {
-    return ok(projectRepository.findAll());
+  public ResponseEntity getAllProjects() {
+    return this.ok(this.projectService.getAllProjects());
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity getById(@PathVariable Long id) {
-    return ok(projectRepository.findById(id));
+  public ResponseEntity getProjectById(@PathVariable("id") Long id) {
+    return this.ok(this.projectService.getProjectById(id));
+  }
+
+  @PatchMapping("/{id}")
+  public ResponseEntity patchProjectById(@PathVariable("id") Long id, @RequestBody ProjectPatchParams params) {
+    return this.ok(this.projectService.patchProjectById(id, params));
   }
 
 }

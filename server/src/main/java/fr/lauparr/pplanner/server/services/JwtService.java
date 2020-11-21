@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @Service
 public class JwtService {
 
-  public static final String USERNAME = "username";
   private static final SignatureAlgorithm signature = SignatureAlgorithm.HS256;
   @Getter
   @Value("${security.jwt.token-prefix:Bearer}")
@@ -42,7 +41,7 @@ public class JwtService {
       return null;
     }
     // Récupération des informations utilisateur
-    Claims claims = Jwts.claims();
+    Claims claims = member.getClaims();
 
     // Récupération des id des rôles de l'utilisateur
     if (member.getAuthorities() != null) {
@@ -50,7 +49,6 @@ public class JwtService {
     }
 
     // Récupération du nom de compte de l'utilisateur
-    claims.put(USERNAME, member.getUsername());
     claims.setSubject(member.getUsername());
 
     return Jwts.builder().setClaims(claims).signWith(signature, this.secretKey).compact();
@@ -92,11 +90,7 @@ public class JwtService {
     if (token != null) {
       token = token.replace(String.format("%s ", this.tokenPrefix), "");
       try {
-        Claims claims = Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token).getBody();
-        if (claims.get(USERNAME) == null) {
-          claims.put(USERNAME, claims.getSubject());
-        }
-        return claims;
+        return Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token).getBody();
       } catch (JwtException e) {
         throw new TaggedApplicationException("jwt", "Erreur lors de la conversion du token: " + e.getMessage());
       }

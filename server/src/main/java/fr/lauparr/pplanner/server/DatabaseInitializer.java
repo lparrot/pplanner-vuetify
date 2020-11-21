@@ -11,6 +11,7 @@ import fr.lauparr.pplanner.server.repositories.ProjectRepository;
 import fr.lauparr.pplanner.server.utils.DateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -26,6 +27,8 @@ public class DatabaseInitializer implements CommandLineRunner {
   private GroupRepository groupRepository;
   @Autowired
   private ProjectRepository projectRepository;
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   @Override
   public void run(String... args) throws Exception {
@@ -38,15 +41,35 @@ public class DatabaseInitializer implements CommandLineRunner {
       groupRepository.saveAll(Arrays.asList(administrator, user));
 
       // Members
-      Member member = Member.builder().username("laurent.parrot").firstName("Laurent").lastName("Parrot").avatar(faker.avatar().image()).birthday(LocalDate.of(1983, 9, 5)).group(administrator).build();
+      Member member = Member.builder()
+        .username("laurent.parrot")
+        .password(passwordEncoder.encode("123"))
+        .firstName("Laurent")
+        .lastName("Parrot")
+        .email("kestounet@gmail.com")
+        .avatar(faker.avatar().image())
+        .birthday(LocalDate.of(1983, 9, 5))
+        .group(administrator)
+        .build();
 
       memberRepository.save(member);
       IntStream.rangeClosed(1, 9).forEach(i -> {
         String lastName = faker.name().lastName();
         String firstName = faker.name().firstName();
+        String username = String.format("%s.%s", lastName.toLowerCase(), firstName.toLowerCase());
         LocalDate birthday = DateTimeUtils.convertToLocalDate(faker.date().birthday());
 
-        Member generatedMember = Member.builder().username(String.format("%s.%s", lastName.toLowerCase(), firstName.toLowerCase())).firstName(firstName).lastName(lastName).avatar(faker.avatar().image()).birthday(birthday).group(user).build();
+        Member generatedMember = Member.builder()
+          .username(username)
+          .password(passwordEncoder.encode("123"))
+          .firstName(firstName)
+          .lastName(lastName)
+          .email(faker.internet().emailAddress(username))
+          .avatar(faker.avatar().image())
+          .birthday(birthday)
+          .group(user)
+          .build();
+
         memberRepository.save(generatedMember);
       });
 

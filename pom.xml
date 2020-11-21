@@ -11,6 +11,10 @@
 
   <packaging>pom</packaging>
 
+  <properties>
+    <java.version>1.8</java.version>
+  </properties>
+
   <modules>
     <module>server</module>
     <module>web</module>
