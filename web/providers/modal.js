@@ -16,7 +16,7 @@ export class ModalProvider {
   confirm (message, title, buttons, closeOnBackdrop = true) {
     const instance = this._createModalWithMessage(message, title, closeOnBackdrop, (instance) => {
 
-      const containerNode = instance.$createElement('div', { class: { 'flex items-end': true } })
+      const containerNode = instance.$createElement('div', { class: { 'flex justify-end': true } })
 
       containerNode.children = buttons.map(button => {
         return instance.$createElement(
@@ -63,7 +63,6 @@ export class ModalProvider {
       this.instances = this.instances.filter(i => i.index !== instance.index)
       instance.$destroy()
       instance.$el.remove()
-      console.log(this)
     })
 
     // Création du message dans le slot
