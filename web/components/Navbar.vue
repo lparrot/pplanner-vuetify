@@ -3,11 +3,11 @@
     <div class="flex flex-col max-w-screen-xl px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
       <div class="p-4 flex flex-row items-center justify-between">
         <slot name="before-title"></slot>
-        <a class="text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg focus:outline-none focus:shadow-outline" href="#">
+        <nuxt-link :to="brandHref" class="text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg focus:outline-none focus:shadow-outline">
           <slot name="title">
             <span :class="`text-${titleColor}-500`" class="font-bold">{{ title }}</span>
           </slot>
-        </a>
+        </nuxt-link>
         <slot name="after-title"></slot>
         <button class="md:hidden rounded-lg focus:outline-none focus:shadow-outline" @click="open = !open">
           <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -49,6 +49,10 @@ export default {
   },
 
   props: {
+    brandHref: {
+      type: String,
+      default: '/',
+    },
     menu: {
       type: Array,
       default: [],

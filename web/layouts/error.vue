@@ -1,7 +1,19 @@
 <template>
   <div>
-    <h1 v-if="error.statusCode === 404">
-      {{ pageNotFound }} </h1>
+    <template v-if="error.statusCode === 404">
+      <div class="absolute top-0 left-0 h-screen w-screen bg-yellow-400 flex justify-center content-center flex-wrap z-50">
+        <div class="font-sans text-white text-center">
+          <div class="text-error inline-block">404</div>
+          <div class="text-4xl">Page introuvable</div>
+
+          <slot name="prev-link">
+            <div class="text-lg mt-8">
+              <div class="cursor-pointer underline" @click="$router.go(-1)">Revenir à la page précédente</div>
+            </div>
+          </slot>
+        </div>
+      </div>
+    </template>
     <h1 v-else>
       {{ otherError }} </h1>
     <nuxt-link to="/">
@@ -21,8 +33,8 @@ export default {
   },
   data () {
     return {
-      pageNotFound: '404 Not Found',
-      otherError: 'An error occurred',
+      pageNotFound: 'Page introuvale',
+      otherError: 'Une erreur est survenue',
     }
   },
   head () {
@@ -36,7 +48,7 @@ export default {
 </script>
 
 <style scoped>
-h1 {
-  font-size: 20px;
+.text-error {
+  font-size: 10rem;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container mx-auto">
     <Navbar :menu="menu" :show="$auth.loggedIn">
       <template #title>
         <span class="font-bold text-red-700">PP</span><span class="text-red-500">laner</span>
@@ -15,9 +15,11 @@
         </template>
       </template>
     </Navbar>
-    <div class="leading-8">
-      <nuxt/>
+
+    <div class="p-4 leading-8">
+      <nuxt></nuxt>
     </div>
+
     <Notifications/>
   </div>
   <!--  <v-app id="main-app">-->

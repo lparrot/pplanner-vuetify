@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" v-bind="$attrs" v-on="$listeners" :class="[`bg-${variant} hover:bg-${variant}-600`, disabledClasses]" class="rounded text-white px-4 py-2 font-bold focus:outline-none">
+  <component :is="tag" v-bind="$attrs" v-on="$listeners" :class="[`bg-${variant} hover:bg-${variant}-600`, disabledClasses]" class="rounded text-white px-2 py-1 font-bold focus:outline-none">
     <slot></slot>
   </component>
 </template>

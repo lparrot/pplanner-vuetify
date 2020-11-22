@@ -4,8 +4,8 @@ module.exports = {
   extend: {
     colors: {
       'default': colorsWithDefault(colors.gray),
-      'primary': colorsWithDefault(colors.violet),
-      'secondary': colorsWithDefault(colors.teal),
+      'primary': colorsWithDefault(colors.red),
+      'secondary': colorsWithDefault(colors.orange),
       'success': colorsWithDefault(colors.green),
       'info': colorsWithDefault(colors.blue),
       'warn': colorsWithDefault(colors.orange),
