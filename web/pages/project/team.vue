@@ -6,8 +6,8 @@
         <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Ici vous pourrez gérer votre équipe en ajoutant, modifiant ou supprimant un ou plusieurs membres.</p>
       </div>
       <div class="flex flex-wrap -m-2">
-        <TeamMember v-for="(user, memberIndex) in members" :key="memberIndex" :user="user">
-          <button class="btn-action" @click="onButtonModalEditClick(user)">
+        <TeamMember v-for="(member, memberIndex) in members" :key="memberIndex" :member="member">
+          <button class="btn-action" @click="onButtonModalEditClick(member)">
             <i class="fas fa-edit"></i>
           </button>
           <button class="btn-action">
@@ -18,14 +18,14 @@
     </div>
 
     <Modal ref="modal_edit" close-on-backdrop size="6xl" title="Modification du membre">
-      <template v-if="user != null">
+      <template v-if="member != null">
         <div class="flex flex-col py-2">
           <div class="text-sm leading-3 text-gray-700 font-bold w-full">Nom du membre</div>
-          <div class="text-xs text-gray-600 w-full">{{ user.name }}</div>
+          <div class="text-xs text-gray-600 w-full">{{ member.name }}</div>
         </div>
         <div class="flex flex-col py-2">
           <div class="text-sm leading-3 text-gray-700 font-bold w-full">Place dans l'équipe</div>
-          <div class="text-xs text-gray-600 w-full">{{ user.job }}</div>
+          <div class="text-xs text-gray-600 w-full">{{ member.job }}</div>
         </div>
       </template>
     </Modal>
@@ -41,7 +41,7 @@ export default {
 
   data () {
     return {
-      user: null,
+      member: null,
       members: [
         { name: 'Henry Letham', job: 'CTO', avatar: 'https://randomuser.me/api/portraits/men/1.jpg' },
         { name: 'Miss Hyun Corwin', job: 'Banking Liaison', avatar: 'https://randomuser.me/api/portraits/women/2.jpg' },
@@ -54,8 +54,8 @@ export default {
   },
 
   methods: {
-    onButtonModalEditClick (user) {
-      this.user = user
+    onButtonModalEditClick (member) {
+      this.member = member
       this.$refs.modal_edit.show()
     },
   },
