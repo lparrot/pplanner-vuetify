@@ -98,6 +98,11 @@ export default {
     this.menu = [
       { label: 'Accueil', path: '/' },
       {
+        label: 'Projet', children: [
+          { label: 'Equipe', path: '/project/team' },
+        ],
+      },
+      {
         label: 'Administration', children: [
           { label: 'Utilisateur', path: '/administration/utilisateur' },
           { label: 'Profil', path: '/administration/profil' },
