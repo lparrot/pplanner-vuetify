@@ -2,12 +2,12 @@ package fr.lauparr.pplanner.server;
 
 import com.github.javafaker.Faker;
 import fr.lauparr.pplanner.server.entities.Group;
-import fr.lauparr.pplanner.server.entities.Member;
 import fr.lauparr.pplanner.server.entities.Project;
 import fr.lauparr.pplanner.server.entities.Role;
+import fr.lauparr.pplanner.server.entities.User;
 import fr.lauparr.pplanner.server.repositories.GroupRepository;
-import fr.lauparr.pplanner.server.repositories.MemberRepository;
 import fr.lauparr.pplanner.server.repositories.ProjectRepository;
+import fr.lauparr.pplanner.server.repositories.UserRepository;
 import fr.lauparr.pplanner.server.utils.DateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -22,7 +22,7 @@ import java.util.stream.IntStream;
 public class DatabaseInitializer implements CommandLineRunner {
 
   @Autowired
-  private MemberRepository memberRepository;
+  private UserRepository userRepository;
   @Autowired
   private GroupRepository groupRepository;
   @Autowired
@@ -32,49 +32,49 @@ public class DatabaseInitializer implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    if (projectRepository.count() < 1) {
+    if (this.projectRepository.count() < 1) {
       Faker faker = Faker.instance();
 
       // Groups
-      Group administrator = Group.builder().name("Administrator").role(Role.ROLE_ADMIN).role(Role.ROLE_USER).build();
-      Group user = Group.builder().name("User").role(Role.ROLE_USER).build();
-      groupRepository.saveAll(Arrays.asList(administrator, user));
+      Group groupAdministrator = Group.builder().name("Administrator").role(Role.ROLE_ADMIN).role(Role.ROLE_USER).build();
+      Group groupUser = Group.builder().name("User").role(Role.ROLE_USER).build();
+      this.groupRepository.saveAll(Arrays.asList(groupAdministrator, groupUser));
 
-      // Members
-      Member member = Member.builder()
+      // Users
+      User user = User.builder()
         .username("laurent.parrot")
-        .password(passwordEncoder.encode("123"))
+        .password(this.passwordEncoder.encode("123"))
         .firstName("Laurent")
         .lastName("Parrot")
         .email("kestounet@gmail.com")
         .avatar(faker.avatar().image())
         .birthday(LocalDate.of(1983, 9, 5))
-        .group(administrator)
+        .group(groupAdministrator)
         .build();
 
-      memberRepository.save(member);
+      this.userRepository.save(user);
       IntStream.rangeClosed(1, 9).forEach(i -> {
         String lastName = faker.name().lastName();
         String firstName = faker.name().firstName();
         String username = String.format("%s.%s", lastName.toLowerCase(), firstName.toLowerCase());
         LocalDate birthday = DateTimeUtils.convertToLocalDate(faker.date().birthday());
 
-        Member generatedMember = Member.builder()
+        User generatedUser = User.builder()
           .username(username)
-          .password(passwordEncoder.encode("123"))
+          .password(this.passwordEncoder.encode("123"))
           .firstName(firstName)
           .lastName(lastName)
           .email(faker.internet().emailAddress(username))
           .avatar(faker.avatar().image())
           .birthday(birthday)
-          .group(user)
+          .group(groupUser)
           .build();
 
-        memberRepository.save(generatedMember);
+        this.userRepository.save(generatedUser);
       });
 
       // Projects
-      projectRepository.saveAll(
+      this.projectRepository.saveAll(
         Arrays.asList(
           Project.builder().name("CCS").description("Carte de circulation sécurisée").build(),
           Project.builder().name("VDD").description("Valise diplomatique défense").build(),

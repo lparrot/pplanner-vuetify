@@ -17,10 +17,10 @@ import java.util.Collection;
 
 @Data
 @Entity
-@Table(name = "members")
+@Table(name = "users")
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Member extends ModifiableEntity implements UserDetails {
+public class User extends ModifiableEntity implements UserDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +45,7 @@ public class Member extends ModifiableEntity implements UserDetails {
   private LocalDate birthday;
 
   @Builder
-  public Member(String username, String password, String email, String firstName, String lastName, LocalDate birthday, String avatar, Group group) {
+  public User(String username, String password, String email, String firstName, String lastName, LocalDate birthday, String avatar, Group group) {
     this.username = username;
     this.password = password;
     this.email = email;

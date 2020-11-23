@@ -1,6 +1,6 @@
 package fr.lauparr.pplanner.server.security;
 
-import fr.lauparr.pplanner.server.repositories.MemberRepository;
+import fr.lauparr.pplanner.server.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,15 +10,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class ApplicationUserDetailsService implements UserDetailsService {
 
-  private final MemberRepository memberRepository;
+  private final UserRepository userRepository;
 
   @Autowired
-  public ApplicationUserDetailsService(MemberRepository memberRepository) {
-    this.memberRepository = memberRepository;
+  public ApplicationUserDetailsService(UserRepository userRepository) {
+    this.userRepository = userRepository;
   }
 
   @Override
   public UserDetails loadUserByUsername(String username) {
-    return this.memberRepository.findByUsernameAndDateSuppressionIsNull(username).orElseThrow(() -> new UsernameNotFoundException("Bad login or password"));
+    return this.userRepository.findByUsernameAndDateSuppressionIsNull(username).orElseThrow(() -> new UsernameNotFoundException("Bad login or password"));
   }
 }

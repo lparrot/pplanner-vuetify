@@ -1,6 +1,6 @@
 package fr.lauparr.pplanner.server.services;
 
-import fr.lauparr.pplanner.server.entities.Member;
+import fr.lauparr.pplanner.server.entities.User;
 import fr.lauparr.pplanner.server.exceptions.TaggedApplicationException;
 import fr.lauparr.pplanner.server.security.ApplicationUserDetailsService;
 import fr.lauparr.pplanner.server.utils.DateTimeUtils;
@@ -35,23 +35,23 @@ public class JwtService {
   /**
    * Création d'un token JWT avec les informations du compte utilisateur
    */
-  public String createToken(Member member) {
+  public String createToken(User user) {
     // Aucun token si l'utilisateur est vide
-    if (member == null) {
+    if (user == null) {
       return null;
     }
     // Récupération des informations utilisateur
-    Claims claims = member.getClaims();
+    Claims claims = user.getClaims();
 
     // Récupération des id des rôles de l'utilisateur
-    if (member.getAuthorities() != null) {
-      claims.put("roles", member.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
+    if (user.getAuthorities() != null) {
+      claims.put("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
     }
 
     // Récupération du nom de compte de l'utilisateur
-    claims.setSubject(member.getUsername());
+    claims.setSubject(user.getUsername());
 
-    return Jwts.builder().setClaims(claims).signWith(signature, this.secretKey).compact();
+    return Jwts.builder().setClaims(claims).signWith(JwtService.signature, this.secretKey).compact();
   }
 
   /**
@@ -64,21 +64,21 @@ public class JwtService {
       jwtBuilder.setExpiration(DateTimeUtils.convertLocalDateTimeToDate(expiration));
     }
 
-    return jwtBuilder.signWith(signature, this.secretKey).compact();
+    return jwtBuilder.signWith(JwtService.signature, this.secretKey).compact();
   }
 
   /**
    * Récupération de l'utilisateur par rapport au token
    */
-  public Member getUser(String token) {
+  public User getUser(String token) {
     Claims claims = this.getClaims(token);
-    return (Member) this.userDetailsService.loadUserByUsername(claims.getSubject());
+    return (User) this.userDetailsService.loadUserByUsername(claims.getSubject());
   }
 
   /**
    * Récupération de l'utilisateur par rapport au token passé dans les headers de la requête
    */
-  public Member getUser(HttpServletRequest request) {
+  public User getUser(HttpServletRequest request) {
     String token = request.getHeader(this.headerName);
     return this.getUser(token);
   }
