@@ -1,14 +1,9 @@
 package fr.lauparr.pplanner.server;
 
 import com.github.javafaker.Faker;
-import fr.lauparr.pplanner.server.entities.Group;
-import fr.lauparr.pplanner.server.entities.Project;
-import fr.lauparr.pplanner.server.entities.Role;
-import fr.lauparr.pplanner.server.entities.User;
-import fr.lauparr.pplanner.server.repositories.GroupRepository;
-import fr.lauparr.pplanner.server.repositories.ProjectRepository;
-import fr.lauparr.pplanner.server.repositories.UserRepository;
-import fr.lauparr.pplanner.server.utils.DateTimeUtils;
+import fr.lauparr.pplanner.server.entities.*;
+import fr.lauparr.pplanner.server.repositories.*;
+import fr.lauparr.pplanner.server.utils.UtilsDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +22,10 @@ public class DatabaseInitializer implements CommandLineRunner {
   private GroupRepository groupRepository;
   @Autowired
   private ProjectRepository projectRepository;
+  @Autowired
+  private TeamRepository teamRepository;
+  @Autowired
+  private MemberRepository memberRepository;
   @Autowired
   private PasswordEncoder passwordEncoder;
 
@@ -57,7 +56,7 @@ public class DatabaseInitializer implements CommandLineRunner {
         String lastName = faker.name().lastName();
         String firstName = faker.name().firstName();
         String username = String.format("%s.%s", lastName.toLowerCase(), firstName.toLowerCase());
-        LocalDate birthday = DateTimeUtils.convertToLocalDate(faker.date().birthday());
+        LocalDate birthday = UtilsDateTime.convertToLocalDate(faker.date().birthday());
 
         User generatedUser = User.builder()
           .username(username)
@@ -74,13 +73,36 @@ public class DatabaseInitializer implements CommandLineRunner {
       });
 
       // Projects
-      this.projectRepository.saveAll(
-        Arrays.asList(
-          Project.builder().name("CCS").description("Carte de circulation sécurisée").build(),
-          Project.builder().name("VDD").description("Valise diplomatique défense").build(),
-          Project.builder().name("PRDV").description("Eureka - module prise de rendez-vous").build()
-        )
-      );
+      Project projectCcs = Project.builder().name("CCS").description("Carte de circulation sécurisée").build();
+      Project projectVdd = Project.builder().name("VDD").description("Valise diplomatique défense").build();
+      Project projectPrdv = Project.builder().name("PRDV").description("Eureka - module prise de rendez-vous").build();
+
+      this.projectRepository.saveAll(Arrays.asList(projectCcs, projectVdd, projectPrdv));
+
+      // Teams
+      Team teamCcs = Team.builder().name("Team CCS").project(projectCcs).build();
+      Team teamVdd = Team.builder().name("Team VDD").project(projectVdd).build();
+      Team teamPrdv = Team.builder().name("Team PRDV").project(projectPrdv).build();
+
+      this.teamRepository.saveAll(Arrays.asList(teamCcs, teamVdd, teamPrdv));
+
+      // Members
+
+      /*
+      IntStream.rangeClosed(1, 50).forEach(i -> {
+        Member member = Member.builder()
+          .fullName(faker.name().fullName())
+          .avatar(faker.avatar().image())
+          .build();
+
+        this.memberRepository.save(member);
+
+        Team team = UtilsDao.findRandom(this.teamRepository);
+        team.getMembers().add(member);
+        this.teamRepository.save(team);
+      });
+      */
+
     }
   }
 

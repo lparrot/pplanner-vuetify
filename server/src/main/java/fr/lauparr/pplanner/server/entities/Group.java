@@ -4,6 +4,7 @@ import fr.lauparr.pplanner.server.pojos.ModifiableEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class Group extends ModifiableEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @NotBlank
   private String name;
 
   @Enumerated(EnumType.STRING)

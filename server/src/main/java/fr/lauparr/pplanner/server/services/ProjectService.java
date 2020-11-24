@@ -4,7 +4,7 @@ import fr.lauparr.pplanner.server.entities.Project;
 import fr.lauparr.pplanner.server.exceptions.MessageException;
 import fr.lauparr.pplanner.server.params.ProjectPatchParams;
 import fr.lauparr.pplanner.server.repositories.ProjectRepository;
-import fr.lauparr.pplanner.server.utils.BeanUtils;
+import fr.lauparr.pplanner.server.utils.UtilsBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -18,17 +18,17 @@ public class ProjectService {
   private ProjectRepository projectRepository;
 
   public List<Project> getAllProjects() {
-    return projectRepository.findAll(Sort.by("name"));
+    return this.projectRepository.findAll(Sort.by("name"));
   }
 
   public Project getProjectById(Long id) {
-    return projectRepository.findById(id).orElseThrow(() -> new MessageException("Unable to find project with id " + id));
+    return this.projectRepository.findById(id).orElseThrow(() -> new MessageException("Unable to find project with id " + id));
   }
 
   public Project patchProjectById(Long id, ProjectPatchParams params) {
-    Project project = getProjectById(id);
-    BeanUtils.copyProperties(params, project, true);
-    projectRepository.save(project);
+    Project project = this.getProjectById(id);
+    UtilsBean.copyProperties(params, project, true);
+    this.projectRepository.save(project);
     return project;
   }
 

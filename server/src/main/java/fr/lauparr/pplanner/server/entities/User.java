@@ -9,9 +9,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.Collection;
 
@@ -26,6 +28,7 @@ public class User extends ModifiableEntity implements UserDetails {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @NotBlank
   private String username;
 
   @JsonIgnore
@@ -67,6 +70,9 @@ public class User extends ModifiableEntity implements UserDetails {
   @Override
   @JsonIgnore
   public Collection<? extends GrantedAuthority> getAuthorities() {
+    if (this.group == null) {
+      return AuthorityUtils.NO_AUTHORITIES;
+    }
     return this.group.getRoles();
   }
 

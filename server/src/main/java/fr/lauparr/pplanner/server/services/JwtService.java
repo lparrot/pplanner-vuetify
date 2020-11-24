@@ -3,7 +3,7 @@ package fr.lauparr.pplanner.server.services;
 import fr.lauparr.pplanner.server.entities.User;
 import fr.lauparr.pplanner.server.exceptions.TaggedApplicationException;
 import fr.lauparr.pplanner.server.security.ApplicationUserDetailsService;
-import fr.lauparr.pplanner.server.utils.DateTimeUtils;
+import fr.lauparr.pplanner.server.utils.UtilsDateTime;
 import io.jsonwebtoken.*;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ public class JwtService {
     JwtBuilder jwtBuilder = Jwts.builder().setClaims(claims);
 
     if (expiration != null) {
-      jwtBuilder.setExpiration(DateTimeUtils.convertLocalDateTimeToDate(expiration));
+      jwtBuilder.setExpiration(UtilsDateTime.convertLocalDateTimeToDate(expiration));
     }
 
     return jwtBuilder.signWith(JwtService.signature, this.secretKey).compact();
