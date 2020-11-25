@@ -1,19 +1,33 @@
 export const strict = false
 
 export const state = () => ({
-  project: null,
+  selectedProject: null,
+  projectList: [],
 })
 
 export const getters = {}
 
 export const actions = {
-  setProject (context, project) {
-    context.commit('setProject', project)
+  async selectProject (context, project) {
+    context.commit('setSelectedProject', project)
+  },
+
+  async updateProjectList (context) {
+    if (!this.$auth.loggedIn) {
+      context.commit('setProjectList', [])
+    } else {
+      const res = await this.$axios.$get('/api/projects')
+      context.commit('setProjectList', res.data)
+    }
   },
 }
 
 export const mutations = {
-  setProject (state, project) {
-    state.project = project
+  setSelectedProject (state, project) {
+    state.selectedProject = project
+  },
+
+  setProjectList (state, projects) {
+    state.projectList = projects
   },
 }

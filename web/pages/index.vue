@@ -28,6 +28,12 @@ export default {
 
   auth: false,
 
+  async asyncData (ctx) {
+    if (ctx.$auth.loggedIn && ctx.store.state.project.selectedProject != null) {
+      ctx.redirect('/dashboard')
+    }
+  },
+
   data () {
     return {
       checkItems: [

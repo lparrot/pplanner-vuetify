@@ -23,11 +23,12 @@
     </Navbar>
 
     <div v-if="$auth.loggedIn" class="bg-default-100 rounded py-2">
-      <Dropdown label="Aucun projet selectionné">
-        <DropdownItem>CCS</DropdownItem>
-        <DropdownItem>VDD</DropdownItem>
-        <DropdownItem>PRDV</DropdownItem>
-      </Dropdown>
+      <div class="flex  items-center mx-2 text-sm text-gray-600">
+        <div>Projet selectionné:</div>
+        <Dropdown :label="selectedProjectName">
+          <DropdownItem v-for="(project, projectIndex) in projectList" :key="projectIndex" @click.native="selectProject(project)">{{ project.name }}</DropdownItem>
+        </Dropdown>
+      </div>
     </div>
 
     <div class="p-4 leading-8">
@@ -49,64 +50,6 @@
 
     <Notifications />
   </div>
-  <!--  <v-app id="main-app">-->
-  <!--    <v-app-bar app clipped-left clipped-right color="blue-grey" dark>-->
-  <!--      <v-app-bar-nav-icon @click.stop="drawer = !drawer" v-if="$vuetify.breakpoint.mobile"></v-app-bar-nav-icon>-->
-  <!--      <v-btn @click="$router.push('/')" rounded text>-->
-  <!--        <v-toolbar-title>PPlanner</v-toolbar-title>-->
-  <!--      </v-btn>-->
-  <!--      <v-spacer></v-spacer>-->
-  <!--      <template v-if="$auth.loggedIn">-->
-  <!--        <v-btn icon @click="logout">-->
-  <!--          <v-icon>mdi-power</v-icon>-->
-  <!--        </v-btn>-->
-  <!--      </template>-->
-  <!--      <template v-else>-->
-  <!--        <v-btn icon @click="$router.push('/login')">-->
-  <!--          <v-icon>mdi-login</v-icon>-->
-  <!--        </v-btn>-->
-  <!--      </template>-->
-  <!--    </v-app-bar>-->
-
-  <!--    <v-navigation-drawer ref="drawerRef" :mini-variant.sync="mini" app clipped :expand-on-hover="!$vuetify.breakpoint.mobile" v-model="drawer">-->
-  <!--      <v-list v-if="$auth.loggedIn" dense>-->
-  <!--        <v-list-item class="px-2">-->
-  <!--          <v-list-item-avatar>-->
-  <!--            <v-img :src="$auth.user.avatar"></v-img>-->
-  <!--          </v-list-item-avatar>-->
-  <!--          <v-list-item-content link v-if="!mini">-->
-  <!--            <v-list-item-title class="title" v-text="$auth.user.fullname"></v-list-item-title>-->
-  <!--            <v-list-item-subtitle v-text="$auth.user.email"></v-list-item-subtitle>-->
-  <!--          </v-list-item-content>-->
-  <!--        </v-list-item>-->
-  <!--      </v-list>-->
-
-  <!--      <v-divider></v-divider>-->
-
-  <!--      <v-list dense>-->
-  <!--        <v-list-item to="/">-->
-  <!--          <v-list-item-action>-->
-  <!--            <v-icon>mdi-home</v-icon>-->
-  <!--          </v-list-item-action>-->
-  <!--          <v-list-item-content>-->
-  <!--            <v-list-item-title>Accueil</v-list-item-title>-->
-  <!--          </v-list-item-content>-->
-  <!--        </v-list-item>-->
-  <!--      </v-list>-->
-  <!--    </v-navigation-drawer>-->
-
-  <!--    <v-main>-->
-  <!--      <v-container fluid>-->
-  <!--        <nuxt/>-->
-  <!--      </v-container>-->
-  <!--    </v-main>-->
-
-  <!--    <v-footer app class="white&#45;&#45;text" color="blue-grey">-->
-  <!--      <span>Vuetify</span>-->
-  <!--      <v-spacer></v-spacer>-->
-  <!--      <span>&copy; {{ new Date().getFullYear() }}</span>-->
-  <!--    </v-footer>-->
-  <!--  </v-app>-->
 </template>
 
 <script>
@@ -115,14 +58,32 @@ import NavbarItem from '@/components/NavbarItem'
 import Notifications from '@/components/Notifications'
 import Dropdown from '~/components/Dropdown'
 import DropdownItem from '~/components/DropdownItem'
+import { mapState } from 'vuex'
 
 export default {
   components: { DropdownItem, Dropdown, NavbarItem, Notifications, Navbar },
+
   data () {
     return {
       menu: [],
     }
   },
+
+  async fetch () {
+    await this.$store.dispatch('project/updateProjectList')
+  },
+
+  computed: {
+    ...mapState({
+      selectedProject: state => state.project.selectedProject,
+      projectList: state => state.project.projectList,
+    }),
+
+    selectedProjectName () {
+      return this.selectedProject != null ? this.selectedProject.name : 'Aucun projet selectionné'
+    },
+  },
+
   created () {
     this.menu = [
       { label: 'Accueil', path: '/' },
@@ -145,10 +106,16 @@ export default {
       },
     ]
   },
+
   methods: {
     async logout () {
       await this.$auth.logout()
       await this.$router.push('/login')
+    },
+
+    async selectProject (project) {
+      await this.$store.dispatch('project/selectProject', project)
+      await this.$router.push('/dashboard')
     },
   },
 }

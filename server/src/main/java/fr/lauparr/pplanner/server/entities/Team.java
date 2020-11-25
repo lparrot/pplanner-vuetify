@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Singular;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -24,7 +23,7 @@ public class Team {
   @NotBlank
   private String name;
 
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.MERGE)
   @JsonManagedReference(value = "team_member_ref")
   private List<Member> members = new ArrayList<>();
 
@@ -36,9 +35,12 @@ public class Team {
   }
 
   @Builder
-  public Team(@NotBlank String name, @Singular List<Member> members, Project project) {
+  public Team(@NotBlank String name, Project project) {
     this.name = name;
-    this.members = members;
     this.project = project;
+  }
+
+  public void addMember(Member member) {
+    this.members.add(member);
   }
 }

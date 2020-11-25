@@ -27,15 +27,15 @@ public abstract class UtilsDao {
   }
 
   public static <T> List<T> convertListDto(List<?> liste, Class<T> clazz) {
-    return (List<T>) liste.stream().map(x -> UtilsDao.convertToDto(x, clazz)).collect(Collectors.toList());
+    return liste.stream().map(x -> UtilsDao.convertToDto(x, clazz)).collect(Collectors.toList());
   }
 
-  public static <T> T findRandom(PagingAndSortingRepository repository) {
+  public static <T> T findRandom(PagingAndSortingRepository<T, ?> repository) {
     long count = repository.count();
     int idx = new SecureRandom().nextInt((int) count);
-    List result = repository.findAll(PageRequest.of(idx, 1)).getContent();
+    List<T> result = repository.findAll(PageRequest.of(idx, 1)).getContent();
     if (!result.isEmpty()) {
-      return (T) result.get(0);
+      return result.get(0);
     }
     return null;
   }
@@ -45,7 +45,7 @@ public abstract class UtilsDao {
    *
    * @return Path
    */
-  public static <T> Path getPathFromRoot(Root<T> root, String field) {
+  public static <T> Path<T> getPathFromRoot(Root<T> root, String field) {
     String principal;
     String[] fields = null;
     if (field != null) {
@@ -57,7 +57,7 @@ public abstract class UtilsDao {
     } else {
       principal = null;
     }
-    Path p;
+    Path<T> p;
     if (UtilsDao.isSubPath(fields)) {
       p = UtilsDao.crossPathToPath(root.join(principal, JoinType.LEFT), fields);
     } else {
@@ -81,8 +81,8 @@ public abstract class UtilsDao {
    *
    * @return Path
    */
-  private static Path crossPathToPath(Path path, String[] fields) {
-    Path lastPath = path;
+  private static <T> Path<T> crossPathToPath(Path<T> path, String[] fields) {
+    Path<T> lastPath = path;
     if (fields != null) {
       for (String key : fields) {
         lastPath = lastPath.get(key);
