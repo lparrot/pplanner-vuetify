@@ -4,8 +4,8 @@
       <span>{{ label }}</span>
       <i class="fas fa-chevron-down text-sm"></i>
     </button>
-    <div v-show="opened" :class="{'right-0': right}" class="absolute mt-2 rounded-md shadow-lg md:w-48">
-      <div class="px-2 py-2 bg-white rounded-md shadow">
+    <transition name="bounce">
+      <div v-show="opened" :class="{'right-0': right}" class="absolute mt-2 rounded-md shadow-lg md:w-48 px-2 py-2 bg-white rounded-md shadow">
         <template v-if="items != null && items.length > 0">
           <template v-for="(item, itemIndex) in items">
             <DropdownItem :key="itemIndex" :class="`hover:bg-${variant}-600`" :exact-active-class="`text-white bg-${variant}`" :to="item.path" exact @click.native="onItemClick">
@@ -18,7 +18,7 @@
           <slot></slot>
         </template>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -84,3 +84,26 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.bounce-enter-active {
+  animation: bounce-in .5s;
+}
+
+.bounce-leave-active {
+  animation: bounce-in .5s reverse;
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+    @apply scale-y-0 opacity-0;
+  }
+  100% {
+    transform: scaleY(1);
+    transform-origin: top;
+    @apply scale-y-100 opacity-100;
+  }
+}
+</style>
