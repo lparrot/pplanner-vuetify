@@ -71,10 +71,11 @@ export default {
 
   proxy: {
     '/api': {
-      target: 'http://localhost:8080',
-      changeOrigin: true,
+      target: 'http://[::1]:8080',
+      changeOrigin: false,
     },
   },
+
   /*
   ** Auth module configuration
   ** See https://auth.nuxtjs.org/api

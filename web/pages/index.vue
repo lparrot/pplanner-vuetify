@@ -16,10 +16,6 @@
         </div>
       </div>
     </div>
-
-    <Modal ref="modal" close-on-backdrop title="Welcome !">
-      Contenu de la modal
-    </Modal>
   </div>
 </template>
 
@@ -38,29 +34,11 @@ export default {
         { label: 'Création de backlog et chiffrage du projet', icon: 'far fa-check-circle' },
         { label: 'Création de feuille de route globale et détaillée', icon: 'far fa-check-circle' },
         { label: 'Suivi des itérations', icon: 'far fa-check-circle' },
-        { label: 'Afficher une modale simple', icon: 'far fa-check-circle', action: () => this.$refs.modal.show() },
-        { label: 'Afficher une modale dynamique', icon: 'far fa-check-circle', action: () => this.showDynamicModal() },
-        { label: 'Afficher une modal de confirmation dynamiquement', icon: 'far fa-check-circle', action: () => this.showDynamicConfirm() },
+        { label: 'Gestion des fichiers liés aux projets', icon: 'far fa-check-circle' },
+        { label: 'Echanges entre la maitrise d\'oeuvre et la maitrise d\'ouvrage', icon: 'far fa-check-circle' },
+        { label: 'Restitutions graphiques et génération de rapports', icon: 'far fa-check-circle' },
       ],
     }
-  },
-
-  methods: {
-    showDynamicModal () {
-      this.$modal.message('Hello from <b>There !!!</b>', 'Mon titre')
-    },
-    showDynamicConfirm () {
-      this.$modal.confirm('Etes vous sûr ?', 'Confirmation', [
-        {
-          label: 'Annuler', action: (modal) => modal.hide(),
-        },
-        {
-          label: 'OK', action: (modal) => {
-            this.$modal.message('Merci !')
-          },
-        }],
-      )
-    },
   },
 }
 </script>

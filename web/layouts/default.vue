@@ -11,16 +11,39 @@
           <NavbarItem to="/login">Se connecter</NavbarItem>
         </template>
         <template v-else>
-          <NavbarItem link tag="a" @click="logout">Se déconnecter</NavbarItem>
+          <div class="flex items-center">
+            <img v-if="$auth.user.email != null" :src="$gravatar.url($auth.user.email)" alt="avatar" class="w-6 h-6 rounded-full">
+            <NavbarDropdown :label="$auth.user.fullname">
+              <NavbarDropdownItem to="/profile">Profil</NavbarDropdownItem>
+              <NavbarDropdownItem @click.native="logout">Se deconnecter</NavbarDropdownItem>
+            </NavbarDropdown>
+          </div>
         </template>
       </template>
     </Navbar>
+
+    <div v-if="$auth.loggedIn" class="bg-default-100 rounded-full py-2">
+
+    </div>
 
     <div class="p-4 leading-8">
       <nuxt></nuxt>
     </div>
 
-    <Notifications/>
+    <div class="bg-default-100 rounded-b">
+      <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
+        <p class="text-gray-500 text-sm text-center sm:text-left">© 2020 tailblocks —
+          PPlanner &copy; {{ new Date().getFullYear() }}
+        </p>
+        <p class="sm:ml-auto sm:mt-0 mt-2 sm:w-auto w-full sm:text-left text-center text-gray-500 text-sm">
+          <span>Mentions légales</span>
+          <span class="mx-1">&#9642;</span>
+          <span>Conditions d'utilisation</span>
+        </p>
+      </div>
+    </div>
+
+    <Notifications />
   </div>
   <!--  <v-app id="main-app">-->
   <!--    <v-app-bar app clipped-left clipped-right color="blue-grey" dark>-->
@@ -86,9 +109,11 @@
 import Navbar from '@/components/Navbar'
 import NavbarItem from '@/components/NavbarItem'
 import Notifications from '@/components/Notifications'
+import NavbarDropdown from '~/components/NavbarDropdown'
+import NavbarDropdownItem from '~/components/NavbarDropdownItem'
 
 export default {
-  components: { NavbarItem, Notifications, Navbar },
+  components: { NavbarDropdownItem, NavbarDropdown, NavbarItem, Notifications, Navbar },
   data () {
     return {
       menu: [],

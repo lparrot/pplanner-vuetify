@@ -20,12 +20,12 @@ public class SecurityController extends AbstractController {
   private JwtService jwtService;
 
   @PostMapping("/login")
-  ResponseEntity postLogin(@RequestBody SecurityPostLoginParams params) {
+  public ResponseEntity postLogin(@RequestBody SecurityPostLoginParams params) {
     return ok(securityService.login(params.getUsername(), params.getPassword()));
   }
 
   @GetMapping("/user")
-  ResponseEntity getUser(HttpServletRequest request) {
+  public ResponseEntity getUser(HttpServletRequest request) {
     return ok(jwtService.getClaims(request));
   }
 

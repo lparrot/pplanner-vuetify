@@ -20,8 +20,8 @@
         <slot name="before-menu"></slot>
         <template v-if="show">
           <template v-for="(menuItem, menuItemIndex) in menu">
-            <NavbarItem v-if="menuItem.children == null" :key="menuItemIndex" :to="menuItem.path" :variant="variant" exact>{{ menuItem.label }}</NavbarItem>
-            <NavbarDropdown v-else :key="menuItemIndex" :items="menuItem.children" :variant="variant">{{ menuItem.label }}</NavbarDropdown>
+            <NavbarItem v-if="menuItem.children == null" :key="menuItemIndex" :to="menuItem.path" exact>{{ menuItem.label }}</NavbarItem>
+            <NavbarDropdown v-else :key="menuItemIndex" :items="menuItem.children" :label="menuItem.label"></NavbarDropdown>
           </template>
         </template>
         <slot name="after-menu"></slot>
@@ -83,12 +83,6 @@ export default {
     return {
       open: false,
     }
-  },
-
-  methods: {
-    onClickDropdownOutside () {
-      this.open = false
-    },
   },
 }
 </script>
