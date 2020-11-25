@@ -90,11 +90,12 @@ public class InitializerService {
 
       // Ajout de l'utilisateur par défaut dans l'équipe de chaque projet
       Member member = new Member(user);
-      memberRepository.save(member);
+      member.setJob(faker.job().title());
+      this.memberRepository.save(member);
 
-      teamService.addMember(member, teamCcs);
-      teamService.addMember(member, teamVdd);
-      teamService.addMember(member, teamPrdv);
+      this.teamService.addMember(member, teamCcs);
+      this.teamService.addMember(member, teamVdd);
+      this.teamService.addMember(member, teamPrdv);
 
       this.teamRepository.saveAll(Arrays.asList(teamCcs, teamVdd, teamPrdv));
 
@@ -102,13 +103,14 @@ public class InitializerService {
 
       IntStream.rangeClosed(1, 50).forEach(i -> {
         Member generatedMember = Member.builder()
-          .fullName(faker.name().fullName())
+          .fullname(faker.name().fullName())
+          .job(faker.job().title())
           .avatar(faker.avatar().image())
           .build();
 
         generatedMember = this.memberRepository.save(generatedMember);
 
-        teamService.addMember(generatedMember, UtilsDao.findRandom(this.teamRepository));
+        this.teamService.addMember(generatedMember, UtilsDao.findRandom(this.teamRepository));
       });
 
     }

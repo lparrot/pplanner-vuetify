@@ -19,9 +19,11 @@ public class Member implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String fullName;
+  private String fullname;
 
   private String avatar;
+
+  private String job;
 
   @ManyToOne
   private User user;
@@ -34,14 +36,15 @@ public class Member implements Serializable {
   }
 
   @Builder
-  public Member(String fullName, String avatar, @Singular List<Team> teams) {
-    this.fullName = fullName;
+  public Member(String fullname, String avatar, String job, @Singular List<Team> teams) {
+    this.fullname = fullname;
     this.avatar = avatar;
+    this.job = job;
     this.teams = teams;
   }
 
   public Member(User user) {
-    this.fullName = String.format("%s %s", user.getLastName(), user.getFirstName());
+    this.fullname = String.format("%s %s", user.getLastName(), user.getFirstName());
     this.avatar = user.getAvatar();
     this.user = user;
   }

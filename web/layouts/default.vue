@@ -31,7 +31,7 @@
           </Dropdown>
         </div>
 
-        <div class="flex flex-row">
+        <div v-if="selectedProject != null" class="flex flex-row">
           <nuxt-link class="text-sm text-white bg-gray-500 p-2 rounded" to="/project/team">Equipe</nuxt-link>
         </div>
       </div>
@@ -44,8 +44,7 @@
     <div class="bg-default-100 rounded-b">
       <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
         <p class="text-gray-500 text-sm text-center sm:text-left">© 2020 tailblocks —
-          PPlanner &copy; {{ new Date().getFullYear() }}
-        </p>
+          PPlanner &copy; {{ new Date().getFullYear() }} </p>
         <p class="sm:ml-auto sm:mt-0 mt-2 sm:w-auto w-full sm:text-left text-center text-gray-500 text-sm">
           <span>Mentions légales</span>
           <span class="mx-1">&#9642;</span>
@@ -54,7 +53,7 @@
       </div>
     </div>
 
-    <Notifications />
+    <Notifications/>
   </div>
 </template>
 
@@ -62,9 +61,9 @@
 import Navbar from '@/components/Navbar'
 import NavbarItem from '@/components/NavbarItem'
 import Notifications from '@/components/Notifications'
+import { mapState } from 'vuex'
 import Dropdown from '~/components/Dropdown'
 import DropdownItem from '~/components/DropdownItem'
-import { mapState } from 'vuex'
 
 export default {
   components: { DropdownItem, Dropdown, NavbarItem, Notifications, Navbar },

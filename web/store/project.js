@@ -3,21 +3,29 @@ export const strict = false
 export const state = () => ({
   selectedProject: null,
   projectList: [],
+  memberList: [],
 })
 
 export const getters = {}
 
 export const actions = {
-  async selectProject (context, project) {
-    context.commit('setSelectedProject', project)
+  async selectProject (ctx, project) {
+    ctx.commit('setSelectedProject', project)
   },
 
-  async updateProjectList (context) {
+  async updateProjectList (ctx) {
     if (!this.$auth.loggedIn) {
-      context.commit('setProjectList', [])
+      ctx.commit('setProjectList', [])
     } else {
       const res = await this.$axios.$get('/api/projects')
-      context.commit('setProjectList', res.data)
+      ctx.commit('setProjectList', res.data)
+    }
+  },
+
+  async findTeam (ctx) {
+    if (ctx.state.selectedProject != null) {
+      const res = await this.$axios.$get(`/api/projects/${ctx.state.selectedProject.id}/teams`)
+      ctx.commit('setMemberList', res.data.members)
     }
   },
 }
@@ -29,5 +37,9 @@ export const mutations = {
 
   setProjectList (state, projects) {
     state.projectList = projects
+  },
+
+  setMemberList (state, members) {
+    state.memberList = members
   },
 }

@@ -3,8 +3,10 @@ package fr.lauparr.pplanner.server.services;
 import fr.lauparr.pplanner.server.entities.Member;
 import fr.lauparr.pplanner.server.entities.Team;
 import fr.lauparr.pplanner.server.exceptions.MessageException;
+import fr.lauparr.pplanner.server.projections.TeamSimpleProjection;
 import fr.lauparr.pplanner.server.repositories.MemberRepository;
 import fr.lauparr.pplanner.server.repositories.TeamRepository;
+import fr.lauparr.pplanner.server.utils.UtilsDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +24,14 @@ public class TeamService {
     }
 
     if (member.getUser() != null) {
-      member = memberRepository.findMemberByUser(member.getUser()).orElse(member);
+      member = this.memberRepository.findMemberByUser(member.getUser()).orElse(member);
     }
 
     team.addMember(member);
-    teamRepository.save(team);
+    this.teamRepository.save(team);
   }
 
+  public TeamSimpleProjection findTeamByProjectId(Long id) {
+    return UtilsDao.convertToDto(this.teamRepository.findByProjectId(id), TeamSimpleProjection.class);
+  }
 }

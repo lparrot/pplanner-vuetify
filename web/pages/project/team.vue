@@ -6,9 +6,9 @@
         <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Ici vous pourrez gérer votre équipe en ajoutant, modifiant ou supprimant un ou plusieurs membres.</p>
       </div>
       <div class="flex flex-wrap -m-2">
-        <TeamMember v-for="(member, memberIndex) in members" :key="memberIndex" :member="member">
+        <TeamMember v-for="(member, memberIndex) in memberList" :key="memberIndex" :member="member">
           <button class="btn-action" @click="onButtonModalEditClick(member)">
-            <i class="fas fa-edit"></i>
+            <i class="fas fa-pen"></i>
           </button>
           <button class="btn-action">
             <i class="fas fa-trash"></i>
@@ -21,7 +21,7 @@
       <template v-if="member != null">
         <div class="flex flex-col py-2">
           <div class="text-sm leading-3 text-gray-700 font-bold w-full">Nom du membre</div>
-          <div class="text-xs text-gray-600 w-full">{{ member.name }}</div>
+          <div class="text-xs text-gray-600 w-full">{{ member.fullname }}</div>
         </div>
         <div class="flex flex-col py-2">
           <div class="text-sm leading-3 text-gray-700 font-bold w-full">Place dans l'équipe</div>
@@ -35,6 +35,7 @@
 <script>
 import Modal from '@/components/Modal'
 import TeamMember from '@/components/TeamMember'
+import { mapState } from 'vuex'
 
 export default {
   components: { TeamMember, Modal },
@@ -42,15 +43,17 @@ export default {
   data () {
     return {
       member: null,
-      members: [
-        { name: 'Henry Letham', job: 'CTO', avatar: 'https://randomuser.me/api/portraits/men/1.jpg' },
-        { name: 'Miss Hyun Corwin', job: 'Banking Liaison', avatar: 'https://randomuser.me/api/portraits/women/2.jpg' },
-        { name: 'Fredericka Bogisich', job: 'Legal Officer', avatar: 'https://randomuser.me/api/portraits/women/3.jpg' },
-        { name: 'Ivory Wolf V', job: 'National Banking Technician', avatar: 'https://randomuser.me/api/portraits/men/4.jpg' },
-        { name: 'Kirstin Kub', job: 'International Accounting Administrator', avatar: 'https://randomuser.me/api/portraits/women/5.jpg' },
-        { name: 'Grady Braun', job: 'Corporate Engineer', avatar: 'https://randomuser.me/api/portraits/women/6.jpg' },
-      ],
     }
+  },
+
+  computed: {
+    ...mapState({
+      memberList: state => state.project.memberList,
+    }),
+  },
+
+  async asyncData (ctx) {
+    await ctx.store.dispatch('project/findTeam')
   },
 
   methods: {
