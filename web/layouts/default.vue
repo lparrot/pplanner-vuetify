@@ -13,17 +13,21 @@
         <template v-else>
           <div class="flex items-center">
             <img v-if="$auth.user.email != null" :src="$gravatar.url($auth.user.email)" alt="avatar" class="w-6 h-6 rounded-full">
-            <NavbarDropdown :label="$auth.user.fullname">
-              <NavbarDropdownItem to="/profile">Profil</NavbarDropdownItem>
-              <NavbarDropdownItem @click.native="logout">Se deconnecter</NavbarDropdownItem>
-            </NavbarDropdown>
+            <Dropdown :label="$auth.user.fullname" right>
+              <DropdownItem to="/profile">Profil</DropdownItem>
+              <DropdownItem @click.native="logout">Se deconnecter</DropdownItem>
+            </Dropdown>
           </div>
         </template>
       </template>
     </Navbar>
 
-    <div v-if="$auth.loggedIn" class="bg-default-100 rounded-full py-2">
-
+    <div v-if="$auth.loggedIn" class="bg-default-100 rounded py-2">
+      <Dropdown label="Aucun projet selectionné">
+        <DropdownItem>CCS</DropdownItem>
+        <DropdownItem>VDD</DropdownItem>
+        <DropdownItem>PRDV</DropdownItem>
+      </Dropdown>
     </div>
 
     <div class="p-4 leading-8">
@@ -109,11 +113,11 @@
 import Navbar from '@/components/Navbar'
 import NavbarItem from '@/components/NavbarItem'
 import Notifications from '@/components/Notifications'
-import NavbarDropdown from '~/components/NavbarDropdown'
-import NavbarDropdownItem from '~/components/NavbarDropdownItem'
+import Dropdown from '~/components/Dropdown'
+import DropdownItem from '~/components/DropdownItem'
 
 export default {
-  components: { NavbarDropdownItem, NavbarDropdown, NavbarItem, Notifications, Navbar },
+  components: { DropdownItem, Dropdown, NavbarItem, Notifications, Navbar },
   data () {
     return {
       menu: [],

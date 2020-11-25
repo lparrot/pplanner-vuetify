@@ -4,13 +4,13 @@
       <span>{{ label }}</span>
       <i class="fas fa-chevron-down text-sm"></i>
     </button>
-    <div v-show="opened" class="absolute right-0 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48">
+    <div v-show="opened" :class="{'right-0': right}" class="absolute mt-2 rounded-md shadow-lg md:w-48">
       <div class="px-2 py-2 bg-white rounded-md shadow">
         <template v-if="items != null && items.length > 0">
           <template v-for="(item, itemIndex) in items">
-            <NavbarDropdownItem :key="itemIndex" :class="`hover:bg-${variant}-600`" :exact-active-class="`text-white bg-${variant}`" :to="item.path" exact @click.native="onItemClick">
+            <DropdownItem :key="itemIndex" :class="`hover:bg-${variant}-600`" :exact-active-class="`text-white bg-${variant}`" :to="item.path" exact @click.native="onItemClick">
               {{ item.label }}
-            </NavbarDropdownItem>
+            </DropdownItem>
           </template>
         </template>
 
@@ -24,16 +24,16 @@
 
 <script>
 import { mixin as clickaway } from 'vue-clickaway'
-import NavbarDropdownItem from '~/components/NavbarDropdownItem'
+import DropdownItem from '~/components/DropdownItem'
 
 export default {
-  name: 'NavbarDropdown',
+  name: 'Dropdown',
 
-  components: { NavbarDropdownItem },
+  components: { DropdownItem },
 
   provide () {
     return {
-      navbar_dropdown: this,
+      dropdown: this,
     }
   },
 
@@ -47,6 +47,10 @@ export default {
     label: {
       type: String,
       default: '',
+    },
+    right: {
+      type: Boolean,
+      default: false,
     },
     variant: {
       type: String,

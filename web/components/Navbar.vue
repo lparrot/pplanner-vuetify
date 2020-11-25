@@ -21,7 +21,7 @@
         <template v-if="show">
           <template v-for="(menuItem, menuItemIndex) in menu">
             <NavbarItem v-if="menuItem.children == null" :key="menuItemIndex" :to="menuItem.path" exact>{{ menuItem.label }}</NavbarItem>
-            <NavbarDropdown v-else :key="menuItemIndex" :items="menuItem.children" :label="menuItem.label"></NavbarDropdown>
+            <Dropdown v-else :key="menuItemIndex" :items="menuItem.children" :label="menuItem.label"></Dropdown>
           </template>
         </template>
         <slot name="after-menu"></slot>
@@ -34,13 +34,13 @@
 </template>
 
 <script>
-import NavbarDropdown from '@/components/NavbarDropdown'
+import Dropdown from '@/components/Dropdown'
 import NavbarItem from '@/components/NavbarItem'
 
 export default {
   name: 'Navbar',
 
-  components: { NavbarItem, NavbarDropdown },
+  components: { NavbarItem, Dropdown },
 
   provide () {
     return {
