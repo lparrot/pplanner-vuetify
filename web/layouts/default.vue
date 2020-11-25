@@ -23,11 +23,17 @@
     </Navbar>
 
     <div v-if="$auth.loggedIn" class="bg-default-100 rounded py-2">
-      <div class="flex  items-center mx-2 text-sm text-gray-600">
-        <div>Projet selectionné:</div>
-        <Dropdown :label="selectedProjectName">
-          <DropdownItem v-for="(project, projectIndex) in projectList" :key="projectIndex" @click.native="selectProject(project)">{{ project.name }}</DropdownItem>
-        </Dropdown>
+      <div class="flex justify-between items-center mx-2 text-sm text-gray-600">
+        <div class="flex flex-row items-center">
+          <div>Projet selectionné:</div>
+          <Dropdown :label="selectedProjectName">
+            <DropdownItem v-for="(project, projectIndex) in projectList" :key="projectIndex" @click.native="selectProject(project)">{{ project.name }}</DropdownItem>
+          </Dropdown>
+        </div>
+
+        <div class="flex flex-row">
+          <nuxt-link class="text-sm text-white bg-gray-500 p-2 rounded" to="/project/team">Equipe</nuxt-link>
+        </div>
       </div>
     </div>
 
@@ -87,11 +93,6 @@ export default {
   created () {
     this.menu = [
       { label: 'Accueil', path: '/' },
-      {
-        label: 'Projet', children: [
-          { label: 'Equipe', path: '/project/team' },
-        ],
-      },
       {
         label: 'Administration', children: [
           { label: 'Utilisateur', path: '/administration/utilisateur' },
