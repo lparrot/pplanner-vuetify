@@ -1,6 +1,6 @@
 <template>
-  <div v-on-clickaway="hide" class="absolute right-2 bottom-2 flex justify-center flex-col-reverse items-end">
-    <div class="relative  bottom-0 right-0">
+  <div v-on-clickaway="hide" class="fixed right-0 bottom-0 flex justify-center flex-col-reverse items-end">
+    <div class="relative bottom-0 right-0 p-2">
       <slot name="button">
         <button class="bg-primary text-white w-12 h-12 rounded-full font-bold shadow-lg z-30 focus:outline-none" @click="onContainerClick">
           <i class="fas fa-envelope"></i>

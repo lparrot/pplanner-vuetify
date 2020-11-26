@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -29,6 +31,10 @@ public class Project extends ModifiableEntity {
   @OneToOne(mappedBy = "project")
   @JsonManagedReference(value = "project_team_ref")
   private Team team;
+
+  @OneToMany(mappedBy = "project")
+  @JsonManagedReference(value = "project_file_ref")
+  private List<ProjectFile> files = new ArrayList<>();
 
   @Builder
   public Project(Long id, String name, String description, Team team) {

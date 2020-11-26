@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    <div class="p-4 leading-8">
+    <div class="py-4 leading-8">
       <nuxt ref="nuxt_navigation"></nuxt>
     </div>
 
