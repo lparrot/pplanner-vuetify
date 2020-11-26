@@ -4,7 +4,7 @@
       <img :src="$gravatar.url(member.avatar)" alt="team" class="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4">
       <div class="flex-grow">
         <h2 class="text-gray-900 title-font font-medium">{{ member.fullname }}</h2>
-        <p class="text-gray-500">{{ member.job }}</p>
+        <p class="text-gray-500 text-sm">{{ member.job }}</p>
       </div>
 
       <div class="flex justify-end">

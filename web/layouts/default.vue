@@ -38,7 +38,7 @@
     </div>
 
     <div class="p-4 leading-8">
-      <nuxt></nuxt>
+      <nuxt ref="nuxt_navigation"></nuxt>
     </div>
 
     <div class="bg-default-100 rounded-b">
@@ -53,7 +53,7 @@
       </div>
     </div>
 
-    <Notifications/>
+    <Notifications />
   </div>
 </template>
 
@@ -114,8 +114,14 @@ export default {
     },
 
     async selectProject (project) {
+      const noSelectedProject = this.selectedProject == null
       await this.$store.dispatch('project/selectProject', project)
-      await this.$router.push('/dashboard')
+      if (noSelectedProject) {
+        await this.$router.push('/dashboard')
+      } else {
+        // Utilisation du $forceUpdate pour rafraichir la page
+        this.$refs.nuxt_navigation.$forceUpdate()
+      }
     },
   },
 }
