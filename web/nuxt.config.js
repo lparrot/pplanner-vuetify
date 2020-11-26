@@ -41,6 +41,7 @@ export default {
   */
   plugins: [
     '~/plugins/app',
+    '~/plugins/scoped-slots',
     '~/plugins/vue-fragment',
     '~/plugins/vee-validate',
   ],

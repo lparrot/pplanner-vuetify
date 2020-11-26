@@ -5,7 +5,7 @@
       <i class="fas fa-chevron-down text-sm"></i>
     </button>
     <transition name="bounce">
-      <div v-show="opened" :class="{'right-0': right}" class="absolute mt-2 rounded-md shadow-lg md:w-48 px-2 py-2 bg-white rounded-md shadow">
+      <div v-show="opened" :class="{'right-0': right}" class="absolute mt-2 rounded-md shadow-lg md:w-48 px-2 py-2 bg-white rounded-md shadow z-20">
         <template v-if="items != null && items.length > 0">
           <template v-for="(item, itemIndex) in items">
             <DropdownItem :key="itemIndex" :class="`hover:bg-${variant}-600`" :exact-active-class="`text-white bg-${variant}`" :to="item.path" exact @click.native="onItemClick">

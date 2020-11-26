@@ -5,7 +5,6 @@ import fr.lauparr.pplanner.server.entities.User;
 import fr.lauparr.pplanner.server.exceptions.MessageException;
 import fr.lauparr.pplanner.server.params.ProjectPatchParams;
 import fr.lauparr.pplanner.server.pojos.Statistics;
-import fr.lauparr.pplanner.server.projections.ProjectFileSimpleProjection;
 import fr.lauparr.pplanner.server.projections.ProjectSimpleProjection;
 import fr.lauparr.pplanner.server.repositories.ProjectRepository;
 import fr.lauparr.pplanner.server.utils.UtilsBean;
@@ -23,7 +22,7 @@ public class ProjectService {
   private ProjectRepository projectRepository;
 
   public List<ProjectSimpleProjection> getAllProjects() {
-    final User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     return UtilsDao.convertListDto(this.projectRepository.findProjectByUser(principal.getId()), ProjectSimpleProjection.class);
   }
 
@@ -35,14 +34,10 @@ public class ProjectService {
   }
 
   public Statistics getStatisticsByProjectId(Long id) {
-    Project project = getProjectById(id);
+    Project project = this.getProjectById(id);
     Statistics statistics = new Statistics();
     statistics.setMembers(project.getTeam().getMembers().size());
     return statistics;
-  }
-
-  public List<ProjectFileSimpleProjection> getProjectFilesByProjectId(Long id) {
-    return UtilsDao.convertListDto(getProjectById(id).getFiles(), ProjectFileSimpleProjection.class);
   }
 
   public Project getProjectById(Long id) {
