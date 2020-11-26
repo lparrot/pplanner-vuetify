@@ -41,6 +41,7 @@ export default {
   */
   plugins: [
     '~/plugins/app',
+    '~/plugins/vue-fragment',
     '~/plugins/vee-validate',
   ],
   /*

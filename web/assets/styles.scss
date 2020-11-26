@@ -7,3 +7,49 @@
 .btn-action {
   @apply rounded-full bg-primary text-white text-sm w-8 h-8 mx-1 hover:bg-primary-700 focus:outline-none;
 }
+
+// Bounce animation
+
+.bounce-enter-active {
+  animation: bounce-in .5s;
+}
+
+.bounce-leave-active {
+  animation: bounce-in .5s reverse;
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+    @apply scale-y-0 opacity-0;
+  }
+  100% {
+    transform: scaleY(1);
+    transform-origin: top;
+    @apply scale-y-100 opacity-100;
+  }
+}
+
+// Translate animation
+
+.translate-enter-active {
+  animation: translate-in .5s;
+}
+
+.translate-leave-active {
+  animation: translate-in .5s reverse;
+}
+
+@keyframes translate-in {
+  0% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+    @apply opacity-0;
+  }
+  100% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+    @apply opacity-100;
+  }
+}

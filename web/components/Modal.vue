@@ -85,7 +85,7 @@ export default {
     },
 
     toggle () {
-      this.opened = !this.opened
+      this.opened ? this.hide() : this.show()
     },
   },
 

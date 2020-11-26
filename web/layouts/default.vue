@@ -23,7 +23,7 @@
     </Navbar>
 
     <div v-if="$auth.loggedIn" class="bg-default-100 rounded py-2">
-      <div class="flex justify-between items-center mx-2 text-sm text-gray-600">
+      <div class="flex flex-col md:flex-row justify-between items-center mx-2 text-sm text-gray-600">
         <div class="flex flex-row items-center">
           <div>Projet selectionné:</div>
           <Dropdown :label="selectedProjectName">
@@ -56,7 +56,10 @@
       </div>
     </div>
 
-    <Notifications />
+    <Notifications>
+      <NotificationItem>Bienvenue sur PPlanner !</NotificationItem>
+      <NotificationItem>Voici une petite notification pour vous prévenir que notre site est actuellement en construction. De ce fait, plusieurs modules ne sont pas à 100% fonctionnel</NotificationItem>
+    </Notifications>
   </div>
 </template>
 
@@ -68,9 +71,10 @@ import Notifications from '@/components/Notifications'
 import { mapState } from 'vuex'
 import Dropdown from '~/components/Dropdown'
 import DropdownItem from '~/components/DropdownItem'
+import NotificationItem from '@/components/NotificationItem'
 
 export default {
-  components: { Avatar, DropdownItem, Dropdown, NavbarItem, Notifications, Navbar },
+  components: { NotificationItem, Avatar, DropdownItem, Dropdown, NavbarItem, Notifications, Navbar },
 
   data () {
     return {
