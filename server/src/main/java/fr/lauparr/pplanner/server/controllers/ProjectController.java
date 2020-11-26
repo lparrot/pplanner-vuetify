@@ -1,7 +1,7 @@
 package fr.lauparr.pplanner.server.controllers;
 
 import fr.lauparr.pplanner.server.params.ProjectPatchParams;
-import fr.lauparr.pplanner.server.pojos.AbstractController;
+import fr.lauparr.pplanner.server.pojos.api.AbstractController;
 import fr.lauparr.pplanner.server.services.ProjectService;
 import fr.lauparr.pplanner.server.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,11 @@ public class ProjectController extends AbstractController {
   @GetMapping("/{id}/teams")
   public ResponseEntity getTeamByProjectId(@PathVariable("id") Long id) {
     return this.ok(this.teamService.findTeamByProjectId(id));
+  }
+
+  @GetMapping("/{id}/statistics")
+  public ResponseEntity getStatisticsByProjectId(@PathVariable("id") Long id) {
+    return this.ok(this.projectService.getStatisticsByProjectId(id));
   }
 
 }

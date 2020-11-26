@@ -1,4 +1,4 @@
-package fr.lauparr.pplanner.server.pojos;
+package fr.lauparr.pplanner.server.pojos.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public abstract class ResponseBase {
 
-	private boolean success;
+  private boolean success;
 
 }

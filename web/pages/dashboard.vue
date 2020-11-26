@@ -11,19 +11,19 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   middleware: 'auth',
 
-  data () {
-    return {
-      statistics: [
-        { icon: 'fas fa-sitemap', label: 'Members', number: 0, to: '/project/team' },
-        { icon: 'fas fa-folder', label: 'Fichiers', number: 0, to: '/project/file_manager' },
-        { icon: 'fas fa-tasks', label: 'Items de backlog', number: 0, to: '/project/backlog' },
-        { icon: 'fas fa-clock', label: 'Nombre J.H', number: 0, to: '/project/backlog' },
-        { icon: 'fas fa-redo', label: 'Itérations', number: 0, to: '/project/iteration' },
-      ],
-    }
+  computed: {
+    ...mapState({
+      statistics: state => state.project.statistics,
+    }),
+  },
+
+  async asyncData (ctx) {
+    await ctx.store.dispatch('project/updateStatistics')
   },
 }
 </script>

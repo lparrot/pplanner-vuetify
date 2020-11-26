@@ -1,7 +1,7 @@
 package fr.lauparr.pplanner.server.controllers;
 
 import fr.lauparr.pplanner.server.params.SecurityPostLoginParams;
-import fr.lauparr.pplanner.server.pojos.AbstractController;
+import fr.lauparr.pplanner.server.pojos.api.AbstractController;
 import fr.lauparr.pplanner.server.services.JwtService;
 import fr.lauparr.pplanner.server.services.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;

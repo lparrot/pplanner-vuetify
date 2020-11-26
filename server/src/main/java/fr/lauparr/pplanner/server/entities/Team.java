@@ -27,7 +27,7 @@ public class Team {
   @JsonManagedReference(value = "team_member_ref")
   private List<Member> members = new ArrayList<>();
 
-  @ManyToOne
+  @OneToOne
   @JsonBackReference(value = "project_team_ref")
   private Project project;
 

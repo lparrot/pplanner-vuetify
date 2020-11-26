@@ -1,6 +1,6 @@
 package fr.lauparr.pplanner.server.exceptions;
 
-import fr.lauparr.pplanner.server.pojos.ResponseError;
+import fr.lauparr.pplanner.server.pojos.api.ResponseError;
 import fr.lauparr.pplanner.server.utils.UtilsController;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

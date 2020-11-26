@@ -1,4 +1,4 @@
-package fr.lauparr.pplanner.server.pojos;
+package fr.lauparr.pplanner.server.pojos.api;
 
 import fr.lauparr.pplanner.server.exceptions.TaggedApplicationException;
 import fr.lauparr.pplanner.server.utils.UtilsController;

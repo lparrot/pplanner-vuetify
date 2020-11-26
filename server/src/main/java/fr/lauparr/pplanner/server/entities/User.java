@@ -1,7 +1,7 @@
 package fr.lauparr.pplanner.server.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import fr.lauparr.pplanner.server.pojos.ModifiableEntity;
+import fr.lauparr.pplanner.server.pojos.api.ModifiableEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.Builder;

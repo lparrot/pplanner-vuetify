@@ -1,4 +1,4 @@
-package fr.lauparr.pplanner.server.pojos;
+package fr.lauparr.pplanner.server.pojos.api;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

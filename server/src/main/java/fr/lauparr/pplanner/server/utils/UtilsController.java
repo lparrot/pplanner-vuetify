@@ -1,7 +1,7 @@
 package fr.lauparr.pplanner.server.utils;
 
-import fr.lauparr.pplanner.server.pojos.ApiConstraint;
-import fr.lauparr.pplanner.server.pojos.ResponseError;
+import fr.lauparr.pplanner.server.pojos.api.ApiConstraint;
+import fr.lauparr.pplanner.server.pojos.api.ResponseError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import javax.validation.*;

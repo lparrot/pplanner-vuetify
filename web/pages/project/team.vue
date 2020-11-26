@@ -2,7 +2,7 @@
   <div>
     <div class="container px-5 py-24 mx-auto">
       <div class="flex flex-col text-center w-full mb-20">
-        <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Equipe du projet</h1>
+        <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Equipe du projet {{ selectedProject.name }}</h1>
         <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Ici vous pourrez gérer votre équipe en ajoutant, modifiant ou supprimant un ou plusieurs membres.</p>
       </div>
       <div class="flex flex-wrap -m-2">
@@ -48,6 +48,7 @@ export default {
 
   computed: {
     ...mapState({
+      selectedProject: state => state.project.selectedProject,
       memberList: state => state.project.memberList,
     }),
   },

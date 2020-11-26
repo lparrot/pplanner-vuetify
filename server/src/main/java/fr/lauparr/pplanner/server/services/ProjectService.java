@@ -4,6 +4,7 @@ import fr.lauparr.pplanner.server.entities.Project;
 import fr.lauparr.pplanner.server.entities.User;
 import fr.lauparr.pplanner.server.exceptions.MessageException;
 import fr.lauparr.pplanner.server.params.ProjectPatchParams;
+import fr.lauparr.pplanner.server.pojos.Statistics;
 import fr.lauparr.pplanner.server.projections.ProjectSimpleProjection;
 import fr.lauparr.pplanner.server.repositories.ProjectRepository;
 import fr.lauparr.pplanner.server.utils.UtilsBean;
@@ -25,10 +26,6 @@ public class ProjectService {
     return UtilsDao.convertListDto(this.projectRepository.findProjectByUser(principal.getId()), ProjectSimpleProjection.class);
   }
 
-  public Project getProjectById(Long id) {
-    return this.projectRepository.findById(id).orElseThrow(() -> new MessageException("Unable to find project with id " + id));
-  }
-
   public Project patchProjectById(Long id, ProjectPatchParams params) {
     Project project = this.getProjectById(id);
     UtilsBean.copyProperties(params, project, true);
@@ -36,4 +33,14 @@ public class ProjectService {
     return project;
   }
 
+  public Statistics getStatisticsByProjectId(Long id) {
+    Project project = getProjectById(id);
+    Statistics statistics = new Statistics();
+    statistics.setMembers(project.getTeam().getMembers().size());
+    return statistics;
+  }
+
+  public Project getProjectById(Long id) {
+    return this.projectRepository.findById(id).orElseThrow(() -> new MessageException(String.format("Impossible de trouver le projet ayant l'id %s", id)));
+  }
 }

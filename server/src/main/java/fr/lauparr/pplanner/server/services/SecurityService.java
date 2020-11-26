@@ -2,7 +2,7 @@ package fr.lauparr.pplanner.server.services;
 
 import fr.lauparr.pplanner.server.entities.User;
 import fr.lauparr.pplanner.server.exceptions.MessageException;
-import fr.lauparr.pplanner.server.pojos.JwtToken;
+import fr.lauparr.pplanner.server.pojos.api.JwtToken;
 import fr.lauparr.pplanner.server.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

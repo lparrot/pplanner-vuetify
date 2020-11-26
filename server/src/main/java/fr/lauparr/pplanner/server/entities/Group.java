@@ -1,6 +1,6 @@
 package fr.lauparr.pplanner.server.entities;
 
-import fr.lauparr.pplanner.server.pojos.ModifiableEntity;
+import fr.lauparr.pplanner.server.pojos.api.ModifiableEntity;
 import lombok.*;
 
 import javax.persistence.*;

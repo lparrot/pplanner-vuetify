@@ -1,7 +1,7 @@
 package fr.lauparr.pplanner.server.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import fr.lauparr.pplanner.server.pojos.ModifiableEntity;
+import fr.lauparr.pplanner.server.pojos.api.ModifiableEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,15 +26,16 @@ public class Project extends ModifiableEntity {
 
   private String description;
 
-  @ManyToOne
+  @OneToOne(mappedBy = "project")
   @JsonManagedReference(value = "project_team_ref")
   private Team team;
 
   @Builder
-  public Project(Long id, String name, String description) {
+  public Project(Long id, String name, String description, Team team) {
     this.id = id;
     this.name = name;
     this.description = description;
+    this.team = team;
   }
 }
 

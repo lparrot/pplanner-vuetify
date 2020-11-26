@@ -1,4 +1,4 @@
-package fr.lauparr.pplanner.server.pojos;
+package fr.lauparr.pplanner.server.pojos.api;
 
 import io.jsonwebtoken.Claims;
 import lombok.Builder;

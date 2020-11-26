@@ -12,7 +12,7 @@
         </template>
         <template v-else>
           <div class="flex items-center">
-            <img v-if="$auth.user.email != null" :src="$gravatar.url($auth.user.email)" alt="avatar" class="w-6 h-6 rounded-full">
+            <Avatar v-if="$auth.user.email != null" :size="36" :src="$auth.user.avatar" :username="$auth.user.email" alt="avatar" class="rounded-full"></Avatar>
             <Dropdown :label="$auth.user.fullname" right>
               <DropdownItem to="/profile">Profil</DropdownItem>
               <DropdownItem @click.native="logout">Se deconnecter</DropdownItem>
@@ -32,7 +32,10 @@
         </div>
 
         <div v-if="selectedProject != null" class="flex flex-row">
-          <nuxt-link class="text-sm text-white bg-gray-500 p-2 rounded" to="/project/team">Equipe</nuxt-link>
+          <nuxt-link class="btn-menu-project" to="/project/team">Equipe</nuxt-link>
+          <nuxt-link class="btn-menu-project" to="/project/file_manager">Fichiers</nuxt-link>
+          <nuxt-link class="btn-menu-project" to="/project/backlog">Backlog</nuxt-link>
+          <nuxt-link class="btn-menu-project" to="/project/iteration">Itérations</nuxt-link>
         </div>
       </div>
     </div>
@@ -43,8 +46,8 @@
 
     <div class="bg-default-100 rounded-b">
       <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
-        <p class="text-gray-500 text-sm text-center sm:text-left">© 2020 tailblocks —
-          PPlanner &copy; {{ new Date().getFullYear() }} </p>
+        <p class="text-gray-500 text-sm text-center sm:text-left">
+          &copy; {{ new Date().getFullYear() }} PPlanner</p>
         <p class="sm:ml-auto sm:mt-0 mt-2 sm:w-auto w-full sm:text-left text-center text-gray-500 text-sm">
           <span>Mentions légales</span>
           <span class="mx-1">&#9642;</span>
@@ -58,6 +61,7 @@
 </template>
 
 <script>
+import Avatar from 'vue-avatar'
 import Navbar from '@/components/Navbar'
 import NavbarItem from '@/components/NavbarItem'
 import Notifications from '@/components/Notifications'
@@ -66,7 +70,7 @@ import Dropdown from '~/components/Dropdown'
 import DropdownItem from '~/components/DropdownItem'
 
 export default {
-  components: { DropdownItem, Dropdown, NavbarItem, Notifications, Navbar },
+  components: { Avatar, DropdownItem, Dropdown, NavbarItem, Notifications, Navbar },
 
   data () {
     return {
@@ -126,3 +130,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.btn-menu-project {
+  @apply text-sm text-white bg-gray-500 p-2 mx-1 rounded;
+}
+</style>
