@@ -1,12 +1,14 @@
 <template>
-  <div class="flex flex-grow">
-    <div class="w-0 xl:w-1/5">
-      <Tree v-model="fileSelected" :nodes="nodes"></Tree>
-    </div>
-    <div class="w-full xl:w-4/5">
-      {{ fileSelected.data }}
-    </div>
-  </div>
+	<div class="flex flex-grow">
+		<div class="w-0 xl:w-1/5">
+			<Tree v-model="fileSelected" :nodes="nodes"></Tree>
+		</div>
+		<div class="w-full xl:w-4/5">
+			<div v-if="fileSelected != null">
+				{{ fileSelected.data }}
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -43,7 +45,7 @@ export default {
   },
 
   async asyncData (ctx) {
-
+    const res = await ctx.$axios.$get(`/api/file_manager/projects/${ctx.store.state.project.selectedProject.id}`)
   },
 }
 </script>
