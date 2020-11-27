@@ -11,14 +11,14 @@
 // Bounce animation
 
 .bounce-enter-active {
-  animation: bounce-in .5s;
+  animation: bounce .5s;
 }
 
 .bounce-leave-active {
-  animation: bounce-in .5s reverse;
+  animation: bounce .5s reverse;
 }
 
-@keyframes bounce-in {
+@keyframes bounce {
   0% {
     transform: scaleY(0);
     transform-origin: top;
@@ -33,15 +33,15 @@
 
 // Translate animation
 
-.translate-enter-active {
-  animation: translate-in .5s;
+.translate-bottom-enter-active {
+  animation: translate-bottom .5s;
 }
 
-.translate-leave-active {
-  animation: translate-in .5s reverse;
+.translate-bottom-leave-active {
+  animation: translate-bottom .5s reverse;
 }
 
-@keyframes translate-in {
+@keyframes translate-bottom {
   0% {
     transform: scaleY(0);
     transform-origin: bottom;

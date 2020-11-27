@@ -8,7 +8,7 @@
       </slot>
     </div>
 
-    <transition name="translate">
+    <transition name="translate-bottom">
       <div v-show="opened" class="relative flex flex-col-reverse">
         <slot></slot>
       </div>

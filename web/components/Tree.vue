@@ -1,6 +1,10 @@
 <template>
   <fragment>
-    <TreeItem v-for="(node, nodeIndex) in nodes" :key="nodeIndex" :node.sync="node" v-bind="{$scopedSlots}" v-on="{$listeners}"></TreeItem>
+    <TreeItem v-for="(node, nodeIndex) in nodes" :key="nodeIndex" v-bind="{$scopedSlots}" v-on="$listeners" :node.sync="node">
+      <template #icon(default)>
+        <i class="fas fa-folder"></i>
+      </template>
+    </TreeItem>
   </fragment>
 </template>
 
@@ -27,6 +31,10 @@ export default {
     nodes: {
       type: Array,
       default: () => [],
+    },
+
+    onExpand: {
+      type: Function,
     },
 
     value: {

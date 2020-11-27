@@ -3,7 +3,7 @@
 
     <template v-if="hasChildren">
 				<span @click="onIconClick" class="cursor-pointer">
-					<slot name="icon" :opened="d_opened">
+					<slot :opened="d_opened" name="expand_icon">
 						<i v-if="d_opened" class="treenode_icon" :class="iconOpen"></i>
 						<i v-else class="treenode_icon" :class="iconClose"></i>
 				  </slot>
@@ -14,16 +14,21 @@
       <i class="treenode_icon text-transparent" :class="iconClose"></i>
     </template>
 
+    <slot :name="`icon(${node.type || 'default'})`" :opened="d_opened"></slot>
+
     <template v-if="tree.multiple">
       <b-form-checkbox class="align-middle m-0" inline :checked="selected" @change="onCheckboxClick"></b-form-checkbox>
     </template>
 
     <span @click="onNodeClick" class="cursor-pointer">
 				<slot name="node" :selected="selected" :node="node" :opened="d_opened" :multiple="tree.multiple">
-					<span :class="classes">{{ node.label }}</span>
+					<span :class="classes" class="transition-all duration-500 ease-out">{{ node.label }}</span>
 				</slot>
 		</span>
-    <TreeItem ref="treenode_children" v-if="showChildren" v-for="(child, childIndex) in node.children" :key="childIndex" class="ml-4" :node="child" v-bind="{$scopedSlots}" v-on="{$listeners}"></TreeItem>
+
+    <div :class="{'opacity-100 scale-y-100': showChildren, 'opacity-0 scale-y-0': !showChildren}" class="ml-4 transition-all ease-linear transform origin-top">
+      <TreeItem v-for="(child, childIndex) in node.children" :key="childIndex" ref="treenode_children" v-bind="{$scopedSlots}" v-on="$listeners" :node="child"></TreeItem>
+    </div>
   </section>
 </template>
 
@@ -65,14 +70,13 @@ export default {
     classes () {
       let classes = []
       if (this.tree.d_value && this.selected) {
-        classes.push('bg-dark text-light p-1 rounded')
+        classes.push('bg-primary text-white p-1 rounded')
       }
       return classes
     },
 
     hasChildren () {
-      console.log(this.node.children != null && this.node.children.length > 0)
-      return this.node.children != null && this.node.children.length > 0
+      return !this.node.empty || (this.node.children != null && this.node.children.length > 0)
     },
 
     showChildren () {
@@ -113,7 +117,10 @@ export default {
       }
     },
 
-    onIconClick () {
+    async onIconClick () {
+      if (this.node.children == null && this.tree.onExpand != null) {
+        await this.tree.onExpand({ opened: this.d_opened, node: this.node })
+      }
       this.d_opened = !this.d_opened
     },
 

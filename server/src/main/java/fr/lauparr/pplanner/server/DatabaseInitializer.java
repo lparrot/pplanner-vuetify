@@ -13,7 +13,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    initializerService.initialize();
+    this.initializerService.initialize();
   }
 
 }
