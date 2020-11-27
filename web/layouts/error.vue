@@ -23,7 +23,7 @@
 
           <div v-if="message != null" class="text-sm mt-4">{{ message }}</div>
 
-          <div v-if="detail.trace != null" class="text-sm mt-4 cursor-pointer" @click="$refs.modalTrace.show()">Voir la trace</div>
+          <div v-if="trace != null" class="text-sm mt-4 cursor-pointer" @click="$refs.modalTrace.show()">Voir la trace</div>
 
           <slot name="prev-link">
             <div class="text-lg mt-8">
@@ -33,10 +33,10 @@
         </div>
       </div>
 
-      <Modal v-if="detail.trace != null" ref="modalTrace" close-on-backdrop size="6xl" title="Trace de l'erreur">
+      <Modal v-if="trace != null" ref="modalTrace" close-on-backdrop size="6xl" title="Trace de l'erreur">
         <div class="text-xs text-left">
           <div class="mb-4">{{ detail.class }}</div>
-          <div v-for="(traceLine, traceLineIndex) in detail.trace" :key="traceLineIndex">{{ traceLine }}</div>
+          <div v-for="(traceLine, traceLineIndex) in trace" :key="traceLineIndex">{{ traceLine }}</div>
         </div>
       </Modal>
 
@@ -80,12 +80,6 @@ export default {
     }
   },
 
-  async fetch () {
-    if (this.error.statusCode === 500 && this.error.response == null) {
-      await this.$router.push('/')
-    }
-  },
-
   computed: {
     responseData () {
       return this.error.response && this.error.response.data
@@ -98,9 +92,9 @@ export default {
       return this.error.message
     },
 
-    detail () {
-      if (this.responseData) {
-        return this.responseData.detail
+    trace () {
+      if (this.responseData && this.responseData.detail) {
+        return this.responseData.detail.trace
       }
     },
   },

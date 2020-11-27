@@ -42,4 +42,9 @@ public class ProjectController extends AbstractController {
     return this.ok(this.projectService.getStatisticsByProjectId(id));
   }
 
+  @GetMapping({"/{id}/files", "/{id}/files/{path}"})
+  public ResponseEntity getProjectFilesByProjectId(@PathVariable("id") Long id, @PathVariable(value = "path", required = false) String path) {
+    return this.ok(this.projectService.getProjectFilesByProjectId(id, path));
+  }
+
 }
