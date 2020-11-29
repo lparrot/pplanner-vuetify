@@ -1,0 +1,1 @@
+cd target && java -jar pplanner.jar

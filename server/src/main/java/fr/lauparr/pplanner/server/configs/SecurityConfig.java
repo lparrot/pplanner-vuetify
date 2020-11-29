@@ -2,11 +2,13 @@ package fr.lauparr.pplanner.server.configs;
 
 import fr.lauparr.pplanner.server.security.NoRedirectStrategy;
 import fr.lauparr.pplanner.server.security.TokenAuthenticationFilter;
-import fr.lauparr.pplanner.server.security.TokenAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,8 +25,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
@@ -32,14 +34,14 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
   @Value("${security.public-path}")
   private String[] publicPath;
+
   @Value("${info.api.prefix}")
   private String apiPrefix;
 
   @Autowired
-  private TokenAuthenticationProvider authenticationProvider;
+  private WebProperties.Resources resourceProperties;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -54,7 +56,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       .defaultAuthenticationEntryPointFor(this.forbiddenEntryPoint(), this.getProtectedUrls())
 
       .and()
-      .authenticationProvider(this.authenticationProvider)
       .addFilterBefore(this.restAuthenticationFilter(), AnonymousAuthenticationFilter.class)
       .authorizeRequests()
       .requestMatchers(this.getProtectedUrls())
@@ -70,21 +71,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       .logout().disable();
   }
 
-  NegatedRequestMatcher getProtectedUrls() {
-    return new NegatedRequestMatcher(new OrRequestMatcher(
-      Arrays.stream(this.publicPath).map(path -> new AntPathRequestMatcher(this.apiPrefix + path)).collect(Collectors.toList())
-    ));
+  private NegatedRequestMatcher getProtectedUrls() {
+    List<AntPathRequestMatcher> list = new ArrayList<>();
+
+    for (String path : this.publicPath) {
+      AntPathRequestMatcher antPathRequestMatcher = new AntPathRequestMatcher(this.apiPrefix + path);
+      list.add(antPathRequestMatcher);
+    }
+    for (String location : this.resourceProperties.getStaticLocations()) {
+      AntPathRequestMatcher antPathRequestMatcher = new AntPathRequestMatcher(location);
+      list.add(antPathRequestMatcher);
+    }
+    return new NegatedRequestMatcher(new OrRequestMatcher(list.toArray(new AntPathRequestMatcher[0])));
   }
 
   @Bean
   public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
+    return new BCryptPasswordEncoder(12);
   }
 
   @Bean
   TokenAuthenticationFilter restAuthenticationFilter() throws Exception {
     TokenAuthenticationFilter filter = new TokenAuthenticationFilter(this.getProtectedUrls());
-    filter.setAuthenticationManager(this.authenticationManager());
+    filter.setAuthenticationManager(this.authenticationManagerBean());
     filter.setAuthenticationSuccessHandler(this.successHandler());
     return filter;
   }
@@ -106,5 +115,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Bean
   AuthenticationEntryPoint forbiddenEntryPoint() {
     return new HttpStatusEntryPoint(FORBIDDEN);
+  }
+
+  @Override
+  @Bean(BeanIds.AUTHENTICATION_MANAGER)
+  public AuthenticationManager authenticationManagerBean() throws Exception {
+    return super.authenticationManagerBean();
   }
 }

@@ -5,22 +5,32 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.3.1.RELEASE</version>
-    <relativePath/> <!-- lookup parent from repository -->
+    <groupId>fr.lauparr</groupId>
+    <artifactId>pplanner</artifactId>
+    <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>fr.lauparr</groupId>
   <artifactId>pplanner-server</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
 
   <name>PPlanner Server</name>
   <description>Server project for PPlanner application</description>
 
   <properties>
     <java.version>1.8</java.version>
+    <springboot.version>2.4.0</springboot.version>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${springboot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -102,10 +112,30 @@
   </dependencies>
 
   <build>
+    <finalName>${parent.artifactId}</finalName>
+
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>../web/target/dist</directory>
+        <targetPath>static</targetPath>
+      </resource>
+    </resources>
+
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>2.4.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

@@ -27,10 +27,10 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-    final String param = ofNullable(request.getHeader(AUTHORIZATION)).orElse(request.getParameter("t"));
-    final String token = ofNullable(param).map(value -> removeStart(value, BEARER)).map(String::trim).orElseThrow(() -> new BadCredentialsException("Missing Authentication Token"));
-    final Authentication auth = new UsernamePasswordAuthenticationToken(token, token);
-    return getAuthenticationManager().authenticate(auth);
+    String param = ofNullable(request.getHeader(AUTHORIZATION)).orElse(request.getParameter("t"));
+    String token = ofNullable(param).map(value -> removeStart(value, TokenAuthenticationFilter.BEARER)).map(String::trim).orElseThrow(() -> new BadCredentialsException("Missing Authentication Token"));
+    Authentication auth = new UsernamePasswordAuthenticationToken(token, token);
+    return this.getAuthenticationManager().authenticate(auth);
   }
 
   @Override
@@ -40,7 +40,7 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
   }
 
   @Override
-  protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+  protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication Failed");
   }
 }
