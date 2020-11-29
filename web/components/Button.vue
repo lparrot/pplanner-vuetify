@@ -25,7 +25,7 @@ export default {
   computed: {
     disabledClasses () {
       if (this.disabled) {
-        return `bg-opacity-50 hover:bg-opacity-50 hover:bg-${this.variant}`
+        return `bg-opacity-50 hover:bg-opacity-50 hover:bg-${this.variant}-500`
       }
     },
   },

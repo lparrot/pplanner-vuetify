@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "${info.api.prefix}/file_manager")
+@RequestMapping(value = "${app.api.prefix}/file_manager")
 public class FileManagerController extends AbstractController {
 
   @Autowired

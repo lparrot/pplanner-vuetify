@@ -93,10 +93,9 @@ export default {
     opened (value) {
       if (value) {
         this.$emit('on-show')
-        return //document.querySelector('body').classList.add('overflow-hidden')
+        return
       }
       this.$emit('on-hide')
-      //document.querySelector('body').classList.remove('overflow-hidden')
     },
   },
 }

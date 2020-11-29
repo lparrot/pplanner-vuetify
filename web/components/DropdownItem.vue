@@ -1,5 +1,5 @@
 <template>
-  <nuxt-link v-bind="$attrs" :class="[`hover:bg-${p_variant}`]" :to="$attrs.to || ''" class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg cursor-pointer md:mt-0 hover:text-white focus:outline-none focus:shadow-outline" @click.native="onItemClick">
+  <nuxt-link v-bind="$attrs" :to="$attrs.to || ''" class="block px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg cursor-pointer md:mt-0 hover:text-white hover:bg-primary-500 focus:outline-none focus:shadow-outline" @click.native="onItemClick">
     <slot></slot>
   </nuxt-link>
 </template>
@@ -12,19 +12,6 @@ export default {
     dropdown: {
       from: 'dropdown',
     },
-  },
-
-  props: {
-    variant: {
-      type: String,
-      default: 'primary',
-    },
-  },
-
-  data () {
-    return {
-      p_variant: this.dropdown.variant,
-    }
   },
 
   methods: {

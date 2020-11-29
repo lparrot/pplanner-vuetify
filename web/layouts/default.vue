@@ -22,6 +22,8 @@
       </template>
     </Navbar>
 
+    <div id="toast-container" class="absolute right-0 top-0"></div>
+
     <div v-if="$auth.loggedIn" class="bg-default-100 rounded py-2">
       <div class="flex flex-col md:flex-row justify-between items-center mx-2 text-sm text-gray-600">
         <div class="flex flex-row items-center">
@@ -64,17 +66,18 @@
 </template>
 
 <script>
-import Avatar from 'vue-avatar'
 import Navbar from '@/components/Navbar'
 import NavbarItem from '@/components/NavbarItem'
+import NotificationItem from '@/components/NotificationItem'
 import Notifications from '@/components/Notifications'
+import Toast from '@/components/Toast'
+import Avatar from 'vue-avatar'
 import { mapState } from 'vuex'
 import Dropdown from '~/components/Dropdown'
 import DropdownItem from '~/components/DropdownItem'
-import NotificationItem from '@/components/NotificationItem'
 
 export default {
-  components: { NotificationItem, Avatar, DropdownItem, Dropdown, NavbarItem, Notifications, Navbar },
+  components: { Toast, NotificationItem, Avatar, DropdownItem, Dropdown, NavbarItem, Notifications, Navbar },
 
   data () {
     return {

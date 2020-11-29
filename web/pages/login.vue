@@ -40,14 +40,18 @@ export default {
   },
 
   methods: {
-    async onSubmit (e) {
+    async onSubmit () {
       const valid = await this.$refs.observer.validate()
       if (valid) {
-        await this.$auth.loginWith('local', { data: this.formLogin })
-
-        if (this.$auth.loggedIn) {
-          await this.$router.push((this.$auth.$state.redirect && this.$auth.options.redirect.home) || '/')
+        const err = null
+        try {
+          await this.$auth.loginWith('local', { data: this.formLogin })
+        } catch (err) {
+          console.log(err.response)
+          await this.$auth.logout()
+          this.$toast.show('Login ou mot de passe incorrect', { timeout: 3000 })
         }
+
       }
     },
   },

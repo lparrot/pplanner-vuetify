@@ -42,6 +42,8 @@ import Tree from '@/components/Tree'
 import { mapState } from 'vuex'
 
 export default {
+  middleware: 'auth',
+
   components: { Tree },
 
   data () {

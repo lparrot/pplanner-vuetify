@@ -1,120 +1,82 @@
 package fr.lauparr.pplanner.server.configs;
 
-import fr.lauparr.pplanner.server.security.NoRedirectStrategy;
 import fr.lauparr.pplanner.server.security.TokenAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.web.WebProperties;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.savedrequest.NullRequestCache;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
-import org.springframework.security.web.util.matcher.OrRequestMatcher;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.springframework.http.HttpStatus.FORBIDDEN;
+import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  @Value("${security.public-path}")
-  private String[] publicPath;
+  public static final String ROLE_ANONYMOUS = "anonymousUser";
 
-  @Value("${info.api.prefix}")
+  @Value("${app.api.prefix:/api}")
   private String apiPrefix;
-
   @Autowired
-  private WebProperties.Resources resourceProperties;
+  private TokenAuthenticationFilter authenticationFilter;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http
-      .headers().httpStrictTransportSecurity().disable()
+    // Désactivation du jeton CSRF
+    http.csrf().disable().httpBasic().disable();
 
-      .and()
-      .requestCache().requestCache(new NullRequestCache())
+    // Suppression des headers type HSTS de Spring Security
+    http.headers().httpStrictTransportSecurity().disable();
 
-      .and()
-      .exceptionHandling()
-      .defaultAuthenticationEntryPointFor(this.forbiddenEntryPoint(), this.getProtectedUrls())
+    // Retourne une erreur 401 si un problème d'authentification survient
+    http.exceptionHandling().authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED));
 
-      .and()
-      .addFilterBefore(this.restAuthenticationFilter(), AnonymousAuthenticationFilter.class)
-      .authorizeRequests()
-      .requestMatchers(this.getProtectedUrls())
-      .authenticated()
+    // Pas de cache car pas de notion de session
+    http.requestCache().requestCache(new NullRequestCache());
+    http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-      .and()
-      .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+    // Réponse statut 200 lors du handler logout
+    http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK));
 
-      .and()
-      .csrf().disable()
-      .httpBasic().disable()
-      .formLogin().disable()
-      .logout().disable();
+    // Ajout du filter JWT
+    http.addFilterBefore(this.authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+    // Prefixe d'url pour la sécurité
+    ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry urlRegistry = http.antMatcher(this.apiPrefix + "/**").authorizeRequests();
+
+    // Sécurité sur toutes les api
+    urlRegistry
+      .antMatchers(HttpMethod.POST, this.apiPrefix + "/security/login**").permitAll()
+      .antMatchers(HttpMethod.GET, this.apiPrefix + "/security/user**").permitAll()
+      .anyRequest().not().hasAuthority("ROLE_ANONYMOUS");
   }
 
-  private NegatedRequestMatcher getProtectedUrls() {
-    List<AntPathRequestMatcher> list = new ArrayList<>();
-
-    for (String path : this.publicPath) {
-      AntPathRequestMatcher antPathRequestMatcher = new AntPathRequestMatcher(this.apiPrefix + path);
-      list.add(antPathRequestMatcher);
-    }
-    for (String location : this.resourceProperties.getStaticLocations()) {
-      AntPathRequestMatcher antPathRequestMatcher = new AntPathRequestMatcher(location);
-      list.add(antPathRequestMatcher);
-    }
-    return new NegatedRequestMatcher(new OrRequestMatcher(list.toArray(new AntPathRequestMatcher[0])));
+  /**
+   * Liste des resources a ignorer dans la sécurité
+   */
+  @Override
+  public void configure(WebSecurity web) {
+    web.ignoring()
+      .antMatchers("/sw.js");
   }
 
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder(12);
-  }
-
-  @Bean
-  TokenAuthenticationFilter restAuthenticationFilter() throws Exception {
-    TokenAuthenticationFilter filter = new TokenAuthenticationFilter(this.getProtectedUrls());
-    filter.setAuthenticationManager(this.authenticationManagerBean());
-    filter.setAuthenticationSuccessHandler(this.successHandler());
-    return filter;
-  }
-
-  @Bean
-  SimpleUrlAuthenticationSuccessHandler successHandler() {
-    SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
-    successHandler.setRedirectStrategy(new NoRedirectStrategy());
-    return successHandler;
-  }
-
-  @Bean
-  FilterRegistrationBean disableAutoRegistration(TokenAuthenticationFilter filter) {
-    FilterRegistrationBean registration = new FilterRegistrationBean(filter);
-    registration.setEnabled(false);
-    return registration;
-  }
-
-  @Bean
-  AuthenticationEntryPoint forbiddenEntryPoint() {
-    return new HttpStatusEntryPoint(FORBIDDEN);
   }
 
   @Override

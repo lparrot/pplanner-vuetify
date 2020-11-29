@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "${info.api.prefix}/projects")
+@RequestMapping(value = "${app.api.prefix}/projects")
 public class ProjectController extends AbstractController {
 
   @Autowired

@@ -1,14 +1,13 @@
-const defaultTheme = require('./themes/default')
+const theme = require('./themes/default')
 
 module.exports = {
-  purge: [
-    'src/**/*.vue',
-    'src/**/*.html',
-  ],
   darkMode: false, // or 'media' or 'class'
-  theme: defaultTheme,
+  theme,
   variants: {
     extend: {},
   },
   plugins: [],
+  purge: {
+    enabled: false,
+  },
 }

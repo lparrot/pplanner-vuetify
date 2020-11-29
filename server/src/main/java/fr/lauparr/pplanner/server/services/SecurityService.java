@@ -16,7 +16,7 @@ public class SecurityService {
   @Autowired
   private PasswordEncoder passwordEncoder;
   @Autowired
-  private JwtService jwtService;
+  private TokenService tokenService;
 
   public JwtToken login(String username, String password) {
     User user = this.userRepository.findByUsernameAndDateSuppressionIsNull(username).orElse(null);
@@ -31,11 +31,11 @@ public class SecurityService {
       throw new MessageException("Mauvais login ou mot de passe");
     }
 
-    String token = this.jwtService.createToken(user);
+    String token = this.tokenService.createToken(user);
 
     return JwtToken.builder()
       .token(token)
-      .claims(this.jwtService.getClaims(token))
+      .claims(this.tokenService.getClaims(token))
       .build();
   }
 

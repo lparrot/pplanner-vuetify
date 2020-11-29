@@ -40,7 +40,8 @@ export default {
   ** Global CSS
   */
   css: [
-    '~/assets/styles.scss',
+    '@fortawesome/fontawesome-free/css/all.css',
+    '~/assets/scss/styles.scss',
   ],
   /*
   ** Plugins to load before mounting the App
@@ -60,7 +61,20 @@ export default {
   /*
   ** Nuxt.js dev-modules
   */
-  buildModules: [],
+  buildModules: [
+    '@nuxtjs/tailwindcss',
+    [
+      'nuxt-purgecss', {
+      paths: [
+        'components/**/*.vue',
+        'layouts/**/*.vue',
+        'pages/**/*.vue',
+        'plugins/**/*.js',
+        'store/**/*.js',
+        'nuxt.config.js',
+      ],
+    }],
+  ],
   /*
   ** Nuxt.js modules
   */
@@ -112,6 +126,7 @@ export default {
       callback: false,
       home: '/',
       login: '/login',
+      logout: '/login',
     },
   },
   /*
@@ -119,10 +134,13 @@ export default {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
+    extractCSS: true,
     postcss: {
-      plugins: {
-        tailwindcss: {},
-        autoprefixer: {},
+      preset: {
+        features: {
+          // Fixes: https://github.com/tailwindcss/tailwindcss/issues/1190#issuecomment-546621554
+          'focus-within-pseudo-class': false,
+        },
       },
     },
   },

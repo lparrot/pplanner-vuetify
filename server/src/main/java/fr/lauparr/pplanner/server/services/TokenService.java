@@ -2,7 +2,7 @@ package fr.lauparr.pplanner.server.services;
 
 import fr.lauparr.pplanner.server.entities.User;
 import fr.lauparr.pplanner.server.exceptions.TaggedApplicationException;
-import fr.lauparr.pplanner.server.security.ApplicationUserDetailsService;
+import fr.lauparr.pplanner.server.security.AppUserDetailsService;
 import fr.lauparr.pplanner.server.utils.UtilsDateTime;
 import io.jsonwebtoken.*;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @Service
-public class JwtService {
+public class TokenService {
 
   private static final SignatureAlgorithm signature = SignatureAlgorithm.HS256;
   @Getter
@@ -30,7 +30,7 @@ public class JwtService {
   private String secretKey;
 
   @Autowired
-  private ApplicationUserDetailsService userDetailsService;
+  private AppUserDetailsService userDetailsService;
 
   /**
    * Création d'un token JWT avec les informations du compte utilisateur
@@ -51,7 +51,7 @@ public class JwtService {
     // Récupération du nom de compte de l'utilisateur
     claims.setSubject(user.getUsername());
 
-    return Jwts.builder().setClaims(claims).signWith(JwtService.signature, this.secretKey).compact();
+    return Jwts.builder().setClaims(claims).signWith(TokenService.signature, this.secretKey).compact();
   }
 
   /**
@@ -64,7 +64,7 @@ public class JwtService {
       jwtBuilder.setExpiration(UtilsDateTime.convertLocalDateTimeToDate(expiration));
     }
 
-    return jwtBuilder.signWith(JwtService.signature, this.secretKey).compact();
+    return jwtBuilder.signWith(TokenService.signature, this.secretKey).compact();
   }
 
   /**

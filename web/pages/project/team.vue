@@ -38,6 +38,8 @@ import TeamMember from '@/components/TeamMember'
 import { mapState } from 'vuex'
 
 export default {
+  middleware: 'auth',
+
   components: { TeamMember, Modal },
 
   data () {

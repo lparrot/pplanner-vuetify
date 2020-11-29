@@ -16,7 +16,7 @@
     </template>
 
     <template v-if="error.statusCode === 500">
-      <div class="absolute top-0 left-0 h-screen w-screen bg-red-400 flex justify-center content-center flex-wrap z-50">
+      <div class="absolute top-0 left-0 h-screen w-screen bg-danger-400 flex justify-center content-center flex-wrap z-50">
         <div class="font-sans text-white text-center">
           <div class="text-error inline-block">{{ error.statusCode }}</div>
           <div class="text-4xl">Erreur technique</div>
@@ -35,7 +35,7 @@
 
       <Modal v-if="trace != null" ref="modalTrace" close-on-backdrop size="6xl" title="Trace de l'erreur">
         <div class="text-xs text-left">
-          <div class="mb-4">{{ detail.class }}</div>
+          <div class="mb-4">{{ className }}</div>
           <div v-for="(traceLine, traceLineIndex) in trace" :key="traceLineIndex">{{ traceLine }}</div>
         </div>
       </Modal>
@@ -95,6 +95,12 @@ export default {
     trace () {
       if (this.responseData && this.responseData.detail) {
         return this.responseData.detail.trace
+      }
+    },
+
+    className () {
+      if (this.responseData && this.responseData.detail) {
+        return this.responseData.detail.class
       }
     },
   },

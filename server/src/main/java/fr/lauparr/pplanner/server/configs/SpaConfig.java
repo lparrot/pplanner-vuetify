@@ -24,7 +24,7 @@ public class SpaConfig implements WebMvcConfigurer {
   private final String contextPath;
   private final WebProperties.Resources resourceProperties;
 
-  @Value("${info.api.prefix}")
+  @Value("${app.api.prefix}")
   private String apiPrefix;
 
   public SpaConfig(@Value("${server.servlet.context-path:/}") String contextPath, WebProperties.Resources resourceProperties) {
