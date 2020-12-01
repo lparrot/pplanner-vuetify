@@ -2,8 +2,6 @@ package fr.lauparr.pplanner.server.pojos;
 
 import lombok.Data;
 import lombok.SneakyThrows;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.Base64;
@@ -20,11 +18,9 @@ public class DirectoryInfo {
   private boolean empty;
 
   @SneakyThrows
-  public DirectoryInfo(File file, String basePath) {
+  public DirectoryInfo(File file) {
     this.name = file.getName();
-
-    this.path = StringUtils.remove(file.getPath(), FilenameUtils.normalize(basePath));
-
+    this.path = file.getPath();
     this.empty = this.checkIsEmpty(file);
     this.key = DirectoryInfo.encode(this.path);
   }

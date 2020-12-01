@@ -16,8 +16,13 @@ public class FileManagerController extends AbstractController {
   @Autowired
   private FileManagerService fileManagerService;
 
-  @GetMapping({"/projects/{id}/files", "/projects/{id}/files/{key}"})
-  public ResponseEntity getProjectDirectoriesByProjectId(@PathVariable("id") Long id, @PathVariable(value = "key", required = false) String key) {
+  @GetMapping("/projects/{id}/root")
+  public ResponseEntity getRootFileByProjectId(@PathVariable("id") Long id) {
+    return this.ok(this.fileManagerService.getRootFileByProjectId(id));
+  }
+
+  @GetMapping("/projects/{id}/files/{key}")
+  public ResponseEntity getProjectDirectoriesByProjectId(@PathVariable("id") Long id, @PathVariable(value = "key") String key) {
     return this.ok(this.fileManagerService.getProjectDirectoriesByProjectId(id, key));
   }
 

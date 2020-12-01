@@ -105,6 +105,7 @@ export default {
   */
   auth: {
     cookie: false,
+    watchLoggedIn: false,
     strategies: {
       local: {
         endpoints: {

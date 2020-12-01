@@ -2,6 +2,25 @@
   @apply rounded-full bg-primary text-white text-sm w-8 h-8 mx-1 hover:bg-primary-700 focus:outline-none;
 }
 
+// Fade animation
+
+.fade-enter-active {
+  animation: fade 1s;
+}
+
+.fade-leave-active {
+  animation: fade 1s reverse;
+}
+
+@keyframes fade {
+  0% {
+    @apply opacity-0
+  }
+  100% {
+    @apply opacity-100
+  }
+}
+
 // Bounce animation
 
 .bounce-enter-active {

@@ -30,7 +30,6 @@ export default {
 
   async asyncData (ctx) {
     if (ctx.$auth.loggedIn && ctx.store.state.project.selectedProject != null) {
-      console.log('redirect')
       ctx.redirect('/dashboard')
     }
   },

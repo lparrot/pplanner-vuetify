@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -29,11 +28,10 @@ public class FileInfo {
   private String updatedAt;
 
   @SneakyThrows
-  public FileInfo(File file, String basePath) {
-    String path = StringUtils.remove(file.getPath(), FilenameUtils.normalize(basePath));
-    this.key = DirectoryInfo.encode(path);
+  public FileInfo(File file) {
     this.name = file.getName();
     this.path = file.getPath();
+    this.key = DirectoryInfo.encode(this.path);
     this.directory = file.isDirectory();
     this.extension = this.directory ? null : FilenameUtils.getExtension(this.name);
     this.size = this.directory ? FileUtils.byteCountToDisplaySize(FileUtils.sizeOfDirectory(file)) : FileUtils.byteCountToDisplaySize(file.length());

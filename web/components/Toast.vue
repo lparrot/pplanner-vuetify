@@ -32,7 +32,7 @@ export default {
 
   computed: {
     classes () {
-      return `bg-${this.variant}-100 text-${this.variant}-400 border-${this.variant}-400`
+      return `bg-${this.variant}-500 text-${this.variant}-200`
     },
   },
 
@@ -66,7 +66,9 @@ export default {
         this.$emit('on-show')
         return
       }
-      this.$emit('on-hide')
+      setTimeout(() => {
+        this.$emit('on-hide')
+      })
     },
   },
 }

@@ -102,13 +102,5 @@ export default {
 </script>
 
 <style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  @apply transition-all duration-200
-}
 
-.fade-enter,
-.fade-leave-to {
-  @apply opacity-0
-}
 </style>

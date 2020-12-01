@@ -61,8 +61,13 @@ export default {
   },
 
   async fetch () {
-    const res = await this.$axios.$get(`/api/file_manager/projects/${this.selectedProject.id}/files`)
-    this.nodes = res.data.map(directory => this.convertNode(directory))
+    const baseDirectoryResponse = await this.$axios.$get(`/api/file_manager/projects/${this.selectedProject.id}/root`)
+    const chilrenResponse = await this.$axios.$get(`/api/file_manager/projects/${this.selectedProject.id}/files/${baseDirectoryResponse.data.key}`)
+    const baseNode = this.convertNode(baseDirectoryResponse.data)
+    baseNode.children = chilrenResponse.data.map(directory => this.convertNode(directory))
+    baseNode.label = 'Répertoire projet'
+    baseNode.opened = true
+    this.nodes.push(baseNode)
   },
 
   methods: {

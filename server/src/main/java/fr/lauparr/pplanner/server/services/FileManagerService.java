@@ -3,6 +3,7 @@ package fr.lauparr.pplanner.server.services;
 import fr.lauparr.pplanner.server.exceptions.MessageException;
 import fr.lauparr.pplanner.server.pojos.DirectoryInfo;
 import fr.lauparr.pplanner.server.pojos.FileInfo;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,30 +21,40 @@ public class FileManagerService {
   @Value("${app.global.projects-path}")
   private String projectsPath;
 
+  public FileInfo getRootFileByProjectId(Long id) {
+    File directory = this.getDirectoryByProjectIdAndEncodedKey(id, null);
+    return new FileInfo(directory);
+  }
+
   public List<DirectoryInfo> getProjectDirectoriesByProjectId(Long id, String key) {
     File[] directories = this.getDirectoryByProjectIdAndEncodedKey(id, key).listFiles(File::isDirectory);
 
     if (directories != null) {
-      return Arrays.stream(directories).map(directory -> new DirectoryInfo(directory, String.format("%s/%s", this.projectsPath, id))).collect(Collectors.toList());
+      return Arrays.stream(directories).map(DirectoryInfo::new).collect(Collectors.toList());
     }
 
     return new ArrayList<>();
   }
 
-  public Object getProjectDirectoryContentsByProjectId(Long id, String key) {
+  public List<FileInfo> getProjectDirectoryContentsByProjectId(Long id, String key) {
     File[] files = this.getDirectoryByProjectIdAndEncodedKey(id, key).listFiles();
 
     if (files != null) {
-      return Arrays.stream(files).map(file -> new FileInfo(file, String.format("%s/%s", this.projectsPath, id))).collect(Collectors.toList());
+      return Arrays.stream(files).map(FileInfo::new).collect(Collectors.toList());
     }
 
     return new ArrayList<>();
   }
 
   public File getDirectoryByProjectIdAndEncodedKey(Long id, String key) {
-    String path = DirectoryInfo.decode(key);
+    String path;
+    if (key != null) {
+      path = DirectoryInfo.decode(key);
+    } else {
+      path = FilenameUtils.normalize(String.format("%s/%s", this.projectsPath, id));
+    }
 
-    File file = new File(String.format("%s/%s/%s", this.projectsPath, id, path));
+    File file = new File(path);
 
     if (!file.exists()) {
       try {

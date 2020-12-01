@@ -14,21 +14,22 @@
       <i class="treenode_icon text-transparent" :class="iconClose"></i>
     </template>
 
-    <slot :name="`icon(${node.type || 'default'})`" :opened="d_opened"></slot>
-
     <template v-if="tree.multiple">
       <b-form-checkbox class="align-middle m-0" inline :checked="selected" @change="onCheckboxClick"></b-form-checkbox>
     </template>
 
-    <span @click="onNodeClick" class="cursor-pointer">
+    <span :class="classes" class="cursor-pointer" @click="onNodeClick">
+        <slot :name="`icon(${node.type || 'default'})`" :opened="d_opened"></slot>
 				<slot name="node" :selected="selected" :node="node" :opened="d_opened" :multiple="tree.multiple">
-					<span :class="classes" class="transition-all duration-500 ease-out">{{ node.label }}</span>
+					<span class="transition-all duration-500 ease-out">{{ node.label }}</span>
 				</slot>
 		</span>
 
-    <div :class="{'opacity-100 scale-y-100': showChildren, 'opacity-0 scale-y-0': !showChildren}" class="ml-4 transition-all ease-linear transform origin-top">
-      <TreeItem v-for="(child, childIndex) in node.children" :key="childIndex" ref="treenode_children" v-bind="{$scopedSlots}" v-on="$listeners" :node="child"></TreeItem>
-    </div>
+    <transition name="bounce">
+      <div v-show="showChildren" class="ml-4 origin-top">
+        <TreeItem v-for="(child, childIndex) in node.children" :key="childIndex" ref="treenode_children" v-bind="{$scopedSlots}" v-on="$listeners" :node="child"></TreeItem>
+      </div>
+    </transition>
   </section>
 </template>
 
@@ -91,6 +92,10 @@ export default {
         return this.tree.d_value.key === this.node.key
       }
     },
+  },
+
+  mounted () {
+    this.d_opened = this.node.opened
   },
 
   methods: {
