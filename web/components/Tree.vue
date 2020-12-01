@@ -49,7 +49,6 @@ export default {
   },
 
   methods: {
-
     setValue (value) {
       this.d_value = value
       this.$emit('input', this.d_value)
@@ -73,6 +72,11 @@ export default {
   },
 
   watch: {
+    value: {
+      handler: function (val) {
+        this.setValue(val)
+      },
+    },
     multiple: {
       handler: function (multiple) {
         // Si on passe en mode multiple, qu'une valeur existe déjà et que d_value n'est pas un tableau

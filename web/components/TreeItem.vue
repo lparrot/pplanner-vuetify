@@ -70,7 +70,7 @@ export default {
   computed: {
     classes () {
       let classes = []
-      if (this.tree.d_value && this.selected) {
+      if (this.selected) {
         classes.push('bg-primary text-white p-1 rounded')
       }
       return classes

@@ -68,12 +68,13 @@ export default {
     baseNode.label = 'Répertoire projet'
     baseNode.opened = true
     this.nodes.push(baseNode)
+    this.fileSelected = baseNode
   },
 
   methods: {
     async onNodeClick (event) {
-      const res = await this.$axios.$get(`/api/file_manager/projects/${this.selectedProject.id}/files/${event.key}/contents`)
-      this.contents = res.data
+      const contentResponse = await this.$axios.$get(`/api/file_manager/projects/${this.selectedProject.id}/files/${event.key}/contents`)
+      this.contents = contentResponse.data
     },
 
     async onExpand ({ opened, node }) {
@@ -84,9 +85,9 @@ export default {
     },
 
     async onContentClick (content, contentIndex) {
-      console.log(content)
       if (content.directory) {
         this.fileSelected = content
+        await this.onNodeClick(this.fileSelected)
       }
     },
 
