@@ -11,13 +11,13 @@
           <NavbarItem to="/login">Se connecter</NavbarItem>
         </template>
         <template v-else>
-          <div class="flex items-center">
+          <div class="hidden md:inline">
             <Avatar v-if="$auth.user.email != null" :size="36" :src="$auth.user.avatar" :username="$auth.user.email" alt="avatar" class="rounded-full"></Avatar>
-            <Dropdown :label="$auth.user.fullname" right>
-              <DropdownItem to="/profile">Profil</DropdownItem>
-              <DropdownItem @click.native="logout">Se deconnecter</DropdownItem>
-            </Dropdown>
           </div>
+          <Dropdown :label="$auth.user.fullname" class="flex-1" navbar right>
+            <DropdownItem to="/profile">Profil</DropdownItem>
+            <DropdownItem @click.native="logout">Se deconnecter</DropdownItem>
+          </Dropdown>
         </template>
       </template>
     </Navbar>

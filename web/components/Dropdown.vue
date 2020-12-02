@@ -1,11 +1,11 @@
 <template>
   <div v-else v-on-clickaway="hide" class="relative">
-    <button :class="`hover:bg-${variant}-600`" class="flex flex-row items-center w-full px-2 py-2 text-sm font-semibold text-left bg-transparent rounded-lg md:w-auto md:inline md:mt-0 md:mx-2 hover:text-white focus:outline-none focus:shadow-outline" @click="toggle()">
+    <button :class="[`hover:bg-${variant}-600`, {'justify-between': navbar}]" class="flex flex-row items-center w-full px-2 py-2 text-sm font-semibold text-left bg-transparent rounded-lg md:w-auto md:inline md:mt-0 md:mx-2 hover:text-white focus:outline-none focus:shadow-outline" @click="toggle()">
       <span>{{ label }}</span>
       <i class="fas fa-chevron-down text-sm"></i>
     </button>
     <transition name="bounce">
-      <div v-show="opened" :class="{'right-0': right}" class="absolute mt-2 rounded-md shadow-lg md:w-48 px-2 py-2 bg-white rounded-md shadow z-20">
+      <div v-show="opened" :class="{'right-0': right, 'relative md:absolute': navbar, 'absolute': !navbar}" class="mt-2 rounded-md md:w-48 px-2 py-2 bg-white rounded-md shadow z-20">
         <template v-if="items != null && items.length > 0">
           <template v-for="(item, itemIndex) in items">
             <DropdownItem :key="itemIndex" :class="`hover:bg-${variant}-600`" :exact-active-class="`text-white bg-${variant}`" :to="item.path" exact @click.native="onItemClick">
@@ -47,6 +47,10 @@ export default {
     label: {
       type: String,
       default: '',
+    },
+    navbar: {
+      type: Boolean,
+      default: false,
     },
     right: {
       type: Boolean,

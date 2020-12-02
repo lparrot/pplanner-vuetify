@@ -21,7 +21,7 @@
         <template v-if="show">
           <template v-for="(menuItem, menuItemIndex) in menu">
             <NavbarItem v-if="menuItem.children == null" :key="menuItemIndex" :to="menuItem.path" exact>{{ menuItem.label }}</NavbarItem>
-            <Dropdown v-else :key="menuItemIndex" :items="menuItem.children" :label="menuItem.label"></Dropdown>
+            <Dropdown v-else :key="menuItemIndex" :items="menuItem.children" :label="menuItem.label" navbar></Dropdown>
           </template>
         </template>
         <slot name="after-menu"></slot>
