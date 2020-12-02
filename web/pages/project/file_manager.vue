@@ -10,7 +10,7 @@
       </Tree>
 
     </div>
-    <div class="xl:w-4/5">
+    <div class="w-full xl:w-4/5">
       <div v-if="fileSelected != null">
         <table class="table-auto w-full text-left whitespace-no-wrap">
           <thead>
@@ -61,14 +61,20 @@ export default {
   },
 
   async fetch () {
+    // Récupération du répertoire de base du projet ainsi que les dossiers enfants
     const baseDirectoryResponse = await this.$axios.$get(`/api/file_manager/projects/${this.selectedProject.id}/root`)
     const chilrenResponse = await this.$axios.$get(`/api/file_manager/projects/${this.selectedProject.id}/files/${baseDirectoryResponse.data.key}`)
+
+    // Construction du node
     const baseNode = this.convertNode(baseDirectoryResponse.data)
     baseNode.children = chilrenResponse.data.map(directory => this.convertNode(directory))
     baseNode.label = 'Répertoire projet'
     baseNode.opened = true
     this.nodes.push(baseNode)
     this.fileSelected = baseNode
+
+    // Récupération du contenu du dossier parent
+    await this.onNodeClick(this.fileSelected)
   },
 
   methods: {
@@ -100,7 +106,7 @@ export default {
 
 <style scoped>
 .table-th {
-  @apply px-4 py-3 tracking-wider font-medium text-gray-900 text-sm bg-gray-200;
+  @apply px-4 py-3 font-medium text-gray-900 text-sm bg-gray-200;
 }
 
 .table-td {
