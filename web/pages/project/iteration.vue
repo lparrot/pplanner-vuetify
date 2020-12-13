@@ -1,11 +1,11 @@
 <template>
-  <section>
-    Itérations
-  </section>
+  <v-container>Itérations</v-container>
 </template>
 
 <script>
-export default {
-  middleware: 'auth',
-}
+import Vue from 'vue'
+
+export default Vue.extend({
+  middleware: 'project',
+})
 </script>

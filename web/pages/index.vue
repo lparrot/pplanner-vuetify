@@ -1,50 +1,59 @@
 <template>
-  <div>
-    <div class="x-5 py-24">
-      <div class="text-center mb-20">
-        <h1 class="sm:text-3xl text-2xl font-medium text-center title-font text-gray-900 mb-4">PPlanner - Project Planner</h1>
-        <p class="text-base leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto">Outil de gestion de projet, pour le pilotage des systèmes, les responsables de réalisation de projet ainsi que les développeurs.</p>
-      </div>
-      <div class="flex flex-wrap lg:w-4/5 sm:mx-auto sm:mb-2 -mx-2">
-        <div v-for="(item, itemIndex) in checkItems" :class="item.action ? 'cursor-pointer' : ''" class="p-2 sm:w-1/2 w-full" @click="item.action ? item.action(itemIndex) : null">
-          <div class="bg-gray-200 rounded flex p-4 h-full items-center">
-            <div class="text-primary w-8 h-8 flex-shrink-0 mr-4">
-              <i :class="item.icon" class="text-2xl"></i>
-            </div>
-            <span class="title-font font-medium">{{ item.label }}</span>
-          </div>
-        </div>
-      </div>
+  <v-container class="fill-height">
+    <div>
+      <v-row align="center" class="d-flex flex-column mb-10" dense justify="center">
+        <div class="text-h5 text-md-h2 text-justify mb-4">PPlanner - Project Planner</div>
+        <div class="text-subtitle-2 text-md-subtitle-1 text-justify">Outil de gestion de projet, pour le pilotage des systèmes, les responsables de réalisation de projet ainsi que les développeurs.</div>
+      </v-row>
+      <v-row dense justify="center">
+        <v-col v-for="(item, itemIndex) in checkItems" :key="itemIndex" class="d-flex flex-row align-self-stretch" cols="12" md="6">
+          <v-hover v-slot="{ hover }">
+            <v-alert :icon="item.icon" class="check-item w-full" dark text>
+              <div>{{ item.label }}</div>
+            </v-alert>
+          </v-hover>
+        </v-col>
+      </v-row>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script>
-import Button from '@/components/Button'
-import Modal from '@/components/Modal'
+import Vue from 'vue'
 
-export default {
-  components: { Modal, Button },
-
-  auth: false,
-
-  async asyncData (ctx) {
-    if (ctx.$auth.loggedIn && ctx.store.state.project.selectedProject != null) {
-      ctx.redirect('/dashboard')
-    }
-  },
-
+export default Vue.extend({
   data () {
     return {
       checkItems: [
-        { label: 'Création de backlog et chiffrage du projet', icon: 'far fa-check-circle' },
-        { label: 'Création de feuille de route globale et détaillée', icon: 'far fa-check-circle' },
-        { label: 'Suivi des itérations', icon: 'far fa-check-circle' },
-        { label: 'Gestion des fichiers liés aux projets', icon: 'far fa-check-circle' },
-        { label: 'Echanges entre la maitrise d\'oeuvre et la maitrise d\'ouvrage', icon: 'far fa-check-circle' },
-        { label: 'Restitutions graphiques et génération de rapports', icon: 'far fa-check-circle' },
+        { label: `Création de backlog et chiffrage du projet`, icon: 'mdi-checkbox-marked-circle-outline' },
+        { label: `Création de feuille de route globale et détaillée`, icon: 'mdi-checkbox-marked-circle-outline' },
+        { label: `Suivi des itérations`, icon: 'mdi-checkbox-marked-circle-outline' },
+        { label: `Gestion des fichiers liés aux projets`, icon: 'mdi-checkbox-marked-circle-outline' },
+        { label: `Echanges entre la maitrise d'oeuvre et la maitrise d'ouvrage`, icon: 'mdi-checkbox-marked-circle-outline' },
+        { label: `Restitutions graphiques et génération de rapports`, icon: 'mdi-checkbox-marked-circle-outline' },
       ],
     }
   },
-}
+
+  fetch (ctx) {
+    if (ctx.$auth.loggedIn && ctx.$accessor.project.selectedProject != null) {
+      ctx.redirect('/project/dashboard')
+    }
+  },
+})
 </script>
+
+<style>
+.check-item {
+  transition: ease-in-out 0.1s;
+}
+
+.check-item:hover {
+  transform-origin: center;
+  transform: scale(1.02);
+  z-index: 200;
+  outline: none;
+  border-color: #9ecaed !important;
+  box-shadow: 0 0 10px #9ecaed !important;
+}
+</style>

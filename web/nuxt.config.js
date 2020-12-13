@@ -1,93 +1,68 @@
+import colors from 'vuetify/es5/util/colors'
+
 export default {
   /*
-  ** Nuxt rendering mode
-  ** See https://nuxtjs.org/api/configuration-mode
-  */
+** Nuxt rendering mode (https://nuxtjs.org/api/configuration-mode)
+*/
   ssr: false,
+
   /*
-  ** Nuxt target
-  ** See https://nuxtjs.org/api/configuration-target
+  ** Nuxt target (https://nuxtjs.org/api/configuration-target)
   */
   target: 'static',
-  /**
-   * Target for generated files
-   * See https://nuxtjs.org/api/configuration-generate
-   */
-  generate: {
-    dir: 'target/dist',
-  },
-  /*
-  ** Headers of the page
-  ** See https://nuxtjs.org/api/configuration-head
-  */
+
+  // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     titleTemplate: '%s - PPlanner',
     title: 'PPlanner',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      {
-        hid: 'description',
-        name: 'description',
-        content: 'Project planning application',
-      },
+      { hid: 'description', name: 'description', content: '' },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
     ],
   },
-  /*
-  ** Global CSS
-  */
+
+  /**
+   * Target for generated files (https://nuxtjs.org/api/configuration-generate)
+   */
+  generate: {
+    dir: 'target/dist',
+  },
+
+  // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
-    '@fortawesome/fontawesome-free/css/all.css',
-    '~/assets/scss/styles.scss',
+    '~/assets/app.scss',
   ],
-  /*
-  ** Plugins to load before mounting the App
-  ** https://nuxtjs.org/guide/plugins
-  */
+
+  // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
-    '~/plugins/app',
-    '~/plugins/scoped-slots',
-    '~/plugins/vue-fragment',
     '~/plugins/vee-validate',
   ],
-  /*
-  ** Auto import components
-  ** See https://nuxtjs.org/api/configuration-components
-  */
+
+  // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
-  /*
-  ** Nuxt.js dev-modules
-  */
+
+  // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
-    '@nuxtjs/tailwindcss',
-    [
-      'nuxt-purgecss', {
-      paths: [
-        'components/**/*.vue',
-        'layouts/**/*.vue',
-        'pages/**/*.vue',
-        'plugins/**/*.js',
-        'store/**/*.js',
-        'nuxt.config.js',
-      ],
-    }],
+    // https://go.nuxtjs.dev/typescript
+    '@nuxt/typescript-build',
+    // https://go.nuxtjs.dev/vuetify
+    '@nuxtjs/vuetify',
+    'nuxt-typed-vuex',
   ],
-  /*
-  ** Nuxt.js modules
-  */
+
+  // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
+    // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@nuxtjs/pwa',
+    '~/modules/app',
   ],
-  /*
-  ** Axios module configuration
-  ** See https://axios.nuxtjs.org/options
-  */
+
+  // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
     proxy: true,
   },
@@ -100,8 +75,7 @@ export default {
   },
 
   /*
-  ** Auth module configuration
-  ** See https://auth.nuxtjs.org/api
+  ** Auth module configuration (https://auth.nuxtjs.org/api)
   */
   auth: {
     cookie: false,
@@ -130,19 +104,26 @@ export default {
       logout: '/login',
     },
   },
-  /*
-  ** Build configuration
-  ** See https://nuxtjs.org/api/configuration-build/
-  */
-  build: {
-    extractCSS: true,
-    postcss: {
-      preset: {
-        features: {
-          // Fixes: https://github.com/tailwindcss/tailwindcss/issues/1190#issuecomment-546621554
-          'focus-within-pseudo-class': false,
+
+  // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
+  vuetify: {
+    customVariables: ['~/assets/variables.scss'],
+    theme: {
+      dark: true,
+      themes: {
+        dark: {
+          primary: colors.blue.darken2,
+          accent: colors.grey.darken3,
+          secondary: colors.amber.darken3,
+          info: colors.teal.lighten1,
+          warning: colors.amber.base,
+          error: colors.deepOrange.accent4,
+          success: colors.green.accent3,
         },
       },
     },
   },
+
+  // Build Configuration (https://go.nuxtjs.dev/config-build)
+  build: {},
 }

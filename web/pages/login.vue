@@ -1,58 +1,67 @@
 <template>
-  <div class="container mx-auto">
-    <ValidationObserver ref="observer" v-slot="{ invalid }" class="flex flex-col items-center" tag="form" @submit.prevent="onSubmit">
-      <Card class="w-full lg:w-1/2" title="Connexion">
-        <ValidationProvider v-slot="{ errors }" name="username" rules="required">
-          <Input v-model="formLogin.username" :bottom="false" :error="errors[0]" label="Nom d'utilisateur" placeholder="Nom d'utilisateur"></Input>
-        </ValidationProvider>
-        <ValidationProvider v-slot="{ errors }" name="password" rules="required">
-          <Input v-model="formLogin.password" :bottom="false" :error="errors[0]" label="Mot de passe" placeholder="Mot de passe" type="password"></Input>
-        </ValidationProvider>
-        <Button :disabled="invalid" class="w-full mt-4">Se connecter</Button>
-      </Card>
-    </ValidationObserver>
-  </div>
+  <v-container class="fill-height">
+    <v-layout class="align-center justify-center">
+      <v-card>
+        <div class="display-1 text-center align-center mb-3">
+          <v-icon class="mr-2" large>mdi-circle-slice-5</v-icon>
+          <span v-text="$config.app.title"></span>
+        </div>
+        <v-card light>
+          <v-card-text>
+            <div class="subheading">
+              <p>Connectez-vous pour accéder à votre tableau de bord</p>
+            </div>
+            <validation-observer ref="validator" tag="form" @submit.prevent="onSubmit">
+              <validation-provider #default="{invalid, errors}" immediate name="nom d'utilisateur" rules="required" tag="div">
+                <v-text-field v-model="form.username" :error="invalid" :error-messages="errors[0]" dense filled label="Nom d'utilisateur" light prepend-icon="mdi-email"></v-text-field>
+              </validation-provider>
+              <validation-provider #default="{invalid, errors}" immediate name="mot de passe" rules="required" tag="div">
+                <v-text-field v-model="form.password" :error="invalid" :error-messages="errors[0]" dense filled label="Mot de passe" light prepend-icon="mdi-lock" type="password"></v-text-field>
+              </validation-provider>
+              <v-btn block="block" color="primary" type="submit">Se connecter</v-btn>
+            </validation-observer>
+          </v-card-text>
+        </v-card>
+      </v-card>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
-import Button from '@/components/Button'
-import Card from '@/components/Card'
-import Input from '@/components/Input'
+import Vue from 'vue'
 
-export default {
-  components: { Card, Button, Input },
+export default Vue.extend({
+  auth: false,
 
-  data () {
-    return {
-      formLogin: {
-        username: null,
-        password: null,
-      },
-      showPassword: false,
+  fetch (ctx) {
+    if (ctx.$auth.loggedIn) {
+      ctx.redirect('/project/dashboard')
     }
   },
 
-  created () {
-    this.formLogin = {
-      username: 'laurent.parrot',
-      password: '123',
+  data () {
+    return {
+      form: {
+        username: null,
+        password: null,
+      },
     }
   },
 
   methods: {
     async onSubmit () {
-      const valid = await this.$refs.observer.validate()
+      const valid = await this.$refs.validator.validate()
       if (valid) {
         try {
-          await this.$auth.loginWith('local', { data: this.formLogin })
+          await this.$auth.loginWith('local', { data: this.form })
           await this.$router.push(this.$auth.$state.redirect || this.$auth.options.redirect.home || '/')
-          this.$toast.show('Vous êtes maintenant connecté', { variant: 'success' })
+          // this.$toast.show('Vous êtes maintenant connecté', { variant: 'success' })
         } catch (err) {
           await this.$auth.logout()
-          this.$toast.show('Login ou mot de passe incorrect', { variant: 'danger' })
+          // this.$toast.show('Login ou mot de passe incorrect', { variant: 'danger' })
         }
       }
     },
   },
-}
+})
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <v-container>Dashboard</v-container>
+  <v-container>Fichiers</v-container>
 </template>
 
 <script>

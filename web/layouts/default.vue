@@ -1,92 +1,94 @@
 <template>
-  <div class="container mx-auto">
-    <Navbar :menu="menu" :show="$auth.loggedIn">
-      <template #title>
-        <span class="font-bold text-red-700">PP</span><span class="text-red-500">laner</span>
-      </template>
+  <v-app>
+    <v-navigation-drawer v-if="$auth.loggedIn" v-model="drawer" :expand-on-hover="$vuetify.breakpoint.lgAndUp" :mini-variant="$vuetify.breakpoint.lgAndUp" app clipped fixed>
+      <v-list dense nav>
+        <v-list-item v-for="(menuItem, menuItemIndex) in menu" :key="menuItemIndex" :to="menuItem.path" exact router>
+          <v-list-item-action class="justify-center">
+            <v-icon small>{{ menuItem.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="menuItem.label"/>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
 
-      <template #right>
-        <template v-if="!$auth.loggedIn">
-          <NavbarItem to="/register">S'inscrire</NavbarItem>
-          <NavbarItem to="/login">Se connecter</NavbarItem>
+    <v-app-bar app clipped-left dense fixed flat>
+      <v-app-bar-nav-icon v-if="$vuetify.breakpoint.mdAndDown" @click.stop="drawer = !drawer"/>
+      <v-toolbar-title class="mr-4">
+        <v-btn text to="/">{{ $config.app.title }}</v-btn>
+      </v-toolbar-title>
+      <v-toolbar-items v-if="$auth.loggedIn">
+        <template v-if="selectedProject == null">
+          <v-btn text>Selectionner un projet</v-btn>
         </template>
         <template v-else>
-          <div class="hidden md:inline">
-            <Avatar v-if="$auth.user.email != null" :size="36" :src="$auth.user.avatar" :username="$auth.user.email" alt="avatar" class="rounded-full"></Avatar>
-          </div>
-          <Dropdown :label="$auth.user.fullname" class="flex-1" navbar right>
-            <DropdownItem to="/profile">Profil</DropdownItem>
-            <DropdownItem @click.native="logout">Se deconnecter</DropdownItem>
-          </Dropdown>
+          <v-btn text>Projet: {{ selectedProject.name }}</v-btn>
         </template>
+      </v-toolbar-items>
+      <v-spacer/>
+      <template v-if="$auth.loggedIn">
+        <v-btn icon to="/profile">
+          <v-icon dense>mdi-account-box</v-icon>
+        </v-btn>
+        <v-bottom-sheet v-model="sheet" persistent>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn v-bind="attrs" v-on="on" icon>
+              <v-icon dense>mdi-power</v-icon>
+            </v-btn>
+          </template>
+          <v-sheet class="text-center">
+            <v-btn class="mt-6" color="primary" text @click="sheet = !sheet">
+              <span>Rester connecté</span>
+            </v-btn>
+            <v-btn class="mt-6" color="error" text @click="logout">
+              <span>Se déconnecter</span>
+            </v-btn>
+            <div class="py-3">
+              <p>Cliquez sur le bouton déconnexion pour vous déconnecter de l'application</p>
+            </div>
+          </v-sheet>
+        </v-bottom-sheet>
       </template>
-    </Navbar>
+      <template v-else>
+        <v-btn icon to="/login">
+          <v-icon dense>mdi-login</v-icon>
+        </v-btn>
+      </template>
 
-    <div id="toast-container" class="absolute right-0 top-0"></div>
+      <template v-if="$auth.loggedIn && selectedProject != null" #extension>
+        <v-tabs fixed-tabs>
+          <v-tab to="/project/dashboard">Tableau de bord</v-tab>
+          <v-tab to="/project/equipe">Equipe</v-tab>
+          <v-tab to="/project/fichier">Fichiers</v-tab>
+          <v-tab to="/project/backlog">Backlog</v-tab>
+          <v-tab to="/project/iteration">Itérations</v-tab>
+        </v-tabs>
+      </template>
+    </v-app-bar>
 
-    <div v-if="$auth.loggedIn" class="bg-default-100 rounded py-2">
-      <div class="flex flex-col md:flex-row justify-between items-center mx-2 text-sm text-gray-600">
-        <div class="flex flex-row items-center">
-          <div>Projet selectionné:</div>
-          <Dropdown :label="selectedProjectName">
-            <DropdownItem v-for="(project, projectIndex) in projectList" :key="projectIndex" @click.native="selectProject(project)">{{ project.name }}</DropdownItem>
-          </Dropdown>
-        </div>
+    <v-main>
+      <nuxt ref="nuxt_navigation"/>
+    </v-main>
 
-        <div v-if="selectedProject != null" class="flex flex-row">
-          <nuxt-link class="btn-menu-project" to="/project/team">Equipe</nuxt-link>
-          <nuxt-link class="btn-menu-project" to="/project/file_manager">Fichiers</nuxt-link>
-          <nuxt-link class="btn-menu-project" to="/project/backlog">Backlog</nuxt-link>
-          <nuxt-link class="btn-menu-project" to="/project/iteration">Itérations</nuxt-link>
-        </div>
-      </div>
-    </div>
-
-    <div class="py-4 leading-8">
-      <nuxt ref="nuxt_navigation"></nuxt>
-    </div>
-
-    <div class="bg-default-100 rounded-b">
-      <div class="container mx-auto py-4 px-5 flex flex-wrap flex-col sm:flex-row">
-        <p class="text-gray-500 text-sm text-center sm:text-left">
-          &copy; {{ new Date().getFullYear() }} PPlanner</p>
-        <p class="sm:ml-auto sm:mt-0 mt-2 sm:w-auto w-full sm:text-left text-center text-gray-500 text-sm">
-          <span>Mentions légales</span>
-          <span class="mx-1">&#9642;</span>
-          <span>Conditions d'utilisation</span>
-        </p>
-      </div>
-    </div>
-
-    <Notifications>
-      <NotificationItem>Bienvenue sur PPlanner !</NotificationItem>
-      <NotificationItem>Voici une petite notification pour vous prévenir que notre site est actuellement en construction. De ce fait, plusieurs modules ne sont pas à 100% fonctionnel</NotificationItem>
-    </Notifications>
-  </div>
+    <v-footer absolute app>
+      <small>PPlanner &copy; {{ new Date().getFullYear() }}</small>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
-import Navbar from '@/components/Navbar'
-import NavbarItem from '@/components/NavbarItem'
-import NotificationItem from '@/components/NotificationItem'
-import Notifications from '@/components/Notifications'
-import Toast from '@/components/Toast'
-import Avatar from 'vue-avatar'
 import { mapState } from 'vuex'
-import Dropdown from '~/components/Dropdown'
-import DropdownItem from '~/components/DropdownItem'
 
 export default {
-  components: { Toast, NotificationItem, Avatar, DropdownItem, Dropdown, NavbarItem, Notifications, Navbar },
+  name: 'AppLayout',
 
   data () {
     return {
+      drawer: false,
       menu: [],
+      sheet: false,
     }
-  },
-
-  async fetch () {
-    await this.$store.dispatch('project/updateProjectList')
   },
 
   computed: {
@@ -94,41 +96,36 @@ export default {
       selectedProject: state => state.project.selectedProject,
       projectList: state => state.project.projectList,
     }),
+  },
 
-    selectedProjectName () {
-      return this.selectedProject != null ? this.selectedProject.name : 'Aucun projet selectionné'
-    },
+  async middleware (ctx) {
+    await ctx.$accessor.project.updateProjectList()
   },
 
   created () {
     this.menu = [
-      { label: 'Accueil', path: '/' },
-      {
-        label: 'Administration', children: [
-          { label: 'Utilisateur', path: '/administration/utilisateur' },
-          { label: 'Profil', path: '/administration/profil' },
-        ],
-      },
-      {
-        label: 'Configuration', children: [
-          { label: 'Application', path: '/configuration/application' },
-          { label: 'Sécurité', path: '/configuration/securite' },
-        ],
-      },
+      { label: 'Accueil', path: '/', icon: 'mdi-home' },
+      { label: 'Administration', path: '/admin', icon: 'mdi-cog' },
     ]
+  },
+
+  async mounted () {
+    this.drawer = this.$vuetify.breakpoint.lgAndUp
   },
 
   methods: {
     async logout () {
       await this.$auth.logout()
       await this.$router.push('/login')
+      this.sheet = false
     },
 
     async selectProject (project) {
+      console.log(project)
       const noSelectedProject = this.selectedProject == null
       await this.$store.dispatch('project/selectProject', project)
       if (noSelectedProject) {
-        await this.$router.push('/dashboard')
+        await this.$router.push('/project/dashboard')
       } else {
         // Utilisation du $forceUpdate pour rafraichir la page
         this.$refs.nuxt_navigation.$forceUpdate()
@@ -137,9 +134,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.btn-menu-project {
-  @apply text-sm text-white bg-gray-500 p-2 mx-1 rounded;
-}
-</style>

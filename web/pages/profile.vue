@@ -1,15 +1,11 @@
 <template>
-  <section>
-    <div>Profil de l'utilisateur {{ $auth.user.fullname }}</div>
-  </section>
+  <v-container>Profil utilisateur</v-container>
 </template>
 
 <script>
-export default {
+import Vue from 'vue'
+
+export default Vue.extend({
   middleware: 'auth',
-}
+})
 </script>
-
-<style scoped>
-
-</style>

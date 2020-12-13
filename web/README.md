@@ -1,4 +1,4 @@
-# pplanner-web
+# pplanner
 
 ## Build Setup
 
