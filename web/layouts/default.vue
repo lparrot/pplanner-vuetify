@@ -15,7 +15,7 @@
 
     <v-app-bar app clipped-left dense fixed flat>
       <v-app-bar-nav-icon v-if="$vuetify.breakpoint.mdAndDown" @click.stop="drawer = !drawer"/>
-      <v-toolbar-title class="mr-4">
+      <v-toolbar-title v-if="$vuetify.breakpoint.mdAndUp" class="mr-4">
         <v-btn text to="/">{{ $config.app.title }}</v-btn>
       </v-toolbar-title>
       <v-toolbar-items v-if="$auth.loggedIn">
@@ -67,12 +67,27 @@
       </template>
 
       <template v-if="$auth.loggedIn && selectedProject != null" #extension>
-        <v-tabs fixed-tabs>
-          <v-tab to="/project/dashboard">Tableau de bord</v-tab>
-          <v-tab to="/project/equipe">Equipe</v-tab>
-          <v-tab to="/project/fichier">Fichiers</v-tab>
-          <v-tab to="/project/backlog">Backlog</v-tab>
-          <v-tab to="/project/iteration">Itérations</v-tab>
+        <v-tabs :icons-and-text="$vuetify.breakpoint.mdAndUp" fixed-tabs>
+          <v-tab to="/project/dashboard">
+            <span v-if="$vuetify.breakpoint.mdAndUp">Tableau de bord</span>
+            <v-icon>mdi-desktop-mac-dashboard</v-icon>
+          </v-tab>
+          <v-tab to="/project/equipe">
+            <span v-if="$vuetify.breakpoint.mdAndUp">Equipe</span>
+            <v-icon>mdi-account-supervisor</v-icon>
+          </v-tab>
+          <v-tab to="/project/fichier">
+            <span v-if="$vuetify.breakpoint.mdAndUp">Fichiers</span>
+            <v-icon>mdi-file-tree</v-icon>
+          </v-tab>
+          <v-tab to="/project/backlog">
+            <span v-if="$vuetify.breakpoint.mdAndUp">Backlog</span>
+            <v-icon>mdi-book-open-variant</v-icon>
+          </v-tab>
+          <v-tab to="/project/iteration">
+            <span v-if="$vuetify.breakpoint.mdAndUp">Itérations</span>
+            <v-icon>mdi-sync</v-icon>
+          </v-tab>
         </v-tabs>
       </template>
     </v-app-bar>
