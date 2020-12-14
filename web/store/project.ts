@@ -61,11 +61,11 @@ export const actions = actionTree(
       if (state.selectedProject != null) {
         const res = await this.$axios.$get(`/api/projects/${state.selectedProject.id}/statistics`)
         const statistics = [
-          {icon: 'mdi-sitemap', label: 'Members', number: res.data.members, to: '/project/team'},
-          {icon: 'mdi-folder', label: 'Fichiers', number: res.data.files, to: '/project/file_manager'},
+          {icon: 'mdi-sitemap', label: 'Members', number: res.data.members, to: '/project/equipe'},
+          {icon: 'mdi-folder', label: 'Fichiers', number: res.data.files, to: '/project/fichier'},
           {icon: 'mdi-format-align-left', label: 'Items de backlog', number: res.data.backlogs, to: '/project/backlog'},
           {icon: 'mdi-clock', label: 'Nombre J.H', number: res.data.totalDuration, to: '/project/backlog'},
-          {icon: 'fas fa-redo', label: 'Itérations', number: res.data.iterations, to: '/project/iteration'},
+          {icon: 'mdi-sync', label: 'Itérations', number: res.data.iterations, to: '/project/iteration'},
         ]
         commit('SET_STATISTICS', statistics)
       }

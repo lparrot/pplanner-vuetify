@@ -12,9 +12,6 @@
 
   <artifactId>pplanner-server</artifactId>
 
-  <name>PPlanner Server</name>
-  <description>Server project for PPlanner application</description>
-
   <properties>
     <java.version>1.8</java.version>
     <springboot.version>2.4.0</springboot.version>
