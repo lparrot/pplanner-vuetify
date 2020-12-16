@@ -147,14 +147,11 @@ export default {
     },
 
     async selectProject (project) {
-      console.log(project)
       const noSelectedProject = this.selectedProject == null
       await this.$store.dispatch('project/selectProject', project)
       if (noSelectedProject) {
         await this.$router.push('/project/dashboard')
       } else {
-        // Utilisation du $forceUpdate pour rafraichir la page
-        // this.$refs.nuxt_navigation.$forceUpdate()
         this.$root.$emit('project-selected')
       }
       this.sheetProjectSelection = false
