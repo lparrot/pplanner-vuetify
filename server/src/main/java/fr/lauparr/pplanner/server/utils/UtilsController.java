@@ -31,9 +31,7 @@ public abstract class UtilsController {
 
   public static ResponseError createValidationResponse(List<ApiConstraint> violations) {
     Map detail = new HashMap();
-    violations.forEach(violation -> {
-      detail.put(violation.getField(), violation);
-    });
+    violations.forEach(violation -> detail.put(violation.getField(), violation));
     return ResponseError.builder().error("Validation error").type("validation").detail(detail).build();
   }
 

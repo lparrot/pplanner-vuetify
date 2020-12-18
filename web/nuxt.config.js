@@ -1,5 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
+const isDev = process.env.NODE_ENV === 'development'
+
 export default {
   /*
 ** Nuxt rendering mode (https://nuxtjs.org/api/configuration-mode)
@@ -40,6 +42,7 @@ export default {
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     '~/plugins/vee-validate',
+
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -125,5 +128,7 @@ export default {
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {},
+  build: {
+    quiet: !isDev,
+  },
 }
