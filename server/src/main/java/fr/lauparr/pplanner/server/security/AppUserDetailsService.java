@@ -15,7 +15,7 @@ public class AppUserDetailsService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) {
-    return this.securityUserDao.findByUsernameAndDateSuppressionIsNull(username).orElseThrow(() -> new MessageException("Mauvais login ou mot de passe"));
+    return this.securityUserDao.findByEmailAndDateSuppressionIsNull(username).orElseThrow(() -> new MessageException("Mauvais login ou mot de passe"));
   }
 
 }

@@ -1,5 +1,5 @@
 <template>
-  <v-container>Fichiers</v-container>
+	<v-container fluid>Fichiers</v-container>
 </template>
 
 <script>

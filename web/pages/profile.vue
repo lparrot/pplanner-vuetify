@@ -1,5 +1,5 @@
 <template>
-  <v-container>Profil utilisateur</v-container>
+	<v-container fluid>Profil utilisateur</v-container>
 </template>
 
 <script>

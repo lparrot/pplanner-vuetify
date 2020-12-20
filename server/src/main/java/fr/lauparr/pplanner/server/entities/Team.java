@@ -3,6 +3,7 @@ package fr.lauparr.pplanner.server.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import fr.lauparr.pplanner.server.entities.abstracts.UUIDModifiableEntity;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,11 +15,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "teams")
-public class Team {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+public class Team extends UUIDModifiableEntity {
 
   @NotBlank
   private String name;

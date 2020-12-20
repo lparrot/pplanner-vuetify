@@ -2,7 +2,7 @@ package fr.lauparr.pplanner.server.projections;
 
 import org.springframework.beans.factory.annotation.Value;
 
-public interface MemberSimpleProjection {
+public interface MemberProj {
 
   String getFullname();
 
@@ -11,6 +11,6 @@ public interface MemberSimpleProjection {
   String getAvatar();
 
   @Value("#{target.user?.id}")
-  Long getUserId();
+  String getUserId();
 
 }

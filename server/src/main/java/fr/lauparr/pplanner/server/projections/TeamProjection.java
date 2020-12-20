@@ -4,15 +4,15 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
-public interface TeamSimpleProjection {
+public interface TeamProjection {
 
-  Long getId();
+  String getId();
 
   String getName();
 
   @Value("#{target.project?.id}")
-  Long getProjectId();
+  String getProjectId();
 
-  List<MemberSimpleProjection> getMembers();
+  List<MemberProj> getMembers();
 
 }

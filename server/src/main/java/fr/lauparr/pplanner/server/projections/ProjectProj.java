@@ -1,7 +1,7 @@
 package fr.lauparr.pplanner.server.projections;
 
-public interface ProjectSimpleProjection {
-  Long getId();
+public interface ProjectProj {
+  String getId();
 
   String getName();
 }

@@ -8,8 +8,8 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface ProjectRepository extends JpaRepository<Project, Long>, JpaSpecificationExecutor<Project> {
+public interface ProjectRepository extends JpaRepository<Project, String>, JpaSpecificationExecutor<Project> {
 
-  @Query("select p from Team t left join t.project p left join t.members m where m.id = :userId")
-  List<Project> findProjectByUser(@Param("userId") Long userId);
+  @Query("select p from Team t left join t.project p left join t.members m left join m.user u where u.id = :userId")
+  List<Project> findProjectByUser(@Param("userId") String userId);
 }

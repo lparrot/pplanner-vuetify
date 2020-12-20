@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, String> {
 
   @Query("select m from Member m where m.user = :user")
   Optional<Member> findMemberByUser(@Param("user") User user);

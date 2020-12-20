@@ -1,7 +1,7 @@
 package fr.lauparr.pplanner.server.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import fr.lauparr.pplanner.server.pojos.api.ModifiableEntity;
+import fr.lauparr.pplanner.server.entities.abstracts.UUIDModifiableEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.Builder;
@@ -12,7 +12,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -22,22 +24,16 @@ import java.util.Collection;
 @Table(name = "users")
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class User extends ModifiableEntity implements UserDetails {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+public class User extends UUIDModifiableEntity implements UserDetails {
 
   @NotBlank
-  private String username;
+  private String email;
 
   @JsonIgnore
   private String password;
 
   @ManyToOne
   private Group group;
-
-  private String email;
 
   private String firstName;
 
@@ -48,8 +44,7 @@ public class User extends ModifiableEntity implements UserDetails {
   private LocalDate birthday;
 
   @Builder
-  public User(String username, String password, String email, String firstName, String lastName, LocalDate birthday, String avatar, Group group) {
-    this.username = username;
+  public User(String email, String password, String firstName, String lastName, LocalDate birthday, String avatar, Group group) {
     this.password = password;
     this.email = email;
     this.firstName = firstName;
@@ -65,6 +60,11 @@ public class User extends ModifiableEntity implements UserDetails {
     claims.put("email", this.email);
     claims.put("avatar", this.avatar);
     return claims;
+  }
+
+  @Override
+  public String getUsername() {
+    return this.getEmail();
   }
 
   @Override

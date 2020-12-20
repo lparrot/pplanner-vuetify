@@ -12,10 +12,13 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.IntStream;
 
 @Service
 public class InitializerService {
+
+  public final static String FAKE_AVATAR_URL = "https://i.pravatar.cc/150?u=";
 
   @Autowired
   private UserRepository userRepository;
@@ -45,12 +48,11 @@ public class InitializerService {
 
       // Users
       User user = User.builder()
-        .username("laurent.parrot")
+        .email("kestounet@gmail.com")
         .password(this.passwordEncoder.encode("123"))
         .firstName("Laurent")
         .lastName("Parrot")
-        .email("kestounet@gmail.com")
-        .avatar(faker.avatar().image())
+        .avatar(InitializerService.FAKE_AVATAR_URL + "kestounet@gmail.com")
         .birthday(LocalDate.of(1983, 9, 5))
         .group(groupAdministrator)
         .build();
@@ -60,15 +62,15 @@ public class InitializerService {
         String lastName = faker.name().lastName();
         String firstName = faker.name().firstName();
         String username = String.format("%s.%s", lastName.toLowerCase(), firstName.toLowerCase());
+        String email = faker.internet().emailAddress(username);
         LocalDate birthday = UtilsDateTime.convertToLocalDate(faker.date().birthday());
 
         User generatedUser = User.builder()
-          .username(username)
+          .email(email)
           .password(this.passwordEncoder.encode("123"))
           .firstName(firstName)
           .lastName(lastName)
-          .email(faker.internet().emailAddress(username))
-          .avatar(faker.avatar().image())
+          .avatar(InitializerService.FAKE_AVATAR_URL + email)
           .birthday(birthday)
           .group(groupUser)
           .build();
@@ -77,35 +79,41 @@ public class InitializerService {
       });
 
       // Projects
+      Project projectPplanner = Project.builder().name("PPlanner").description("Project Planner").build();
       Project projectCcs = Project.builder().name("CCS").description("Carte de circulation sécurisée").build();
       Project projectVdd = Project.builder().name("VDD").description("Valise diplomatique défense").build();
       Project projectPrdv = Project.builder().name("PRDV").description("Eureka - module prise de rendez-vous").build();
 
-      this.projectRepository.saveAll(Arrays.asList(projectCcs, projectVdd, projectPrdv));
+      this.projectRepository.saveAll(Arrays.asList(projectPplanner, projectCcs, projectVdd, projectPrdv));
 
       // Teams
-      Team teamCcs = Team.builder().name("Team CCS").project(projectCcs).build();
-      Team teamVdd = Team.builder().name("Team VDD").project(projectVdd).build();
-      Team teamPrdv = Team.builder().name("Team PRDV").project(projectPrdv).build();
+      List<Team> teams = Arrays.asList(
+        Team.builder().name("Team PPlanner").project(projectPplanner).build(),
+        Team.builder().name("Team CCS").project(projectCcs).build(),
+        Team.builder().name("Team VDD").project(projectVdd).build(),
+        Team.builder().name("Team PRDV").project(projectPrdv).build()
+      );
 
       // Ajout de l'utilisateur par défaut dans l'équipe de chaque projet
       Member member = new Member(user);
+
       member.setJob(faker.job().title());
       this.memberRepository.save(member);
 
-      this.teamService.addMember(member, teamCcs);
-      this.teamService.addMember(member, teamVdd);
-      this.teamService.addMember(member, teamPrdv);
+      teams.forEach(team -> {
+        this.teamService.addMember(member, team);
+      });
 
-      this.teamRepository.saveAll(Arrays.asList(teamCcs, teamVdd, teamPrdv));
+      this.teamRepository.saveAll(teams);
 
       // Members
 
       IntStream.rangeClosed(1, 50).forEach(i -> {
+        String fullName = faker.name().fullName();
         Member generatedMember = Member.builder()
-          .fullname(faker.name().fullName())
+          .fullname(fullName)
           .job(faker.job().title())
-          .avatar(faker.avatar().image())
+          .avatar(InitializerService.FAKE_AVATAR_URL + fullName)
           .build();
 
         generatedMember = this.memberRepository.save(generatedMember);

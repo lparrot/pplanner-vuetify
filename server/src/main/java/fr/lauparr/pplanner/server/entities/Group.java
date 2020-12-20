@@ -1,6 +1,6 @@
 package fr.lauparr.pplanner.server.entities;
 
-import fr.lauparr.pplanner.server.pojos.api.ModifiableEntity;
+import fr.lauparr.pplanner.server.entities.abstracts.UUIDModifiableEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,11 +13,7 @@ import java.util.List;
 @Table(name = "groups")
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Group extends ModifiableEntity {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+public class Group extends UUIDModifiableEntity {
 
   @NotBlank
   private String name;

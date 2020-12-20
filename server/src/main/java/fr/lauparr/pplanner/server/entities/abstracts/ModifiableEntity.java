@@ -1,4 +1,4 @@
-package fr.lauparr.pplanner.server.pojos.api;
+package fr.lauparr.pplanner.server.entities.abstracts;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,7 +29,7 @@ public abstract class ModifiableEntity implements Serializable {
     if (this.dateCreation == null) {
       this.dateCreation = LocalDateTime.now();
     }
-    if (isUpdatableDate()) {
+    if (this.isUpdatableDate()) {
       this.dateModification = LocalDateTime.now();
     }
   }

@@ -19,7 +19,10 @@ export default {
     title: 'PPlanner',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
+      },
       { hid: 'description', name: 'description', content: '' },
     ],
     link: [
@@ -42,11 +45,17 @@ export default {
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     '~/plugins/vee-validate',
-
+    '~/plugins/pplanner',
   ],
 
+  loading: '~/components/Loading.vue',
+
   // Auto import components (https://go.nuxtjs.dev/config-components)
-  components: true,
+  components: [
+    '~/components/',
+    { path: '~/components/pplanner/', prefix: 'pp' },
+    { path: '~/components/modules/', prefix: 'pp', global: true },
+  ],
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
@@ -111,9 +120,19 @@ export default {
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
+    treeShake: true,
     theme: {
-      dark: true,
+      dark: false,
       themes: {
+        light: {
+          primary: '#1976D2',
+          secondary: '#424242',
+          accent: '#82B1FF',
+          error: '#FF5252',
+          info: '#2196F3',
+          success: '#4CAF50',
+          warning: '#FB8C00',
+        },
         dark: {
           primary: colors.blue.darken2,
           accent: colors.grey.darken3,

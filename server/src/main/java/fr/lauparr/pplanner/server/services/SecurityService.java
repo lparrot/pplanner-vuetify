@@ -19,7 +19,7 @@ public class SecurityService {
   private TokenService tokenService;
 
   public JwtToken login(String username, String password) {
-    User user = this.userRepository.findByUsernameAndDateSuppressionIsNull(username).orElse(null);
+    User user = this.userRepository.findByEmailAndDateSuppressionIsNull(username).orElse(null);
 
     // Si aucun utilisateur n'a été trouvé à partir du login
     if (user == null) {

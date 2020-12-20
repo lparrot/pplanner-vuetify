@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
+import java.util.logging.Level;
 
 /**
  * Handler personnalisé pour l'interception des exceptions venant du container (non catchées par le développeur)
@@ -37,6 +39,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
   public final ResponseEntity handleMessageException(MessageException e, WebRequest request) {
     ResponseError exceptionResponse = UtilsController.createMessageResponse(e.getLevel(), e.getMessage(), e.getTitle());
     return new ResponseEntity(exceptionResponse, HttpStatus.OK);
+  }
+
+  @ExceptionHandler(EntityNotFoundException.class)
+  public final ResponseEntity handleEntityNotFoundException(EntityNotFoundException e, WebRequest request) {
+    ResponseError exceptionResponse = UtilsController.createMessageResponse(Level.SEVERE, e.getMessage());
+    return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
   }
 
   @ExceptionHandler(Throwable.class)

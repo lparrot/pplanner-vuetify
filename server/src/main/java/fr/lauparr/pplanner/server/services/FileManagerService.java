@@ -21,12 +21,12 @@ public class FileManagerService {
   @Value("${app.global.projects-path}")
   private String projectsPath;
 
-  public FileInfo getRootFileByProjectId(Long id) {
+  public FileInfo getRootFileByProjectId(String id) {
     File directory = this.getDirectoryByProjectIdAndEncodedKey(id, null);
     return new FileInfo(directory);
   }
 
-  public List<DirectoryInfo> getProjectDirectoriesByProjectId(Long id, String key) {
+  public List<DirectoryInfo> getProjectDirectoriesByProjectId(String id, String key) {
     File[] directories = this.getDirectoryByProjectIdAndEncodedKey(id, key).listFiles(File::isDirectory);
 
     if (directories != null) {
@@ -36,7 +36,7 @@ public class FileManagerService {
     return new ArrayList<>();
   }
 
-  public List<FileInfo> getProjectDirectoryContentsByProjectId(Long id, String key) {
+  public List<FileInfo> getProjectDirectoryContentsByProjectId(String id, String key) {
     File[] files = this.getDirectoryByProjectIdAndEncodedKey(id, key).listFiles();
 
     if (files != null) {
@@ -46,7 +46,7 @@ public class FileManagerService {
     return new ArrayList<>();
   }
 
-  public File getDirectoryByProjectIdAndEncodedKey(Long id, String key) {
+  public File getDirectoryByProjectIdAndEncodedKey(String id, String key) {
     String path;
     if (key != null) {
       path = DirectoryInfo.decode(key);

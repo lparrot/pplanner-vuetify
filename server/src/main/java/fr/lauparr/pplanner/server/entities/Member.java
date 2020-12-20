@@ -1,23 +1,22 @@
 package fr.lauparr.pplanner.server.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import fr.lauparr.pplanner.server.entities.abstracts.UUIDModifiableEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Singular;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Entity
 @Table(name = "members")
-public class Member implements Serializable {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+public class Member extends UUIDModifiableEntity {
 
   private String fullname;
 
