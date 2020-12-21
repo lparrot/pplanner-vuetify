@@ -21,14 +21,9 @@
           </v-edit-dialog>
 
           <div class="ml-5">
-            <v-tooltip bottom>
-              <template #activator="{ on, attrs }">
-                <v-btn v-bind="attrs" v-on="on" color="red" dark depressed fab x-small>
-                  <v-icon dark>mdi-trash-can-outline</v-icon>
-                </v-btn>
-              </template>
-              <span>Supprimer le tableau</span>
-            </v-tooltip>
+            <v-btn color="red" dark depressed icon small text>
+              <v-icon dark>mdi-trash-can-outline</v-icon>
+            </v-btn>
           </div>
         </v-layout>
 
@@ -49,7 +44,14 @@
         <template v-if="boardModules != null">
           <v-row v-for="(boardModule, boardModuleIndex) in boardModules" :key="boardModuleIndex" class="d-flex justify-center">
             <v-col cols="12" md="10">
-              <p class="text-h4">{{ boardModule.name }}</p>
+              <v-layout align-content-center>
+                <p class="text-h4">{{ boardModule.name }}</p>
+                <div class="ml-5">
+                  <v-btn color="red" dark depressed icon small text>
+                    <v-icon dark>mdi-trash-can-outline</v-icon>
+                  </v-btn>
+                </div>
+              </v-layout>
               <component :is="boardModule.type" :module="boardModule"></component>
             </v-col>
           </v-row>

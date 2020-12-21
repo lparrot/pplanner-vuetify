@@ -1,6 +1,6 @@
 <template>
   <div>
-    TaskList
+    <v-skeleton-loader boilerplate type="table"></v-skeleton-loader>
   </div>
 </template>
 

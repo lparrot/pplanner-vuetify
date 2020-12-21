@@ -1,7 +1,24 @@
 <template>
-	<div>
-		Kanban
-	</div>
+  <div>
+    <v-row>
+      <v-col>
+        <v-skeleton-loader boilerplate type="text"></v-skeleton-loader>
+        <v-skeleton-loader boilerplate type="image@3"></v-skeleton-loader>
+      </v-col>
+      <v-col>
+        <v-skeleton-loader boilerplate type="text"></v-skeleton-loader>
+        <v-skeleton-loader boilerplate type="image@3"></v-skeleton-loader>
+      </v-col>
+      <v-col>
+        <v-skeleton-loader boilerplate type="text"></v-skeleton-loader>
+        <v-skeleton-loader boilerplate type="image@3"></v-skeleton-loader>
+      </v-col>
+      <v-col>
+        <v-skeleton-loader boilerplate type="text"></v-skeleton-loader>
+        <v-skeleton-loader boilerplate type="image@3"></v-skeleton-loader>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script lang="ts">
