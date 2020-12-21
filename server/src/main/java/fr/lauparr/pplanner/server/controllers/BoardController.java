@@ -4,6 +4,7 @@ import fr.lauparr.pplanner.server.params.BoardPatchModuleParams;
 import fr.lauparr.pplanner.server.params.BoardPatchParams;
 import fr.lauparr.pplanner.server.params.BoardPostModuleParams;
 import fr.lauparr.pplanner.server.pojos.api.AbstractController;
+import fr.lauparr.pplanner.server.projections.ProjectBoardModuleProj;
 import fr.lauparr.pplanner.server.projections.ProjectBoardProj;
 import fr.lauparr.pplanner.server.services.BoardService;
 import fr.lauparr.pplanner.server.utils.UtilsDao;
@@ -30,12 +31,12 @@ public class BoardController extends AbstractController {
 
   @GetMapping("/{id}/modules")
   public ResponseEntity getBoardModule(@PathVariable("id") String id) {
-    return this.ok(this.boardService.getModules(id));
+    return this.ok(UtilsDao.convertListDto(this.boardService.getModules(id), ProjectBoardModuleProj.class));
   }
 
   @PostMapping("/{id}/modules")
   public ResponseEntity postBoardModule(@PathVariable("id") String id, @RequestBody BoardPostModuleParams params) {
-    return this.ok(this.boardService.createModule(id, params.getType()));
+    return this.ok(UtilsDao.convertToDto(this.boardService.createModule(id, params), ProjectBoardModuleProj.class));
   }
 
   @PatchMapping("/modules/{id}")

@@ -7,14 +7,13 @@ interface Project {
 interface Board {
   id: string
   name: string
-  visibility?: string
+  description: string
+  visibility: string
 }
 
 interface BoardModule {
   type: string
-  img: string
-  label: string
-  description: string
+  name: string
 }
 
 interface Member {

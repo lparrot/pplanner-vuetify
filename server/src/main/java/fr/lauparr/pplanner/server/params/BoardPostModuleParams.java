@@ -6,5 +6,6 @@ import lombok.Data;
 public class BoardPostModuleParams {
 
   private String type;
+  private String name;
 
 }

@@ -4,6 +4,8 @@ public interface ProjectBoardModuleProj {
 
   String getId();
 
+  String getName();
+
   String getType();
 
   String getState();

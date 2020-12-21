@@ -61,7 +61,7 @@
               <v-row>
                 <v-col cols="12">
                   <validation-provider #default="{invalid, errors}" name="nom du tableau" rules="required">
-                    <v-text-field v-model="forms.createNewBlankBoard.name" :error="invalid" :error-messages="errors[0]" filled label="Nom du tableau *"></v-text-field>
+                    <v-text-field v-model.trim="forms.createNewBlankBoard.name" :error="invalid" :error-messages="errors[0]" filled label="Nom du tableau *"></v-text-field>
                   </validation-provider>
                 </v-col>
                 <v-col cols="12">

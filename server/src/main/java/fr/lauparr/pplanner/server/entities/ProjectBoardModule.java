@@ -18,6 +18,8 @@ public class ProjectBoardModule extends UUIDModifiableEntity {
 
   private String type;
 
+  private String name;
+
   @Column(columnDefinition = "LONGTEXT")
   private String state;
 

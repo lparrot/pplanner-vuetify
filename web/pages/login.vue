@@ -10,10 +10,10 @@
             </div>
             <validation-observer ref="validator" tag="form" @submit.prevent="onSubmit">
               <validation-provider #default="{invalid, errors}" immediate name="nom d'utilisateur" rules="required|email" tag="div">
-                <v-text-field v-model="form.username" :error="invalid" :error-messages="errors[0]" dense filled label="Nom d'utilisateur" light prepend-icon="mdi-email" type="email"></v-text-field>
+                <v-text-field v-model.trim="form.username" :error="invalid" :error-messages="errors[0]" dense filled label="Nom d'utilisateur" light prepend-icon="mdi-email" type="email"></v-text-field>
               </validation-provider>
               <validation-provider #default="{invalid, errors}" immediate name="mot de passe" rules="required" tag="div">
-                <v-text-field v-model="form.password" :error="invalid" :error-messages="errors[0]" dense filled label="Mot de passe" light prepend-icon="mdi-lock" type="password"></v-text-field>
+                <v-text-field v-model.trim="form.password" :error="invalid" :error-messages="errors[0]" dense filled label="Mot de passe" light prepend-icon="mdi-lock" type="password"></v-text-field>
               </validation-provider>
               <v-btn block="block" color="primary" type="submit">Se connecter</v-btn>
             </validation-observer>

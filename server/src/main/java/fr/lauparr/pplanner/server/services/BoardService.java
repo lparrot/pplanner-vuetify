@@ -5,10 +5,9 @@ import fr.lauparr.pplanner.server.entities.ProjectBoardModule;
 import fr.lauparr.pplanner.server.entities.abstracts.ModifiableEntity;
 import fr.lauparr.pplanner.server.params.BoardPatchModuleParams;
 import fr.lauparr.pplanner.server.params.BoardPatchParams;
-import fr.lauparr.pplanner.server.projections.ProjectBoardModuleProj;
+import fr.lauparr.pplanner.server.params.BoardPostModuleParams;
 import fr.lauparr.pplanner.server.repositories.ProjectBoardModuleRepository;
 import fr.lauparr.pplanner.server.repositories.ProjectBoardRepository;
-import fr.lauparr.pplanner.server.utils.UtilsDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,19 +41,19 @@ public class BoardService {
     return this.projectBoardRepository.save(board);
   }
 
-  public List<ProjectBoardModuleProj> getModules(String id) {
+  public List<ProjectBoardModule> getModules(String id) {
     ProjectBoard board = this.getBoardById(id);
-    return UtilsDao.convertListDto(
+    return
       board.getModules().stream()
         .sorted(Comparator.comparing(ModifiableEntity::getDateCreation))
-        .collect(Collectors.toList()),
-      ProjectBoardModuleProj.class);
+        .collect(Collectors.toList());
   }
 
-  public ProjectBoardModule createModule(String id, String type) {
+  public ProjectBoardModule createModule(String id, BoardPostModuleParams params) {
     ProjectBoard board = this.getBoardById(id);
     ProjectBoardModule boardModule = new ProjectBoardModule();
-    boardModule.setType(type);
+    boardModule.setType(params.getType());
+    boardModule.setName(params.getName());
     board.addModule(boardModule);
     return this.projectBoardModuleRepository.save(boardModule);
   }

@@ -9,7 +9,7 @@
             <v-edit-dialog :return-value="field.label" cancel-text="Annuler" large save-text="Valider">
               <span class="text-h6 font-weight-bold">{{ field.label }}</span>
               <template v-slot:input>
-                <v-text-field v-model="field.label"></v-text-field>
+                <v-text-field v-model.trim="field.label"></v-text-field>
               </template>
             </v-edit-dialog>
             <v-btn v-if="!field.fixed" :ripple="false" icon text tile width="20">
@@ -35,7 +35,7 @@
           <v-edit-dialog :return-value="item[field.id]" cancel-text="Annuler" large save-text="Valider">
             <div>{{ item[field.id] }}</div>
             <template v-slot:input>
-              <v-text-field v-model="item[field.id]"></v-text-field>
+              <v-text-field v-model.trim="item[field.id]"></v-text-field>
             </template>
           </v-edit-dialog>
         </td>

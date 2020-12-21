@@ -16,7 +16,7 @@
           <v-edit-dialog :return-value.sync="board.name" cancel-text="Annuler" large save-text="Valider" @save="onSave">
             <div class="text-h4" v-text="board.name"></div>
             <template v-slot:input>
-              <v-text-field v-model="board.name" :rules="[required]" autofocus label="Nom" single-line></v-text-field>
+              <v-text-field v-model.trim="board.name" :rules="[required]" autofocus label="Nom" single-line></v-text-field>
             </template>
           </v-edit-dialog>
 
@@ -49,6 +49,7 @@
         <template v-if="boardModules != null">
           <v-row v-for="(boardModule, boardModuleIndex) in boardModules" :key="boardModuleIndex" class="d-flex justify-center">
             <v-col cols="12" md="10">
+              <p class="text-h4">{{ boardModule.name }}</p>
               <component :is="boardModule.type" :module="boardModule"></component>
             </v-col>
           </v-row>
@@ -58,54 +59,63 @@
     </v-card>
 
     <v-dialog v-model="dialogs.addModule" :width="$vuetify.breakpoint.mdAndDown ? '100vw': '60vw'" scrollable>
-      <v-card>
-        <v-card-title class="pa-0">
-          <v-toolbar flat>
-            <v-toolbar-title>Ajout d'un nouveau module au tableau</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn icon text>
-              <v-icon class="heading grey--text text--darken-4" @click="dialogs.addModule = false">mdi-close</v-icon>
-            </v-btn>
-          </v-toolbar>
-        </v-card-title>
+      <validation-observer #default="{invalid}">
+        <v-card>
+          <v-card-title class="pa-0">
+            <v-toolbar flat>
+              <v-toolbar-title>Ajout d'un nouveau module au tableau</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-btn icon text>
+                <v-icon class="heading grey--text text--darken-4" @click="dialogs.addModule = false">mdi-close</v-icon>
+              </v-btn>
+            </v-toolbar>
+          </v-card-title>
 
-        <v-card-text>
-          <p class="subtitle-2">Selectionnez un module ci-dessous</p>
-          <v-item-group v-model="selectedModuleToAdd">
-            <v-container>
-              <v-row>
-                <v-col v-for="(module, moduleIndex) in modules" :key="moduleIndex" cols="12" lg="3" md="4">
-                  <v-item #default="{ active, toggle }">
-                    <v-card class="pt-1" @click="toggle">
-                      <v-img :aspect-ratio="16/9" :src="module.img" contain>
-                        <v-expand-transition>
-                          <div v-if="active" class="d-flex transition-fast-in-fast-out blue lighten-2 v-card--reveal display-3 white--text fill-height">
-                            <v-layout align-center justify-center>
-                              <div>Sélectionné</div>
-                            </v-layout>
+          <v-card-text>
+            <validation-provider #default="{invalid, errors}" name="nom du module" rules="required">
+              <v-text-field v-model.trim="selectedModuleToAdd.name" :error="invalid" :error-messages="errors[0]" label="Nom du module"></v-text-field>
+            </validation-provider>
+
+            <validation-provider #default="{invalid, errors}" name="module" rules="required">
+              <input :value="selectedModuleToAdd.module" type="hidden">
+            </validation-provider>
+            <p class="subtitle-2">Selectionnez un module ci-dessous</p>
+            <v-item-group v-model="selectedModuleToAdd.module">
+              <v-container>
+                <v-row>
+                  <v-col v-for="(module, moduleIndex) in modules" :key="moduleIndex" cols="12" lg="3" md="4">
+                    <v-item #default="{ active, toggle }">
+                      <v-card class="pt-1" @click="toggle">
+                        <v-img :aspect-ratio="16/9" :src="module.img" contain>
+                          <v-expand-transition>
+                            <div v-if="active" class="d-flex transition-fast-in-fast-out blue lighten-2 v-card--reveal display-3 white--text fill-height">
+                              <v-layout align-center justify-center>
+                                <div>Sélectionné</div>
+                              </v-layout>
+                            </div>
+                          </v-expand-transition>
+                        </v-img>
+                        <v-card-text>
+                          <div class="font-weight-light grey--text title mb-2 text-justify">
+                            {{ module.label }}
+                            <p class="subtitle-2">{{ module.description }}</p>
                           </div>
-                        </v-expand-transition>
-                      </v-img>
-                      <v-card-text>
-                        <div class="font-weight-light grey--text title mb-2 text-justify">
-                          {{ module.label }}
-                          <p class="subtitle-2">{{ module.description }}</p>
-                        </div>
-                      </v-card-text>
-                    </v-card>
-                  </v-item>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-item-group>
-        </v-card-text>
+                        </v-card-text>
+                      </v-card>
+                    </v-item>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-item-group>
+          </v-card-text>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="red" text @click="dialogs.addModule = false">Annuler</v-btn>
-          <v-btn color="green" text @click="onSubmitAddModule">Valider</v-btn>
-        </v-card-actions>
-      </v-card>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="red" text @click="dialogs.addModule = false">Annuler</v-btn>
+            <v-btn :disabled="invalid" color="green" text @click="onSubmitAddModule">Valider</v-btn>
+          </v-card-actions>
+        </v-card>
+      </validation-observer>
     </v-dialog>
   </v-container>
 </template>
@@ -115,6 +125,13 @@ import {Component, namespace, Vue, Watch} from 'nuxt-property-decorator'
 
 const projectModule = namespace('project')
 
+interface BoardModuleSelect {
+  type: string
+  img: string
+  label: string
+  description: string
+}
+
 @Component
 export default class PageProjectBoardIndex extends Vue {
 
@@ -122,7 +139,7 @@ export default class PageProjectBoardIndex extends Vue {
 
   board?: any = null
   boardEdit: any = {}
-  boardModules?: any[] | null = null
+  boardModules?: BoardModule[] | null = null
   dialogs: any = {
     addModule: false,
   }
@@ -139,20 +156,23 @@ export default class PageProjectBoardIndex extends Vue {
   required: Function = v => v != null || 'Champ requis'
 
   async onClickAddModule() {
-    this.selectedModuleToAdd = null
+    this.selectedModuleToAdd = {
+      name: null,
+      module: null,
+    }
     this.dialogs.addModule = true
   }
 
   async onSave() {
     const {name, description, visibility} = this.board
-    await this.$axios.$patch(`/api/boards/${this.board.id}`, {name, description, visibility})
+    await this.$axios.$patch(`/api/boards/${this.board?.id}`, {name, description, visibility})
     // TODO : Rafraichir la liste des tableaux
   }
 
   async onSubmitAddModule() {
-    const module = this.modules[this.selectedModuleToAdd]
+    const module = this.modules[this.selectedModuleToAdd.module]
     if (module != null && this.board != null) {
-      const res = await this.$axios.$post(`/api/boards/${this.board.id}/modules`, {type: module.type})
+      const res = await this.$axios.$post(`/api/boards/${this.board?.id}/modules`, {type: module.type, name: this.selectedModuleToAdd.name})
       this.boardModules?.push(res.data)
       this.dialogs.addModule = false
     }
