@@ -48,7 +48,7 @@
         <!-- Liste des modules -->
         <template v-if="boardModules != null">
           <v-row v-for="(boardModule, boardModuleIndex) in boardModules" :key="boardModuleIndex" class="d-flex justify-center">
-            <v-col cols="12" md="8">
+            <v-col cols="12" md="10">
               <component :is="boardModule.type" :module="boardModule"></component>
             </v-col>
           </v-row>
