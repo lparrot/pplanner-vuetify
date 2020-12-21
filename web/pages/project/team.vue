@@ -19,8 +19,8 @@
               </v-list-item-avatar>
 
               <v-list-item-content>
-                <v-list-item-title>{{ member['fullname'] }}</v-list-item-title>
-                <v-list-item-subtitle>{{ member['job'] }}</v-list-item-subtitle>
+                <v-list-item-title>{{ member.fullname }}</v-list-item-title>
+                <v-list-item-subtitle>{{ member.job }}</v-list-item-subtitle>
               </v-list-item-content>
 
 							<v-list-item-action>
@@ -46,8 +46,8 @@ const projectModule = namespace('project')
 })
 export default class PageProjectEquipe extends Vue {
 
-  @projectModule.State selectedProject;
-  @projectModule.State memberList;
+  @projectModule.State selectedProject?: Project;
+  @projectModule.State memberList?: Array<Member>;
 
   async fetch(ctx) {
     await ctx.store.dispatch('project/findTeam')

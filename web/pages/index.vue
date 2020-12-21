@@ -21,9 +21,14 @@
 <script lang="ts">
 import {Component, Vue} from 'nuxt-property-decorator'
 
+interface CheckItem {
+  label: string
+  icon: string
+}
+
 @Component({})
 export default class PageIndex extends Vue {
-  checkItems: Array<any> = [
+  checkItems: Array<CheckItem> = [
     {label: `Création de backlog et chiffrage du projet`, icon: 'mdi-checkbox-marked-circle-outline'},
     {label: `Création de feuille de route globale et détaillée`, icon: 'mdi-checkbox-marked-circle-outline'},
     {label: `Suivi des itérations`, icon: 'mdi-checkbox-marked-circle-outline'},

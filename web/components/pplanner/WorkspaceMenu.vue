@@ -43,7 +43,9 @@
     <v-list dense nav>
       <v-subheader>Tableaux</v-subheader>
       <template v-if="project.boards.length > 0">
-        <pp-board-list-item v-for="(board, boardIndex) in project.boards" :key="boardIndex" :active="boardIndex === selectedBoardIndex" :board="board" @on-select-board="onSelectBoard"></pp-board-list-item>
+        <template v-for="(board, boardIndex) in project.boards">
+          <pp-board-list-item :key="boardIndex" :active="boardIndex === selectedBoardIndex" :board="board" @on-select-board="onSelectBoard"></pp-board-list-item>
+        </template>
       </template>
       <template v-else>
         <span>Cliquez sur Ajouter... pour créer un nouveau tableau</span>
@@ -90,8 +92,8 @@ const projectModule = namespace('project')
 @Component({})
 export default class WorkspaceMenu extends Vue {
 
-  @projectModule.State selectedProject
-  @projectModule.State selectedBoard
+  @projectModule.State selectedProject?: Project
+  @projectModule.State selectedBoard?: Board
 
   forms: any = {
     createNewBlankBoard: {
@@ -99,21 +101,23 @@ export default class WorkspaceMenu extends Vue {
       visibility: 'PRIVATE',
     },
   }
+
   dialogs: any = {
     createNewBlankBoard: false,
   }
-  project?: any = null
+
+  project?: Project
 
   get selectedBoardIndex() {
     if (this.selectedProject == null || this.selectedBoard == null) {
       return -1
     }
-    return this.project?.boards.findIndex(it => it.id === this.selectedBoard.id)
+    return this.project?.boards?.findIndex(it => it.id === this.selectedBoard?.id)
   }
 
   async getProject() {
     try {
-      const res = await this.$axios.$get(`/api/projects/${this.selectedProject.id}?boards=true`)
+      const res = await this.$axios.$get(`/api/projects/${this.selectedProject?.id}?boards=true`)
       this.project = res.data
     } catch (err) {
       await this.$accessor.project.selectProject(null)
@@ -141,7 +145,7 @@ export default class WorkspaceMenu extends Vue {
   }
 
   async onSubmitCreateNewBlankBoard() {
-    const res = await this.$axios.$post(`/api/projects/${this.selectedProject.id}/boards`, this.forms.createNewBlankBoard)
+    const res = await this.$axios.$post(`/api/projects/${this.selectedProject?.id}/boards`, this.forms.createNewBlankBoard)
     await this.getProject()
     this.dialogs.createNewBlankBoard = false
     await this.onSelectBoard(res.data)

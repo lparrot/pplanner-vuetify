@@ -12,9 +12,9 @@ import {Component, Prop, Vue} from 'nuxt-property-decorator'
 
 @Component
 export default class PPBoardListItem extends Vue {
-  @Prop() readonly active
-  @Prop() readonly board
-  @Prop() readonly selectedIndex
+  @Prop(Boolean) readonly active!: boolean
+  @Prop() readonly board!: Board
+  @Prop(Number) readonly selectedIndex!: number
 
   onSelectBoard(board) {
     this.$emit('on-select-board', board)

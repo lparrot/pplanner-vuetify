@@ -84,8 +84,8 @@ const projectModule = namespace('project')
 @Component({})
 export default class LayoutDefault extends Vue {
 
-  @projectModule.State selectedProject
-  @projectModule.State projectList
+  @projectModule.State selectedProject?: Project
+  @projectModule.State projectList?: Array<Project>
 
   drawer: boolean = false
   loading: boolean = false
