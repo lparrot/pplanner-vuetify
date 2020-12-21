@@ -31,6 +31,13 @@
       </v-list>
     </v-menu>
 
+    <v-list-item link to="/project/team">
+      <pp-list-item-avatar>
+        <v-icon small>mdi-account-group-outline</v-icon>
+      </pp-list-item-avatar>
+      <v-list-item-content>Equipe</v-list-item-content>
+    </v-list-item>
+
     <v-divider></v-divider>
 
     <v-list dense nav>

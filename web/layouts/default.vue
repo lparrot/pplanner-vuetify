@@ -40,7 +40,9 @@
       <!-- Icones de profil -->
       <template v-if="$auth.loggedIn">
         <v-btn icon to="/profile">
-          <vue-avatar :size="24" :src="$auth.user.avatar" :username="$auth.user.fullname"></vue-avatar>
+          <v-avatar size="24">
+            <img :src="$auth.user.avatar" alt="avatar">
+          </v-avatar>
         </v-btn>
         <v-bottom-sheet v-model="sheetDeconnexion" persistent>
           <template #activator="{ on, attrs }">
@@ -75,16 +77,11 @@
 </template>
 
 <script lang="ts">
-import VueAvatar from 'vue-avatar'
 import {Component, namespace, Vue} from 'nuxt-property-decorator'
 
 const projectModule = namespace('project')
 
-@Component({
-  components: {
-    VueAvatar,
-  },
-})
+@Component({})
 export default class LayoutDefault extends Vue {
 
   @projectModule.State selectedProject

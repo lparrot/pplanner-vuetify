@@ -33,7 +33,6 @@ declare module '@nuxt/types' {
 }
 
 // @nuxtjs/auth
-
 interface StorageCookieOptions extends CookieAttributes {
   cookie: {
     prefix: string;

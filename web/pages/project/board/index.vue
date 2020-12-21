@@ -126,7 +126,7 @@ export default class PageProjectBoardIndex extends Vue {
   dialogs: any = {
     addModule: false,
   }
-  modules: any[] = [
+  modules: BoardModule[] = [
     {type: 'pp-analytics', img: '/modules/analytics.png', label: 'Analytique', description: `Permet de réaliser des diagrammes d'analyse de données`},
     {type: 'pp-table', img: '/modules/table.png', label: 'Liste dynamique', description: `Permet de réaliser des listes avec des champs dynamiques`},
     {type: 'pp-chat', img: '/modules/chat.png', label: 'Conversation', description: `Permet de réaliser des conversations entre membres du projet`},

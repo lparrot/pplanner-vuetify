@@ -13,7 +13,9 @@
 					<v-card-actions>
 						<v-list-item>
 							<v-list-item-avatar color="grey darken-3">
-                <avatar :size="48" :src="member.avatar" :username="member['fullname']" alt="avatar" class="elevation-6"></avatar>
+                <v-avatar class="elevation-6" size="48">
+                  <img :src="member.avatar" alt="avatar">
+                </v-avatar>
               </v-list-item-avatar>
 
               <v-list-item-content>
@@ -35,16 +37,12 @@
 </template>
 
 <script lang="ts">
-import Avatar from 'vue-avatar'
 import {Component, namespace, Vue} from 'nuxt-property-decorator'
 
 const projectModule = namespace('project')
 
 @Component({
   middleware: 'project',
-  components: {
-    Avatar,
-  },
 })
 export default class PageProjectEquipe extends Vue {
 

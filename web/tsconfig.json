@@ -26,10 +26,6 @@
         "./*"
       ]
     },
-    //    "typeRoots": [
-    //      "@types",
-    //      "./typings"
-    //    ],
     "types": [
       "@types/node",
       "@nuxt/types",
