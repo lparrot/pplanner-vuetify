@@ -92,8 +92,8 @@ const projectModule = namespace('project')
 @Component({})
 export default class WorkspaceMenu extends Vue {
 
-  @projectModule.State selectedProject?: Project
-  @projectModule.State selectedBoard?: Board
+  @projectModule.State selectedProject?: Nullable<Project>
+  @projectModule.State selectedBoard?: Nullable<Board>
 
   forms: any = {
     createNewBlankBoard: {
@@ -106,7 +106,7 @@ export default class WorkspaceMenu extends Vue {
     createNewBlankBoard: false,
   }
 
-  project?: Project
+  project: Project | null = null
 
   get selectedBoardIndex() {
     if (this.selectedProject == null || this.selectedBoard == null) {

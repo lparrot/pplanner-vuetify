@@ -1,7 +1,7 @@
 interface Project {
   id?: string
   name: string
-  boards?: Array<Board>
+  boards: Array<Board>
 }
 
 interface Board {
