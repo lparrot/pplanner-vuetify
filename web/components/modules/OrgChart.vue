@@ -6,17 +6,18 @@
 
 <script lang="ts">
 import {stateMixin} from '@/mixins/state.mixin'
-import Vue from 'vue'
+import {Component, Vue} from 'nuxt-property-decorator'
 
-export default Vue.extend({
-	mixins: [stateMixin],
-
-	data() {
-		return {
-			...this.$props.module.state,
-		}
-	}
+@Component({
+  mixins: [stateMixin],
+  data() {
+    return {
+      ...this.$props.module.state,
+    }
+  },
 })
+export default class PPOrgChart extends Vue {
+}
 </script>
 
 <style scoped>

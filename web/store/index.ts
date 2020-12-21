@@ -2,7 +2,7 @@ import createPersistedState from 'vuex-persistedstate'
 import {getAccessorType} from 'typed-vuex'
 
 // Import all your submodules
-import * as project from './project'
+import * as project from '~/store/project'
 
 export const plugins = [createPersistedState({
 	key: 'pplanner.storage',

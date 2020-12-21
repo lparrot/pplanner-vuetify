@@ -13,6 +13,11 @@ export default {
   */
   target: 'static',
 
+  static: {
+    // Aucun préfixe ne sera rajouté au niveau du baseUrl pour les images par exemple
+    prefix: false,
+  },
+
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     titleTemplate: '%s - PPlanner',

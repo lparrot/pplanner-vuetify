@@ -1,11 +1,14 @@
 <template>
-	<v-container fluid>Profil utilisateur</v-container>
+  <v-container fluid>Profil utilisateur</v-container>
 </template>
 
-<script>
-import Vue from 'vue'
+<script lang="ts">
 
-export default Vue.extend({
+import {Component, Vue} from 'nuxt-property-decorator'
+
+@Component({
   middleware: 'auth',
 })
+export default class PageProfile extends Vue {
+}
 </script>

@@ -4,8 +4,10 @@
 	</v-list-item-avatar>
 </template>
 
-<script>
-import Vue from 'vue'
+<script lang="ts">
+import {Component, Vue} from 'nuxt-property-decorator'
 
-export default Vue.extend({})
+@Component
+export default class PPListItemAvatar extends Vue {
+}
 </script>

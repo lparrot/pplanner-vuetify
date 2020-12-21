@@ -1,11 +1,12 @@
 <template>
-	<v-icon v-bind="$attrs">{{ visibility === 'PRIVATE' ? 'mdi-lock-outline' : 'mdi-eye-outline' }}</v-icon>
+  <v-icon v-bind="$attrs">{{ visibility === 'PRIVATE' ? 'mdi-lock-outline' : 'mdi-eye-outline' }}</v-icon>
 </template>
 
-<script>
-import Vue from 'vue'
+<script lang="ts">
+import {Component, Prop, Vue} from 'nuxt-property-decorator'
 
-export default Vue.extend({
-  props: ['visibility'],
-})
+@Component
+export default class PPVisibilityIcon extends Vue {
+  @Prop(String) readonly visibility
+}
 </script>

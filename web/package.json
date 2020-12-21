@@ -14,12 +14,12 @@
     "@nuxtjs/axios": "^5.12.2",
     "core-js": "^3.6.5",
     "nuxt": "^2.14.6",
+    "nuxt-property-decorator": "^2.8.8",
     "nuxt-typed-vuex": "^0.1.22",
     "vee-validate": "^3.4.5",
     "vue-avatar": "^2.3.3",
     "vuetify": "*",
     "vuex": "^3.6.0",
-    "vuex-module-decorators": "^1.0.1",
     "vuex-persistedstate": "^4.0.0-beta.1"
   },
   "devDependencies": {

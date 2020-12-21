@@ -13,13 +13,13 @@
 					<v-card-actions>
 						<v-list-item>
 							<v-list-item-avatar color="grey darken-3">
-								<avatar :size="48" :src="member.avatar" :username="member.fullname" alt="avatar" class="elevation-6"></avatar>
-							</v-list-item-avatar>
+                <avatar :size="48" :src="member.avatar" :username="member['fullname']" alt="avatar" class="elevation-6"></avatar>
+              </v-list-item-avatar>
 
-							<v-list-item-content>
-								<v-list-item-title>{{ member.fullname }}</v-list-item-title>
-								<v-list-item-subtitle>{{ member.job }}</v-list-item-subtitle>
-							</v-list-item-content>
+              <v-list-item-content>
+                <v-list-item-title>{{ member['fullname'] }}</v-list-item-title>
+                <v-list-item-subtitle>{{ member['job'] }}</v-list-item-subtitle>
+              </v-list-item-content>
 
 							<v-list-item-action>
 								<v-btn icon>
@@ -34,33 +34,31 @@
 	</v-container>
 </template>
 
-<script>
-import Vue from 'vue'
+<script lang="ts">
 import Avatar from 'vue-avatar'
-import { mapState } from 'vuex'
+import {Component, namespace, Vue} from 'nuxt-property-decorator'
 
-export default Vue.extend({
+const projectModule = namespace('project')
+
+@Component({
   middleware: 'project',
-
   components: {
     Avatar,
   },
+})
+export default class PageProjectEquipe extends Vue {
 
-  computed: {
-    ...mapState({
-      selectedProject: state => state.project.selectedProject,
-      memberList: state => state.project.memberList,
-    }),
-  },
+  @projectModule.State selectedProject;
+  @projectModule.State memberList;
 
-  async fetch (ctx) {
+  async fetch(ctx) {
     await ctx.store.dispatch('project/findTeam')
-  },
+  }
 
-  async mounted () {
+  async mounted() {
     await this.$root.$on('project-selected', async () => {
       await this.$nuxt.refresh()
     })
-  },
-})
+  }
+}
 </script>
