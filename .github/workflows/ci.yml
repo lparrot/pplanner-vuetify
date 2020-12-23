@@ -20,5 +20,18 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: Package
+          name: Artifact
           path: target
+
+      - name: Deploy file
+        uses: wlixcc/SFTP-Deploy-Action@v1.0
+        with:
+          username: 'root'
+          server: '${{ secrets.SSH_IP_ADDRESS }}'
+          port: '${{ secrets.SSH_PORT }}'
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          local_path: './target/*.jar'
+          remote_path: '/volume1/apps/pplanner/files'
+          args: '-o ConnectTimeout=5'
+
+
