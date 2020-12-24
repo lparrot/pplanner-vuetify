@@ -27,6 +27,7 @@ jobs:
           port: ${{ secrets.NAS_PORT }}
           source: "target/pplanner.jar"
           target: "/volume1/apps/pplanner/files"
+          strip_components: 1
 
       - name: Restart docker container
         uses: appleboy/ssh-action@master
@@ -35,6 +36,6 @@ jobs:
           username: ${{ secrets.NAS_USERNAME }}
           password: ${{ secrets.NAS_PASSWORD }}
           port: ${{ secrets.NAS_PORT }}
-          script: sudo /usr/local/bin/docker restart pplanner
+          script: echo ${{ secrets.NAS_PASSWORD }} | sudo -S /usr/local/bin/docker restart pplanner
 
 
