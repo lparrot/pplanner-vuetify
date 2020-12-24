@@ -21,3 +21,12 @@ interface Member {
   fullname: string
   job: string
 }
+
+interface User {
+  username?: string
+  email?: string
+  firstName?: string
+  lastName?: string
+  birthday?: string
+  avatar?: string
+}

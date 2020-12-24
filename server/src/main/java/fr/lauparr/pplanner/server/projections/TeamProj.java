@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
-public interface TeamProjection {
+public interface TeamProj {
 
   String getId();
 

@@ -11,7 +11,7 @@
       <v-toolbar-items class="d-inline-flex justify-center mr-2">
         <v-btn text to="/">
           <img alt="logo" src="/logo.png" width="24">
-          <div v-if="!isTabletAndMobile">{{ $config.app.title }} - 1.0</div>
+          <div v-if="!isTabletAndMobile" v-text="$config.app.title"></div>
         </v-btn>
       </v-toolbar-items>
 

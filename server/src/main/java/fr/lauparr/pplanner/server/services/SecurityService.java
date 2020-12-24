@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 public class SecurityService {
 
@@ -39,4 +41,7 @@ public class SecurityService {
       .build();
   }
 
+  public User getUserData(String name) {
+    return this.userRepository.findByEmailAndDateSuppressionIsNull(name).orElseThrow(() -> new EntityNotFoundException("L'utilisateur n'existe pas "));
+  }
 }
