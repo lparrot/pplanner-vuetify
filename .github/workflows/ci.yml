@@ -25,6 +25,7 @@ jobs:
           username: ${{ secrets.NAS_USERNAME }}
           key: ${{ secrets.NAS_PRIVATE_KEY }}
           port: ${{ secrets.NAS_PORT }}
+          passphrase: ${{ secrets.NAS_PASSPHRASE }}
           script: cd /volume1/apps && ls
 
 
