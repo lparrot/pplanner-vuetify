@@ -18,13 +18,23 @@ jobs:
       #- name: Build with Maven
       #  run: mvn --batch-mode --update-snapshots clean package
 
-      - name: Send to NAS
+      - name: Copy artifact to NAS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.NAS_HOST }}
+          username: ${{ secrets.NAS_USERNAME }}
+          password: ${{ secrets.NAS_PASSWORD }}
+          port: ${{ secrets.NAS_PORT }}
+          source: "target/*.jar"
+          target: "/volume1/apps/pplanner/files"
+
+      - name: Restart docker container
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.NAS_HOST }}
           username: ${{ secrets.NAS_USERNAME }}
-          key: ${{ secrets.NAS_PRIVATE_KEY }}
+          password: ${{ secrets.NAS_PASSWORD }}
           port: ${{ secrets.NAS_PORT }}
-          script: cd /volume1/apps && ls
+          script: sudo docker restart pplanner
 
 
