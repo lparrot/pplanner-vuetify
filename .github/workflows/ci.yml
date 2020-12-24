@@ -35,6 +35,6 @@ jobs:
           username: ${{ secrets.NAS_USERNAME }}
           password: ${{ secrets.NAS_PASSWORD }}
           port: ${{ secrets.NAS_PORT }}
-          script: sudo docker restart pplanner
+          script: sudo /usr/local/bin/docker restart pplanner
 
 
