@@ -23,7 +23,7 @@ jobs:
         with:
           host: ${{ secrets.NAS_HOST }}
           username: ${{ secrets.NAS_USERNAME }}
-          key: ${{ secrets.NAS_PRIVATE_KEY }}
+          password: ${{ secrets.NAS_PASSWORD }}
           port: ${{ secrets.NAS_PORT }}
           script: cd /volume1/apps && ls
 
