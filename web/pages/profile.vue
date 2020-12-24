@@ -29,7 +29,7 @@ import {Component, Vue} from 'nuxt-property-decorator'
 })
 export default class PageProfile extends Vue {
 
-  public user?: User = null
+  public user?: User
 
   async asyncData(ctx) {
     const res = await ctx.$axios.$get('/api/security/user_data')
