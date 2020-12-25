@@ -161,7 +161,7 @@ import {Component, Prop, Vue} from 'nuxt-property-decorator'
 @Component({})
 export default class ProfileCard extends Vue {
 
-  @Prop(Object) readonly user: User
+  @Prop(Object) readonly user?: User
 
 }
 </script>
