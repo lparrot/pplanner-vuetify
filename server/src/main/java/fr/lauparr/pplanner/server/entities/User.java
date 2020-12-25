@@ -1,6 +1,7 @@
 package fr.lauparr.pplanner.server.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import fr.lauparr.pplanner.server.entities.abstracts.UUIDModifiableEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
@@ -42,6 +44,10 @@ public class User extends UUIDModifiableEntity implements UserDetails {
   private String avatar;
 
   private LocalDate birthday;
+
+  @JsonManagedReference(value = "user_member_ref")
+  @OneToOne(mappedBy = "user")
+  private Member member;
 
   @Builder
   public User(String email, String password, String firstName, String lastName, LocalDate birthday, String avatar, Group group) {

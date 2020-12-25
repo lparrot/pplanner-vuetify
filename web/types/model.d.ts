@@ -23,10 +23,12 @@ interface Member {
 }
 
 interface User {
-  username?: string
+  avatar?: string
+  birthday?: string
   email?: string
   firstName?: string
+  fullname?: string
   lastName?: string
-  birthday?: string
-  avatar?: string
+  member?: Member
+  username?: string
 }
