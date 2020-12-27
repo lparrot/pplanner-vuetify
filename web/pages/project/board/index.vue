@@ -200,7 +200,7 @@ export default class PageProjectBoardIndex extends Vue {
   async handleDeleteModule (module) {
     const res = await this.$axios.$delete(`/boards/modules/${ module.id }`)
     if (res.success) {
-      this.boardModules = this.boardModules?.filter(it => it.id !== module.id)
+      this.boardModules = this.boardModules?.filter((it: any) => it.id !== module.id)
       // TODO : Notification 'Module supprimé'
     }
   }

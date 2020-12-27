@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,10 @@ public class Member extends UUIDModifiableEntity {
 
   private String job;
 
+  private String email;
+
+  private LocalDate birthday;
+
   @JsonBackReference(value = "user_member_ref")
   @OneToOne
   private User user;
@@ -36,16 +41,18 @@ public class Member extends UUIDModifiableEntity {
   }
 
   @Builder
-  public Member(String fullname, String avatar, String job, @Singular List<Team> teams) {
+  public Member(String fullname, String avatar, String job, String email, LocalDate birthday, @Singular List<Team> teams) {
     this.fullname = fullname;
     this.avatar = avatar;
     this.job = job;
+    this.email = email;
+    this.birthday = birthday;
     this.teams = teams;
   }
 
   public Member(User user) {
     this.fullname = String.format("%s %s", user.getLastName(), user.getFirstName());
-    this.avatar = user.getAvatar();
+    this.email = user.getEmail();
     this.user = user;
   }
 }

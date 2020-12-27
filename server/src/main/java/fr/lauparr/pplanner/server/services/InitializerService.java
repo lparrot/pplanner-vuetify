@@ -52,8 +52,6 @@ public class InitializerService {
         .password(this.passwordEncoder.encode("123"))
         .firstName("Laurent")
         .lastName("Parrot")
-        .avatar(InitializerService.FAKE_AVATAR_URL + "kestounet@gmail.com")
-        .birthday(LocalDate.of(1983, 9, 5))
         .group(groupAdministrator)
         .build();
 
@@ -63,15 +61,12 @@ public class InitializerService {
         String firstName = faker.name().firstName();
         String username = String.format("%s.%s", lastName.toLowerCase(), firstName.toLowerCase());
         String email = faker.internet().emailAddress(username);
-        LocalDate birthday = UtilsDateTime.convertToLocalDate(faker.date().birthday());
 
         User generatedUser = User.builder()
           .email(email)
           .password(this.passwordEncoder.encode("123"))
           .firstName(firstName)
           .lastName(lastName)
-          .avatar(InitializerService.FAKE_AVATAR_URL + email)
-          .birthday(birthday)
           .group(groupUser)
           .build();
 
@@ -110,10 +105,13 @@ public class InitializerService {
 
       IntStream.rangeClosed(1, 50).forEach(i -> {
         String fullName = faker.name().fullName();
+        LocalDate birthday = UtilsDateTime.convertToLocalDate(faker.date().birthday());
+
         Member generatedMember = Member.builder()
           .fullname(fullName)
           .job(faker.job().title())
           .avatar(InitializerService.FAKE_AVATAR_URL + fullName)
+          .birthday(birthday)
           .build();
 
         generatedMember = this.memberRepository.save(generatedMember);

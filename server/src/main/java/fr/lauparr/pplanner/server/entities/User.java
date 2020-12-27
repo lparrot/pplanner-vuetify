@@ -15,14 +15,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDate;
 import java.util.Collection;
 
 @Data
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
-@ToString(of = {"email"})
+@ToString(of = "id")
 @EqualsAndHashCode(callSuper = false)
 public class User extends UUIDModifiableEntity implements UserDetails {
 
@@ -39,30 +38,24 @@ public class User extends UUIDModifiableEntity implements UserDetails {
 
   private String lastName;
 
-  private String avatar;
-
-  private LocalDate birthday;
-
   @JsonManagedReference(value = "user_member_ref")
   @OneToOne(mappedBy = "user")
   private Member member;
 
   @Builder
-  public User(String email, String password, String firstName, String lastName, LocalDate birthday, String avatar, Group group) {
-    this.password = password;
+  public User(String email, String password, String firstName, String lastName, Group group) {
     this.email = email;
+    this.password = password;
     this.firstName = firstName;
     this.lastName = lastName;
-    this.birthday = birthday;
-    this.avatar = avatar;
     this.group = group;
   }
 
   public Claims getClaims() {
     Claims claims = Jwts.claims();
     claims.put("fullname", String.format("%s %s", this.firstName, this.lastName));
-    claims.put("email", this.email);
-    claims.put("avatar", this.avatar);
+    claims.put("email", this.getEmail());
+    claims.put("avatar", this.member.getAvatar());
     return claims;
   }
 

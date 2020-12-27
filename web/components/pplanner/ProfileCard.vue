@@ -3,8 +3,8 @@
     <v-col cols="12" md="4">
       <v-card flat>
         <v-layout justify-center>
-          <v-img :src="user.avatar" contain max-width="25em">
-            <v-footer absolute color="blue-grey">
+          <v-img :src="member.avatar" contain max-width="25em">
+            <v-footer v-if="writable" absolute color="blue-grey">
               <v-layout justify-center>
                 <v-btn dark text>Modifier la photo</v-btn>
               </v-layout>
@@ -33,43 +33,25 @@
                 </tr>
                 <tbody>
                 <tr>
+                  <td class="font-weight-bold">Job</td>
+                  <td>{{ member.job }}</td>
+                </tr>
+                <tr>
                   <td class="font-weight-bold">Nom</td>
-                  <td>{{ user.fullname }}</td>
+                  <td>{{ member.fullname }}</td>
                 </tr>
                 <tr>
                   <td class="font-weight-bold">Email</td>
-                  <td>{{ user.email }}</td>
+                  <td>{{ member.email }}</td>
                 </tr>
                 <tr>
                   <td class="font-weight-bold">Anniversaire</td>
-                  <td>{{ user.birthday }}</td>
+                  <td>{{ member.birthday }}</td>
                 </tr>
                 </tbody>
               </table>
             </v-card-text>
           </v-card>
-
-          <template v-if="user.member != null">
-            <v-card flat>
-              <v-card-title>
-                <div class="subtitle-1 grey--text">Informations de membre</div>
-              </v-card-title>
-              <v-card-text>
-                <table>
-                  <tr>
-                    <th style="width: 10em"></th>
-                    <th></th>
-                  </tr>
-                  <tbody>
-                  <tr>
-                    <td class="font-weight-bold">Job</td>
-                    <td>{{ user.member.job }}</td>
-                  </tr>
-                  </tbody>
-                </table>
-              </v-card-text>
-            </v-card>
-          </template>
         </v-tab-item>
 
         <v-tab-item>
@@ -156,12 +138,13 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue} from 'nuxt-property-decorator'
+import { Component, Prop, Vue } from 'nuxt-property-decorator'
 
 @Component({})
 export default class ProfileCard extends Vue {
 
-  @Prop(Object) readonly user?: User
+  @Prop(Object) readonly member?: Member
+  @Prop({ type: Boolean, default: false }) readonly writable?: boolean
 
 }
 </script>

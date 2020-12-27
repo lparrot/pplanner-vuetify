@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <pp-profile-card :user="user"></pp-profile-card>
+    <pp-profile-card :member="user.member" writable></pp-profile-card>
   </v-container>
 </template>
 
