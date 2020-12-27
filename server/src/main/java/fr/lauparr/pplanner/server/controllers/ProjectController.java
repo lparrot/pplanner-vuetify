@@ -1,5 +1,7 @@
 package fr.lauparr.pplanner.server.controllers;
 
+import fr.lauparr.pplanner.server.entities.Project;
+import fr.lauparr.pplanner.server.entities.abstracts.ModifiableEntity;
 import fr.lauparr.pplanner.server.params.ProjectPatchParams;
 import fr.lauparr.pplanner.server.params.ProjectPostBoardParams;
 import fr.lauparr.pplanner.server.pojos.api.AbstractController;
@@ -11,6 +13,8 @@ import fr.lauparr.pplanner.server.utils.UtilsDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "${app.api.prefix}/projects")
@@ -29,7 +33,11 @@ public class ProjectController extends AbstractController {
   @GetMapping("/{id}")
   public ResponseEntity getProjectById(@PathVariable("id") String id, @RequestParam(name = "boards", defaultValue = "false") boolean withBoards) {
     Class projectionClass = withBoards ? ProjectWithBoardsProj.class : ProjectProj.class;
-    return this.ok(UtilsDao.convertToDto(this.projectService.getProjectById(id), projectionClass));
+    Project project = this.projectService.getProjectById(id);
+    if (withBoards) {
+      project.setBoards(project.getBoards().stream().filter(ModifiableEntity::isActive).collect(Collectors.toList()));
+    }
+    return this.ok(UtilsDao.convertToDto(project, projectionClass));
   }
 
   @PatchMapping("/{id}")

@@ -1,5 +1,12 @@
-export default async (ctx, inject) => {
-	const service = {}
+import Vue from 'vue'
 
-	inject('pplanner', service)
+export let EventBus: Vue
+
+export default async (ctx, inject) => {
+  const service = {}
+
+  EventBus = new Vue()
+
+  inject('pplanner', service)
+  inject('eventBus', EventBus)
 }

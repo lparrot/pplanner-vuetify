@@ -3,6 +3,7 @@ package fr.lauparr.pplanner.server.entities.abstracts;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
@@ -45,6 +46,18 @@ public abstract class ModifiableEntity implements Serializable {
   @JsonIgnore
   public boolean isUpdatableDate() {
     return true;
+  }
+
+  public boolean isActive() {
+    return this.dateSuppression == null;
+  }
+
+  public static <T extends ModifiableEntity> Specification<T> whereActives() {
+    return (root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get("dateSuppression"));
+  }
+
+  public static <T extends ModifiableEntity> Specification<T> whereInactives() {
+    return (root, query, criteriaBuilder) -> criteriaBuilder.isNotNull(root.get("dateSuppression"));
   }
 
 }

@@ -3,6 +3,7 @@ package fr.lauparr.pplanner.server.services;
 import fr.lauparr.pplanner.server.entities.Project;
 import fr.lauparr.pplanner.server.entities.ProjectBoard;
 import fr.lauparr.pplanner.server.entities.User;
+import fr.lauparr.pplanner.server.entities.abstracts.ModifiableEntity;
 import fr.lauparr.pplanner.server.params.ProjectPatchParams;
 import fr.lauparr.pplanner.server.params.ProjectPostBoardParams;
 import fr.lauparr.pplanner.server.pojos.Statistics;
@@ -60,6 +61,6 @@ public class ProjectService {
   }
 
   public Project getProjectById(String id) {
-    return this.projectRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Impossible de trouver le projet ayant l'id %s", id)));
+    return this.projectRepository.findById(id, ModifiableEntity.whereActives()).orElseThrow(() -> new EntityNotFoundException(String.format("Impossible de trouver le projet ayant l'id %s", id)));
   }
 }

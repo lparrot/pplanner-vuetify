@@ -27,8 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-  public static final String ROLE_ANONYMOUS = "anonymousUser";
-
   @Value("${app.api.prefix:/api}")
   private String apiPrefix;
   @Autowired
@@ -60,8 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // Sécurité sur toutes les api
     urlRegistry
-      .antMatchers(HttpMethod.POST, this.apiPrefix + "/security/login**").permitAll()
-      .antMatchers(HttpMethod.GET, this.apiPrefix + "/security/user**").permitAll()
+      .antMatchers(HttpMethod.POST, this.apiPrefix + "/auth/login**").permitAll()
+      .antMatchers(HttpMethod.GET, this.apiPrefix + "/auth/user**").permitAll()
       .anyRequest().not().hasAuthority("ROLE_ANONYMOUS");
   }
 

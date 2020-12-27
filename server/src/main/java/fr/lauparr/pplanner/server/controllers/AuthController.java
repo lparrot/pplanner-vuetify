@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 @RestController
-@RequestMapping(value = "${app.api.prefix}/security")
-public class SecurityController extends AbstractController {
+@RequestMapping(value = "${app.api.prefix}/auth")
+public class AuthController extends AbstractController {
 
   @Autowired
   private SecurityService securityService;

@@ -25,11 +25,11 @@ public class BoardService {
   private ProjectBoardModuleRepository projectBoardModuleRepository;
 
   public ProjectBoard getBoardById(String id) {
-    return this.projectBoardRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Impossible de trouver le tableau ayant l'id %s", id)));
+    return this.projectBoardRepository.findById(id, ModifiableEntity.whereActives()).orElseThrow(() -> new EntityNotFoundException(String.format("Impossible de trouver le tableau ayant l'id %s", id)));
   }
 
   public ProjectBoardModule getBoardModuleById(String id) {
-    return this.projectBoardModuleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Impossible de trouver le module ayant l'id %s", id)));
+    return this.projectBoardModuleRepository.findById(id, ModifiableEntity.whereActives()).orElseThrow(() -> new EntityNotFoundException(String.format("Impossible de trouver le module ayant l'id %s", id)));
   }
 
   public ProjectBoard updateBoard(String id, BoardPatchParams params) {
@@ -45,6 +45,7 @@ public class BoardService {
     ProjectBoard board = this.getBoardById(id);
     return
       board.getModules().stream()
+        .filter(ProjectBoardModule::isActive)
         .sorted(Comparator.comparing(ModifiableEntity::getDateCreation))
         .collect(Collectors.toList());
   }
@@ -58,9 +59,22 @@ public class BoardService {
     return this.projectBoardModuleRepository.save(boardModule);
   }
 
-  public void updateBoardState(String id, BoardPatchModuleParams params) {
+  public void updateModuleState(String id, BoardPatchModuleParams params) {
     ProjectBoardModule boardModule = this.getBoardModuleById(id);
     boardModule.setState(params.getState());
     this.projectBoardModuleRepository.save(boardModule);
+  }
+
+  public void deleteBoard(String id) {
+    ProjectBoard board = this.getBoardById(id);
+    board.remove();
+    board.getModules().forEach(ModifiableEntity::remove);
+    this.projectBoardRepository.save(board);
+  }
+
+  public void deleteModuleById(String id) {
+    ProjectBoardModule module = this.getBoardModuleById(id);
+    module.remove();
+    this.projectBoardModuleRepository.save(module);
   }
 }

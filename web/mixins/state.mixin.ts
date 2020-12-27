@@ -1,4 +1,4 @@
-import Vue from "vue";
+import Vue from 'vue'
 
 export const stateMixin = Vue.extend({
   props: {
@@ -11,13 +11,13 @@ export const stateMixin = Vue.extend({
     $data: {
       handler: async function (val) {
         let state = Object.keys(val).filter(it => !it.startsWith('pr_')).reduce((obj, key) => {
-          obj[key] = val[key];
-          return obj;
-        }, {});
+          obj[key] = val[key]
+          return obj
+        }, {})
 
         state = JSON.stringify(state)
 
-        await this.$axios.$patch(`/api/boards/modules/${this.module.id}`, {state})
+        await this.$axios.$patch(`/boards/modules/${this.module.id}`, { state })
       },
       deep: true,
     },

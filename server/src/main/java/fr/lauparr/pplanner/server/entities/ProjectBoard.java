@@ -2,7 +2,7 @@ package fr.lauparr.pplanner.server.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import fr.lauparr.pplanner.server.entities.abstracts.UUIDEntity;
+import fr.lauparr.pplanner.server.entities.abstracts.UUIDModifiableEntity;
 import fr.lauparr.pplanner.server.enums.BoardVisibility;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "project_boards")
 @EqualsAndHashCode(callSuper = true)
-public class ProjectBoard extends UUIDEntity implements Serializable {
+public class ProjectBoard extends UUIDModifiableEntity implements Serializable {
 
   private String name;
 
@@ -37,7 +37,7 @@ public class ProjectBoard extends UUIDEntity implements Serializable {
   @JsonManagedReference(value = "board_parent_ref")
   private List<ProjectBoard> children = new ArrayList<>();
 
-  @OneToMany(mappedBy = "board")
+  @OneToMany(mappedBy = "board", cascade = {CascadeType.MERGE, CascadeType.REFRESH})
   @JsonManagedReference(value = "module_board_ref")
   private List<ProjectBoardModule> modules = new ArrayList<>();
 

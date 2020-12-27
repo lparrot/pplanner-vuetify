@@ -28,10 +28,18 @@ export default {
         name: 'viewport',
         content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
       },
-      { hid: 'description', name: 'description', content: '' },
+      {
+        hid: 'description',
+        name: 'description',
+        content: '',
+      },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: 'icon',
+        type: 'image/x-icon',
+        href: '/favicon.ico',
+      },
     ],
   },
 
@@ -65,7 +73,14 @@ export default {
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
     // https://go.nuxtjs.dev/typescript
-    '@nuxt/typescript-build',
+    [
+      '@nuxt/typescript-build', {
+      typeCheck: {
+        typescript: {
+          memoryLimit: 4096,
+        },
+      },
+    }],
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
     'nuxt-typed-vuex',
@@ -81,6 +96,7 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
+    prefix: '/api',
     proxy: true,
   },
 
@@ -101,12 +117,12 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: '/api/security/login',
+            url: '/auth/login',
             method: 'post',
             propertyName: 'data.token',
           },
           user: {
-            url: '/api/security/user',
+            url: '/auth/user',
             method: 'get',
             propertyName: 'data',
           },

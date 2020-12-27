@@ -29,6 +29,12 @@ public class BoardController extends AbstractController {
     return this.ok(this.boardService.updateBoard(id, params));
   }
 
+  @DeleteMapping("/{id}")
+  public ResponseEntity deleteBoard(@PathVariable("id") String id) {
+    this.boardService.deleteBoard(id);
+    return this.ok();
+  }
+
   @GetMapping("/{id}/modules")
   public ResponseEntity getBoardModule(@PathVariable("id") String id) {
     return this.ok(UtilsDao.convertListDto(this.boardService.getModules(id), ProjectBoardModuleProj.class));
@@ -40,8 +46,14 @@ public class BoardController extends AbstractController {
   }
 
   @PatchMapping("/modules/{id}")
-  public ResponseEntity patchBoardById(@PathVariable("id") String id, @RequestBody BoardPatchModuleParams params) {
-    this.boardService.updateBoardState(id, params);
+  public ResponseEntity patchModuleById(@PathVariable("id") String id, @RequestBody BoardPatchModuleParams params) {
+    this.boardService.updateModuleState(id, params);
+    return this.ok();
+  }
+
+  @DeleteMapping("/modules/{id}")
+  public ResponseEntity deleteModuleById(@PathVariable("id") String id) {
+    this.boardService.deleteModuleById(id);
     return this.ok();
   }
 

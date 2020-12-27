@@ -9,6 +9,7 @@ declare module 'vue/types/vue' {
     $accessor: typeof accessorType
     $auth: Auth
     $vuetify: Framework
+    $eventBus: Vue
   }
 }
 

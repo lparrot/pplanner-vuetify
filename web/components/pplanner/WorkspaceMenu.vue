@@ -16,7 +16,7 @@
       </template>
 
       <v-list dense nav>
-        <v-list-item link @click="onCreateNewBlankBoard">
+        <v-list-item link @click="handleCreateNewBlankBoard">
           <pp-list-item-avatar>
             <v-icon small>mdi-monitor-dashboard</v-icon>
           </pp-list-item-avatar>
@@ -44,7 +44,7 @@
       <v-subheader>Tableaux</v-subheader>
       <template v-if="project.boards.length > 0">
         <template v-for="(board, boardIndex) in project.boards">
-          <pp-board-list-item :key="boardIndex" :active="boardIndex === selectedBoardIndex" :board="board" @on-select-board="onSelectBoard"></pp-board-list-item>
+          <pp-board-list-item :key="boardIndex" :active="boardIndex === selectedBoardIndex" :board="board" @on-select-board="handleSelectBoard"></pp-board-list-item>
         </template>
       </template>
       <template v-else>
@@ -53,7 +53,7 @@
     </v-list>
 
     <v-dialog v-model="dialogs.createNewBlankBoard" max-width="600px">
-      <validation-observer #default="{invalid}" tag="form" @submit.prevent="onSubmitCreateNewBlankBoard">
+      <validation-observer #default="{invalid}" tag="form" @submit.prevent="handleSubmitCreateNewBlankBoard">
         <v-card v-if="dialogs.createNewBlankBoard">
           <v-card-title>Création d'un nouveau tableau vierge</v-card-title>
           <v-card-text>
@@ -85,7 +85,7 @@
 </template>
 
 <script lang="ts">
-import {Component, namespace, Vue, Watch} from 'nuxt-property-decorator'
+import { Component, namespace, Vue, Watch } from 'nuxt-property-decorator'
 
 const projectModule = namespace('project')
 
@@ -108,52 +108,69 @@ export default class WorkspaceMenu extends Vue {
 
   project: Project | null = null
 
-  get selectedBoardIndex() {
+  get selectedBoardIndex () {
+    if (this.$route.fullPath !== '/project/board') {
+      return -1
+    }
     if (this.selectedProject == null || this.selectedBoard == null) {
       return -1
     }
     return this.project?.boards?.findIndex(it => it.id === this.selectedBoard?.id)
   }
 
-  async getProject() {
+  async created () {
+    this.$eventBus.$on('update-boards', async () => {
+      await this.fetchProject()
+    })
+  }
+
+  async fetchProject () {
     try {
-      const res = await this.$axios.$get(`/api/projects/${this.selectedProject?.id}?boards=true`)
+      this.$nextTick(async () => {
+        this.$nuxt.$loading.start()
+      })
+      const res = await this.$axios.$get(`/projects/${ this.selectedProject?.id }?boards=true`)
       this.project = res.data
     } catch (err) {
       await this.$accessor.project.selectProject(null)
       await this.$accessor.project.selectBoard(null)
+    } finally {
+      this.$nuxt.$loading.finish()
     }
   }
 
-  onCreateNewBlankBoard() {
+  handleCreateNewBlankBoard () {
     this.dialogs.createNewBlankBoard = true
     this.forms.createNewBlankBoard = {
       name: null,
       visibility: 'PRIVATE',
     }
-    this.onLinkClick()
+    this.handleClickLink()
   }
 
-  onLinkClick() {
+  handleClickLink () {
     this.$emit('on-link-click')
   }
 
-  async onSelectBoard(board) {
-    await this.$accessor.project.selectBoard({id: board.id, name: board.name})
+  async handleSelectBoard (board) {
+    await this.$accessor.project.selectBoard({
+      id: board.id,
+      name: board.name
+    })
     await this.$router.push(`/project/board`)
-    this.onLinkClick()
+    this.handleClickLink()
   }
 
-  async onSubmitCreateNewBlankBoard() {
-    const res = await this.$axios.$post(`/api/projects/${this.selectedProject?.id}/boards`, this.forms.createNewBlankBoard)
-    await this.getProject()
+  async handleSubmitCreateNewBlankBoard () {
+    const res = await this.$axios.$post(`/projects/${ this.selectedProject?.id }/boards`, this.forms.createNewBlankBoard)
+    await this.fetchProject()
     this.dialogs.createNewBlankBoard = false
-    await this.onSelectBoard(res.data)
+    await this.handleSelectBoard(res.data)
   }
 
-  @Watch('selectedProject', {immediate: true})
-  async onSelectProjectChange() {
-    await this.getProject()
+  @Watch('selectedProject', { immediate: true })
+  async handleSelectedProjectChange () {
+    await this.fetchProject()
   }
 }
 </script>

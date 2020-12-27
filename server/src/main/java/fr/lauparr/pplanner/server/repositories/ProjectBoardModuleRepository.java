@@ -1,7 +1,7 @@
 package fr.lauparr.pplanner.server.repositories;
 
 import fr.lauparr.pplanner.server.entities.ProjectBoardModule;
-import org.springframework.data.jpa.repository.JpaRepository;
+import fr.lauparr.pplanner.server.repositories.customs.AppRepository;
 
-public interface ProjectBoardModuleRepository extends JpaRepository<ProjectBoardModule, String> {
+public interface ProjectBoardModuleRepository extends AppRepository<ProjectBoardModule, String> {
 }

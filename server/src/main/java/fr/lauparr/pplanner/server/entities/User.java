@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import fr.lauparr.pplanner.server.entities.abstracts.UUIDModifiableEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,6 +22,7 @@ import java.util.Collection;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
+@ToString(of = {"email"})
 @EqualsAndHashCode(callSuper = false)
 public class User extends UUIDModifiableEntity implements UserDetails {
 
