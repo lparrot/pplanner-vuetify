@@ -17,6 +17,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "noImplicitAny": false,
+    "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "~/*": [
