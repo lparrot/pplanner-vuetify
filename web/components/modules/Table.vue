@@ -153,7 +153,7 @@ export default class PPTable extends mixins(stateMixin) {
   public validatorAddColumn!: ValidationContext
 
   public fields: Field[] = [
-    { id: 0, label: '', fixed: true, type: 'pp-column-text' }
+    { id: 0, label: '', fixed: true, type: 'pp-column-text', props: { required: true } }
   ]
   public items: any[] = []
   public lastFieldId = 0

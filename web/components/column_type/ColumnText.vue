@@ -7,7 +7,7 @@
     <template #input>
       <validation-observer ref="validator">
         <validation-provider #default="{invalid, errors}" :rules="{required: field.props.required === true}" name=" " slim>
-          <v-text-field v-model="tempItem" :error="invalid" :error-messages="errors[0]" clearable></v-text-field>
+          <v-text-field v-model.trim="tempItem" :error="invalid" :error-messages="errors[0]" clearable></v-text-field>
         </validation-provider>
       </validation-observer>
     </template>
