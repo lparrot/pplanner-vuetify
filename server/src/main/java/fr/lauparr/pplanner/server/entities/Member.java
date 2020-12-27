@@ -19,8 +19,6 @@ import java.util.List;
 @Table(name = "members")
 public class Member extends UUIDModifiableEntity {
 
-  private String fullname;
-
   private String avatar;
 
   private String job;
@@ -28,6 +26,10 @@ public class Member extends UUIDModifiableEntity {
   private String email;
 
   private LocalDate birthday;
+
+  private String firstName;
+
+  private String lastName;
 
   @JsonBackReference(value = "user_member_ref")
   @OneToOne
@@ -41,18 +43,22 @@ public class Member extends UUIDModifiableEntity {
   }
 
   @Builder
-  public Member(String fullname, String avatar, String job, String email, LocalDate birthday, @Singular List<Team> teams) {
-    this.fullname = fullname;
+  public Member(String avatar, String job, String email, LocalDate birthday, String firstName, String lastName, @Singular List<Team> teams) {
     this.avatar = avatar;
     this.job = job;
     this.email = email;
     this.birthday = birthday;
     this.teams = teams;
+    this.firstName = firstName;
+    this.lastName = lastName;
   }
 
   public Member(User user) {
-    this.fullname = String.format("%s %s", user.getLastName(), user.getFirstName());
     this.email = user.getEmail();
     this.user = user;
+  }
+
+  public String getFullname() {
+    return String.format("%s %s", this.firstName, this.lastName);
   }
 }

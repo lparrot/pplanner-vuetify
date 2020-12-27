@@ -15,9 +15,6 @@ jobs:
         with:
           java-version: 1.8
 
-      - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots clean package
-
       - name: Cache local Maven repository
         uses: actions/cache@v2
         with:
@@ -26,12 +23,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - uses: actions/cache@v2
+      - name: Cache NPM repository
+        uses: actions/cache@v2
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+
+      - name: Build with Maven
+        run: mvn --batch-mode --update-snapshots clean package
 
       - name: Copy artifact to NAS
         uses: appleboy/scp-action@master

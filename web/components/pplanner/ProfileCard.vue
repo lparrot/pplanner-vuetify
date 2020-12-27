@@ -38,7 +38,11 @@
                 </tr>
                 <tr>
                   <td class="font-weight-bold">Nom</td>
-                  <td>{{ member.fullname }}</td>
+                  <td>{{ member.lastName }}</td>
+                </tr>
+                <tr>
+                  <td class="font-weight-bold">Prénom</td>
+                  <td>{{ member.firstName }}</td>
                 </tr>
                 <tr>
                   <td class="font-weight-bold">Email</td>

@@ -35,16 +35,18 @@
     </v-row>
 
     <v-dialog v-model="dialogInfoTeam">
-      <v-card>
-        <v-card-title>Informations sur {{ selectedMember.fullname }}</v-card-title>
-        <v-card-text style="max-height: 70vh; overflow-y: auto">
-          <pp-profile-card :member="selectedMember"></pp-profile-card>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" text @click="dialogInfoTeam = false">Fermer</v-btn>
-        </v-card-actions>
-      </v-card>
+      <template v-if="selectedMember != null">
+        <v-card>
+          <v-card-title>Informations sur {{ selectedMember.fullname }}</v-card-title>
+          <v-card-text style="max-height: 70vh; overflow-y: auto">
+            <pp-profile-card :member="selectedMember"></pp-profile-card>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="dialogInfoTeam = false">Fermer</v-btn>
+          </v-card-actions>
+        </v-card>
+      </template>
     </v-dialog>
   </v-container>
 </template>

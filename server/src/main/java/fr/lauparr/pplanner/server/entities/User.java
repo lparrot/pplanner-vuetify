@@ -34,26 +34,20 @@ public class User extends UUIDModifiableEntity implements UserDetails {
   @ManyToOne
   private Group group;
 
-  private String firstName;
-
-  private String lastName;
-
   @JsonManagedReference(value = "user_member_ref")
   @OneToOne(mappedBy = "user")
   private Member member;
 
   @Builder
-  public User(String email, String password, String firstName, String lastName, Group group) {
+  public User(String email, String password, Group group) {
     this.email = email;
     this.password = password;
-    this.firstName = firstName;
-    this.lastName = lastName;
     this.group = group;
   }
 
   public Claims getClaims() {
     Claims claims = Jwts.claims();
-    claims.put("fullname", String.format("%s %s", this.firstName, this.lastName));
+    claims.put("fullname", this.getMember() != null ? this.getMember().getFullname() : null);
     claims.put("email", this.getEmail());
     claims.put("avatar", this.member.getAvatar());
     return claims;

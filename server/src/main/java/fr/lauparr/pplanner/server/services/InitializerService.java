@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -50,23 +51,17 @@ public class InitializerService {
       User user = User.builder()
         .email("kestounet@gmail.com")
         .password(this.passwordEncoder.encode("123"))
-        .firstName("Laurent")
-        .lastName("Parrot")
         .group(groupAdministrator)
         .build();
 
       this.userRepository.save(user);
       IntStream.rangeClosed(1, 9).forEach(i -> {
-        String lastName = faker.name().lastName();
-        String firstName = faker.name().firstName();
-        String username = String.format("%s.%s", lastName.toLowerCase(), firstName.toLowerCase());
+        String username = faker.name().username().toLowerCase();
         String email = faker.internet().emailAddress(username);
 
         User generatedUser = User.builder()
           .email(email)
           .password(this.passwordEncoder.encode("123"))
-          .firstName(firstName)
-          .lastName(lastName)
           .group(groupUser)
           .build();
 
@@ -93,24 +88,31 @@ public class InitializerService {
       Member member = new Member(user);
 
       member.setJob(faker.job().title());
+      member.setBirthday(LocalDate.of(1983, Month.SEPTEMBER, 5));
+      member.setAvatar(InitializerService.FAKE_AVATAR_URL + "kestounet@gmail.com");
+      member.setFirstName("Laurent");
+      member.setLastName("Parrot");
       this.memberRepository.save(member);
 
-      teams.forEach(team -> {
-        this.teamService.addMember(member, team);
-      });
+      teams.forEach(team -> this.teamService.addMember(member, team));
 
       this.teamRepository.saveAll(teams);
 
       // Members
 
       IntStream.rangeClosed(1, 50).forEach(i -> {
-        String fullName = faker.name().fullName();
+        String lastName = faker.name().lastName();
+        String firstName = faker.name().firstName();
+        String username = String.format("%s.%s", lastName.toLowerCase(), firstName.toLowerCase());
+        String email = faker.internet().emailAddress(username);
         LocalDate birthday = UtilsDateTime.convertToLocalDate(faker.date().birthday());
 
         Member generatedMember = Member.builder()
-          .fullname(fullName)
+          .firstName(firstName)
+          .lastName(lastName)
           .job(faker.job().title())
-          .avatar(InitializerService.FAKE_AVATAR_URL + fullName)
+          .email(email)
+          .avatar(InitializerService.FAKE_AVATAR_URL + username)
           .birthday(birthday)
           .build();
 
