@@ -63,7 +63,7 @@ jobs:
           password: ${{secrets.MAIL_PASSWORD}}
           subject: "[GITHUB ACTIONS - ${{job.status}}] Job completed"
           # Read file contents as body:
-          body: Build job of ${{github.repository}} completed. Status is ${{job.job.status}}
+          body: Build job of ${{github.repository}} completed. Status is ${{job.status}}
           to: ${{secrets.MAIL_TO}}
           from: ${{secrets.MAIL_FROM}}
           content_type: text/html
