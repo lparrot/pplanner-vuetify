@@ -29,7 +29,8 @@
     "types": [
       "@types/node",
       "@nuxt/types",
-      "@nuxtjs/axios"
+      "@nuxtjs/axios",
+      "vee-validate/dist/types"
     ]
   },
   "exclude": [

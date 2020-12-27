@@ -27,32 +27,31 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from 'nuxt-property-decorator'
-import {stateMixin} from '~/mixins/state.mixin'
+import { Component, mixins } from 'nuxt-property-decorator'
+import { stateMixin } from '~/mixins/state.mixin'
 
-function getRandomInt(min: number, max: number): number {
+function getRandomInt (min: number, max: number): number {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
 @Component({
-  mixins: [stateMixin],
-  data() {
+  data () {
     return {
       ...this.$props.module.state,
     }
   },
 })
-export default class PPAnalytics extends Vue {
+export default class PPAnalytics extends mixins(stateMixin) {
 
   value: any = []
 
-  mounted() {
+  mounted () {
     this.onInit()
   }
 
-  onInit() {
+  onInit () {
     if (this.value.length === 0) {
       this.value = []
       for (let i = 0; i < 10; i++) {

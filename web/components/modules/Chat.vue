@@ -20,18 +20,17 @@
 </template>
 
 <script lang="ts">
-import {stateMixin} from '@/mixins/state.mixin'
-import {Component, Vue} from 'nuxt-property-decorator'
+import { stateMixin } from '@/mixins/state.mixin'
+import { Component, mixins } from 'nuxt-property-decorator'
 
 @Component({
-  mixins: [stateMixin],
-  data() {
+  data () {
     return {
       ...this.$props.module.state,
     }
   },
 })
-export default class PPChat extends Vue {
+export default class PPChat extends mixins(stateMixin) {
 }
 </script>
 

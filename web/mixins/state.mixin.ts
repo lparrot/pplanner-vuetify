@@ -1,25 +1,17 @@
-import Vue from 'vue'
+import { Component, Prop, Vue } from "nuxt-property-decorator";
 
-export const stateMixin = Vue.extend({
-  props: {
-    module: {
-      type: Object,
-    },
-  },
+@Component
+export class stateMixin extends Vue {
+  @Prop(Object) module: any
 
-  watch: {
-    $data: {
-      handler: async function (val) {
-        let state = Object.keys(val).filter(it => !it.startsWith('pr_')).reduce((obj, key) => {
-          obj[key] = val[key]
-          return obj
-        }, {})
+  async saveState () {
+    let state = Object.keys(this.$data).filter(it => !it.startsWith('pr_')).reduce((obj, key) => {
+      obj[key] = this.$data[key]
+      return obj
+    }, {})
 
-        state = JSON.stringify(state)
+    state = JSON.stringify(state)
 
-        await this.$axios.$patch(`/boards/modules/${this.module.id}`, { state })
-      },
-      deep: true,
-    },
-  },
-})
+    await this.$axios.$patch(`/boards/modules/${ this.module.id }`, { state })
+  }
+}

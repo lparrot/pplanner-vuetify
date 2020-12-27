@@ -3,7 +3,7 @@
     <v-card dense flat>
       <v-card-text>
         <!-- Nom -->
-        <v-layout align-content-center>
+        <div class="d-flex align-center">
           <v-edit-dialog :return-value.sync="board.visibility" cancel-text="Annuler" large save-text="Valider" @save="handleSaveBoard">
             <pp-visibility-icon :visibility="board.visibility" class="mr-2"></pp-visibility-icon>
             <template v-slot:input>
@@ -22,10 +22,13 @@
 
           <div class="ml-5">
             <v-btn color="red" dark depressed icon small text @click="handleDeleteBoard(board)">
-              <v-icon dark>mdi-trash-can-outline</v-icon>
+              <v-icon dense>mdi-trash-can-outline</v-icon>
+            </v-btn>
+            <v-btn color="green" dark depressed icon small text @click="handleShowDialogNewModule">
+              <v-icon dense>mdi-plus-box</v-icon>
             </v-btn>
           </div>
-        </v-layout>
+        </div>
 
         <!-- Description -->
         <v-layout align-content-center>
@@ -37,21 +40,18 @@
           </v-edit-dialog>
         </v-layout>
 
-        <!-- Options -->
-        <v-btn color="green" text @click="handleShowDialogNewModule">Ajouter un module</v-btn>
-
         <!-- Liste des modules -->
         <template v-if="boardModules != null">
           <v-row v-for="(boardModule, boardModuleIndex) in boardModules" :key="boardModuleIndex" class="d-flex justify-center">
             <v-col cols="12" md="10">
-              <v-layout align-content-center>
-                <p class="text-h4">{{ boardModule.name }}</p>
+              <div class="d-flex align-center">
+                <span class="text-h6">{{ boardModule.name }}</span>
                 <div class="ml-5">
                   <v-btn color="red" dark depressed icon small text @click="handleDeleteModule(boardModule)">
-                    <v-icon dark>mdi-trash-can-outline</v-icon>
+                    <v-icon dense small>mdi-trash-can-outline</v-icon>
                   </v-btn>
                 </div>
-              </v-layout>
+              </div>
               <component :is="boardModule.type" :module="boardModule"></component>
             </v-col>
           </v-row>
@@ -60,6 +60,7 @@
       </v-card-text>
     </v-card>
 
+    <!-- Dialog ajout module -->
     <v-dialog v-model="dialogs.addModule" :width="$vuetify.breakpoint.mdAndDown ? '100vw': '60vw'">
       <validation-observer #default="{invalid}">
         <v-card tile>
@@ -120,6 +121,7 @@
         </v-card>
       </validation-observer>
     </v-dialog>
+
   </v-container>
 </template>
 
@@ -147,42 +149,12 @@ export default class PageProjectBoardIndex extends Vue {
     addModule: false,
   }
   modules: BoardModuleSelect[] = [
-    {
-      type: 'pp-analytics',
-      img: '/modules/analytics.png',
-      label: 'Analytique',
-      description: `Permet de réaliser des diagrammes d'analyse de données`
-    },
-    {
-      type: 'pp-table',
-      img: '/modules/table.png',
-      label: 'Liste dynamique',
-      description: `Permet de réaliser des listes avec des champs dynamiques`
-    },
-    {
-      type: 'pp-chat',
-      img: '/modules/chat.png',
-      label: 'Conversation',
-      description: `Permet de réaliser des conversations entre membres du projet`
-    },
-    {
-      type: 'pp-kanban',
-      img: '/modules/kanban.png',
-      label: 'Kanban',
-      description: `Permet de réaliser des tableaux de type Kanban`
-    },
-    {
-      type: 'pp-org-chart',
-      img: '/modules/org_chart.png',
-      label: 'Organigrammes',
-      description: `Permet de réaliser des organigrammes`
-    },
-    {
-      type: 'pp-task-list',
-      img: '/modules/tasklist.png',
-      label: 'Liste de tâches',
-      description: `Permet de réaliser des listes de tâches`
-    },
+    { type: 'pp-analytics', img: '/modules/analytics.png', label: 'Analytique', description: `Permet de réaliser des diagrammes d'analyse de données` },
+    { type: 'pp-table', img: '/modules/table.png', label: 'Liste dynamique', description: `Permet de réaliser des listes avec des champs dynamiques` },
+    { type: 'pp-chat', img: '/modules/chat.png', label: 'Conversation', description: `Permet de réaliser des conversations entre membres du projet` },
+    { type: 'pp-kanban', img: '/modules/kanban.png', label: 'Kanban', description: `Permet de réaliser des tableaux de type Kanban` },
+    { type: 'pp-org-chart', img: '/modules/org_chart.png', label: 'Organigrammes', description: `Permet de réaliser des organigrammes` },
+    { type: 'pp-task-list', img: '/modules/tasklist.png', label: 'Liste de tâches', description: `Permet de réaliser des listes de tâches` },
   ]
   selectedModuleToAdd?: any = null
 
@@ -214,26 +186,15 @@ export default class PageProjectBoardIndex extends Vue {
   }
 
   async handleSaveBoard () {
-    const {
-      name,
-      description,
-      visibility
-    } = this.board
-    await this.$axios.$patch(`/boards/${ this.board?.id }`, {
-      name,
-      description,
-      visibility
-    })
+    const { name, description, visibility } = this.board
+    await this.$axios.$patch(`/boards/${ this.board?.id }`, { name, description, visibility })
     this.$eventBus.$emit('update-boards')
   }
 
   async handleSubmitNewModule () {
     const module = this.modules[this.selectedModuleToAdd.module]
     if (module != null && this.board != null) {
-      const res = await this.$axios.$post(`/boards/${ this.board?.id }/modules`, {
-        type: module.type,
-        name: this.selectedModuleToAdd.name
-      })
+      const res = await this.$axios.$post(`/boards/${ this.board?.id }/modules`, { type: module.type, name: this.selectedModuleToAdd.name })
       this.boardModules?.push(res.data)
       this.dialogs.addModule = false
     }

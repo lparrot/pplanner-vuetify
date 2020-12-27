@@ -68,6 +68,7 @@ export default {
     '~/components/',
     { path: '~/components/pplanner/', prefix: 'pp' },
     { path: '~/components/modules/', prefix: 'pp', global: true },
+    { path: '~/components/column_type/', prefix: 'pp', global: true },
   ],
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
@@ -121,11 +122,7 @@ export default {
             method: 'post',
             propertyName: 'data.token',
           },
-          user: {
-            url: '/auth/user',
-            method: 'get',
-            propertyName: 'data',
-          },
+          user: { url: '/auth/user', method: 'get', propertyName: 'data' },
           logout: false,
         },
       },
