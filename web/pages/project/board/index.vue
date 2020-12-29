@@ -21,10 +21,10 @@
           </v-edit-dialog>
 
           <div class="ml-5">
-            <v-btn color="red" dark depressed icon small text @click="handleDeleteBoard(board)">
+            <v-btn color="red" dark icon small text @click="handleDeleteBoard(board)">
               <v-icon dense>mdi-trash-can-outline</v-icon>
             </v-btn>
-            <v-btn color="green" dark depressed icon small text @click="handleShowDialogNewModule">
+            <v-btn color="green" dark icon small text @click="handleShowDialogNewModule">
               <v-icon dense>mdi-plus-box</v-icon>
             </v-btn>
           </div>
@@ -47,7 +47,7 @@
               <div class="d-flex align-center">
                 <span class="text-h6">{{ boardModule.name }}</span>
                 <div class="ml-5">
-                  <v-btn color="red" dark depressed icon small text @click="handleDeleteModule(boardModule)">
+                  <v-btn color="red" dark icon small text @click="handleDeleteModule(boardModule)">
                     <v-icon dense small>mdi-trash-can-outline</v-icon>
                   </v-btn>
                 </div>
@@ -126,7 +126,7 @@
 </template>
 
 <script lang="ts">
-import { Component, namespace, Vue, Watch } from 'nuxt-property-decorator'
+import {Component, namespace, Vue, Watch} from 'nuxt-property-decorator'
 
 const projectModule = namespace('project')
 

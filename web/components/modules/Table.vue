@@ -95,7 +95,7 @@
       <validation-observer ref="validatorAddColumn" #default="{invalid}">
         <v-card v-if="pr_newField != null">
           <v-card-title>Ajout d'une nouvelle colonne</v-card-title>
-          <v-card-text style="max-height: 75vh; overflow-y: auto">
+          <v-card-text class="pt-2" style="max-height: 75vh; overflow-y: auto">
             <v-row>
               <v-col cols="12" md="6">
                 <validation-provider #default="{invalid, errors}" name="nom" rules="required" slim>
