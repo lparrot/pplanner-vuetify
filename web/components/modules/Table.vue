@@ -5,7 +5,7 @@
       <thead>
       <tr>
         <th class="pa-0" style="width: 16px"></th>
-        <th v-for="(field, fieldIndex) in fields" :key="fieldIndex" v-bind="field.attrs">
+        <th v-for="(field, fieldIndex) in fields" :key="fieldIndex" v-bind="field.attrs" :style="field.thStyles">
           <div class="d-flex align-center justify-center flex-nowrap">
             <pp-column-text :field="{props: {required: true}}" :item="field.label" @update:item="handleUpdateField(field, $event)">
               <span class="text-h6 font-weight-bold">{{ field.label }}</span>
@@ -48,7 +48,7 @@
             <v-icon dense small style="width: 16px">mdi-chevron-down</v-icon>
           </v-btn>
         </td>
-        <td v-for="(field, fieldIndex) in fields" :key="fieldIndex" class="pp-table_field">
+        <td v-for="(field, fieldIndex) in fields" :key="fieldIndex" :style="field.tdStyles" class="pp-table_field">
           <component :is="field.type" :field="field" :item="item[field.id]" @update:item="handleUpdateItem(item, field.id, $event)"></component>
         </td>
         <td class="pa-0" style="width: 16px"></td>
@@ -122,11 +122,13 @@
 </template>
 
 <script lang="ts">
-import { stateMixin } from '@/mixins/state.mixin'
-import { Component, mixins, Ref } from 'nuxt-property-decorator'
+import {stateMixin} from '@/mixins/state.mixin'
+import {Component, mixins, Ref} from 'nuxt-property-decorator'
 
 interface Field {
   attrs?: any
+  thStyles?: any
+  tdStyles?: any
   fixed?: boolean
   id: number
   label: string
@@ -138,6 +140,8 @@ interface FieldType {
   icon: string
   text: string
   type: string
+  size?: string
+  centered: boolean
 }
 
 @Component({
@@ -161,20 +165,20 @@ export default class PPTable extends mixins(stateMixin) {
   public pr_columnTypes: FieldType[] = []
   public pr_dialogAddColumn = false
   public pr_selectedField: any = null
-  public pr_newField: any = null
+  public pr_newField: Field = null
   public pr_selectedItem: any = null
   public pr_sheetTableField = false
   public pr_sheetTableItem = false
 
   created () {
     this.pr_columnTypes = [
-      { type: 'pp-column-badge', icon: 'mdi-format-color-text', text: 'Badge' },
-      { type: 'pp-column-checkbox', icon: 'mdi-format-color-text', text: 'Case à cocher' },
-      { type: 'pp-column-date', icon: 'mdi-format-color-text', text: 'Date' },
-      { type: 'pp-column-number', icon: 'mdi-format-color-text', text: 'Nombre' },
-      { type: 'pp-column-progress', icon: 'mdi-format-color-text', text: 'Progression' },
-      { type: 'pp-column-dropdown', icon: 'mdi-format-color-text', text: 'Selection' },
-      { type: 'pp-column-text', icon: 'mdi-format-color-text', text: 'Texte' },
+      {type: 'pp-column-badge', icon: 'mdi-format-color-text', text: 'Badge', size: '100px', centered: true},
+      {type: 'pp-column-checkbox', icon: 'mdi-format-color-text', text: 'Case à cocher', size: '100px', centered: true},
+      {type: 'pp-column-date', icon: 'mdi-format-color-text', text: 'Date', size: '100px', centered: true},
+      {type: 'pp-column-number', icon: 'mdi-format-color-text', text: 'Nombre', size: '100px', centered: true},
+      {type: 'pp-column-progress', icon: 'mdi-format-color-text', text: 'Progression', size: '100px', centered: true},
+      {type: 'pp-column-dropdown', icon: 'mdi-format-color-text', text: 'Selection', size: '100px', centered: true},
+      {type: 'pp-column-text', icon: 'mdi-format-color-text', text: 'Texte', centered: false},
     ]
   }
 
@@ -184,7 +188,13 @@ export default class PPTable extends mixins(stateMixin) {
   }
 
   async handleClickAddNewField (columnType: FieldType) {
-    this.pr_newField = { type: columnType.type }
+    this.pr_newField = {type: columnType.type}
+    if (columnType.size != null) {
+      this.pr_newField.thStyles = {'width': columnType.size}
+    }
+    if (columnType.centered) {
+      this.pr_newField.tdStyles = {'text-align': 'center'}
+    }
     this.pr_dialogAddColumn = true
   }
 

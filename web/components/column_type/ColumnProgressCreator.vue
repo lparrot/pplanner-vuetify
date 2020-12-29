@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { tableFieldCreatorMixin } from '@/mixins/table-field-creator.mixin'
+import { tableFieldCreatorMixin } from '../../mixins/table-field-creator.mixin'
 import { Component, mixins } from 'nuxt-property-decorator'
 
 @Component

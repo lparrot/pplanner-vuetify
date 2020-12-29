@@ -18,17 +18,16 @@ interface BoardModule {
 
 interface Member {
   avatar: string
-  fullname: string
   job: string
+  firstName?: string
+  lastName?: string
+  fullname?: string
+  birthday?: string
+  email?: string
 }
 
 interface User {
-  avatar?: string
-  birthday?: string
   email?: string
-  firstName?: string
-  fullname?: string
-  lastName?: string
   member?: Member
   username?: string
 }
