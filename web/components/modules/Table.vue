@@ -5,7 +5,7 @@
       <thead>
       <tr>
         <th class="pa-0" style="width: 16px"></th>
-        <th v-for="(field, fieldIndex) in fields" :key="fieldIndex" v-bind="field.attrs" :style="field.thStyles">
+        <th v-for="(field, fieldIndex) in fields" :key="fieldIndex" v-bind="field.attrs" :style="field.thStyles" style="white-space: nowrap">
           <div class="d-flex align-center justify-center flex-nowrap">
             <pp-column-text :field="{props: {required: true}}" :item="field.label" @update:item="handleUpdateField(field, $event)">
               <span class="text-h6 font-weight-bold">{{ field.label }}</span>
