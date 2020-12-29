@@ -1,4 +1,4 @@
-import { actionTree, mutationTree } from 'nuxt-typed-vuex'
+import {actionTree, mutationTree} from 'nuxt-typed-vuex'
 
 export const strict = false
 
@@ -22,23 +22,23 @@ export const getters = {}
  * Mutations
  */
 export const mutations = mutationTree(state, {
-  SET_MEMBER_LIST (state, members) {
+  SET_MEMBER_LIST(state, members) {
     state.memberList = members
   },
 
-  SET_PROJECT_LIST (state, projects) {
+  SET_PROJECT_LIST(state, projects) {
     state.projectList = projects
   },
 
-  SET_SELECTED_BOARD (state, board) {
+  SET_SELECTED_BOARD(state, board) {
     state.selectedBoard = board
   },
 
-  SET_SELECTED_PROJECT (state, project) {
+  SET_SELECTED_PROJECT(state, project) {
     state.selectedProject = project
   },
 
-  SET_STATISTICS (state, statistics) {
+  SET_STATISTICS(state, statistics) {
     state.statistics = statistics
   },
 })
@@ -50,19 +50,19 @@ export const actions = actionTree(
   {
     state,
     getters,
-    mutations
+    mutations,
   },
   {
-    async selectProject ({ commit }, project) {
+    async selectProject({commit}, project) {
       commit('SET_SELECTED_PROJECT', project)
       commit('SET_SELECTED_BOARD', null)
     },
 
-    async selectBoard ({ commit }, boardId) {
+    async selectBoard({commit}, boardId) {
       commit('SET_SELECTED_BOARD', boardId)
     },
 
-    async updateProjectList ({ commit }) {
+    async updateProjectList({commit}) {
       if (!this['$auth'].loggedIn) {
         commit('SET_PROJECT_LIST', [])
       } else {
@@ -71,19 +71,16 @@ export const actions = actionTree(
       }
     },
 
-    async updateStatistics ({
-                              commit,
-                              state
-                            }) {
+    async updateStatistics({commit, state}) {
       if (state.selectedProject != null) {
         try {
-          const res = await this.$axios.$get(`/projects/${ state.selectedProject.id }/statistics`)
+          const res = await this.$axios.$get(`/projects/${state.selectedProject.id}/statistics`)
           const statistics = [
-            { icon: 'mdi-sitemap', label: 'Members', number: res.data.members, to: '/project/team' },
-            { icon: 'mdi-folder', label: 'Fichiers', number: res.data.files, to: '/project/fichier' },
-            { icon: 'mdi-format-align-left', label: 'Items de backlog', number: res.data.backlogs, to: '/project/backlog' },
-            { icon: 'mdi-clock', label: 'Nombre J.H', number: res.data.totalDuration, to: '/project/backlog' },
-            { icon: 'mdi-sync', label: 'Itérations', number: res.data.iterations, to: '/project/iteration' },
+            {icon: 'mdi-sitemap', label: 'Membres', number: res.data.members, to: '/project/team'},
+            {icon: 'mdi-folder', label: 'Fichiers', number: res.data.files, to: '/project/fichier'},
+            {icon: 'mdi-format-align-left', label: 'Items de backlog', number: res.data.backlogs, to: '/project/backlog'},
+            {icon: 'mdi-clock', label: 'Nombre J.H', number: res.data.totalDuration, to: '/project/backlog'},
+            {icon: 'mdi-sync', label: 'Itérations', number: res.data.iterations, to: '/project/iteration'},
           ]
           commit('SET_STATISTICS', statistics)
         } catch (err) {
@@ -92,11 +89,11 @@ export const actions = actionTree(
       }
     },
 
-    async findTeam (ctx) {
+    async findTeam(ctx) {
       if (ctx.state.selectedProject != null) {
-        const res = await this.$axios.$get(`/projects/${ ctx.state.selectedProject.id }/teams`)
+        const res = await this.$axios.$get(`/projects/${ctx.state.selectedProject.id}/teams`)
         ctx.commit('SET_MEMBER_LIST', res.data.members)
       }
     },
-  }
+  },
 )
