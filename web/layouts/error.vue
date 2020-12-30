@@ -1,11 +1,28 @@
 <template>
   <v-container dark>
-    <h1 v-if="error.statusCode === 404">
-      {{ pageNotFound }} </h1>
-    <h1 v-else>
-      {{ otherError }} </h1>
+    <template v-if="error.statusCode === 404">
+      <h1>Page introuvable</h1>
+    </template>
+
+    <template v-else>
+      <h1>Erreur technique</h1>
+
+      <p>{{ error.message }}</p>
+
+      <div class="font-weight-bold">{{ error.data.error }}
+        <template v-if="error.data.detail">[ {{ error.data.detail.class }} ]</template>
+      </div>
+
+      <v-divider class="my-4"></v-divider>
+
+      <template v-if="error.data.detail">
+        <div v-for="(detail, detailIndex) in error.data.detail.trace" :key="detailIndex" :class="{'font-weight-bold': detail.startsWith('fr.lauparr')}">{{ detail }}</div>
+      </template>
+
+    </template>
+
     <NuxtLink to="/">
-      Home page
+      Page d'accueil
     </NuxtLink>
   </v-container>
 </template>
@@ -14,8 +31,8 @@
 import {Component, Prop, Vue} from 'nuxt-property-decorator'
 
 interface NuxtError {
+  data?: any
   message?: string
-  path?: string
   statusCode?: number
 }
 
@@ -23,12 +40,8 @@ interface NuxtError {
 export default class LayoutError extends Vue {
   @Prop() readonly error?: NuxtError
 
-  pageNotFound: string = '404 Not Found'
-  otherError: string = 'An error occurred'
-
   head() {
-    const title =
-      this.error?.statusCode === 404 ? this.pageNotFound : this.otherError
+    const title = this.error?.statusCode === 404 ? 'Page introuvable' : 'Erreur technique'
     return {
       title,
     }
