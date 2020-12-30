@@ -49,7 +49,7 @@ export default class PpColumnBadge extends mixins(tableColumnMixin) {
     if (valid) {
       this.itemSync = {
         text: this.tempItem.text,
-        color: this.tempItem.color.hex,
+        color: this.tempItem.color.hex || this.tempItem.color,
       }
     }
   }
