@@ -9,16 +9,19 @@
 
       <p>{{ error.message }}</p>
 
-      <div class="font-weight-bold">{{ error.data.error }}
-        <template v-if="error.data.detail">[ {{ error.data.detail.class }} ]</template>
-      </div>
+      <template v-if="error.data != null">
+        <div class="font-weight-bold">
+          <span>{{ error.data.error }}</span>
+          <template v-if="error.data.detail">[ {{ error.data.detail.class }} ]</template>
+        </div>
 
-      <v-divider class="my-4"></v-divider>
+        <v-divider class="my-4"></v-divider>
 
-      <template v-if="error.data.detail">
-        <div v-for="(detail, detailIndex) in error.data.detail.trace" :key="detailIndex" :class="{'font-weight-bold': detail.startsWith('fr.lauparr')}">{{ detail }}</div>
+        <template v-if="error.data.detail">
+          <div v-for="(detail, detailIndex) in error.data.detail.trace" :key="detailIndex" :class="{'font-weight-bold': detail.startsWith('fr.lauparr')}">{{ detail }}</div>
+        </template>
+
       </template>
-
     </template>
 
     <NuxtLink to="/">
