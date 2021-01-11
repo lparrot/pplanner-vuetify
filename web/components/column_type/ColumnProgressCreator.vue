@@ -13,10 +13,6 @@ import { Component, mixins } from 'nuxt-property-decorator'
 @Component
 export default class PPColumnProgressCreator extends mixins(tableFieldCreatorMixin) {
 
-  created () {
-    this.$set(this.itemSync, 'props', this.itemSync.props || {})
-  }
-
 }
 </script>
 

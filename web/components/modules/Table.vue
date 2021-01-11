@@ -18,7 +18,7 @@
         <th class="pa-0" style="width: 18px">
           <v-menu offset-y>
             <template #activator="{on, attrs}">
-              <v-btn v-bind="attrs" v-on="on" :ripple="false" icon text tile width="16">
+              <v-btn v-bind="attrs" v-on="on" :ripple="false" icon plain tile width="16">
                 <v-icon color="green" dense small style="width: 16px">mdi-plus-circle</v-icon>
               </v-btn>
             </template>
@@ -44,7 +44,7 @@
       <tbody>
       <tr v-for="(item, itemIndex) in items" :key="itemIndex">
         <td class="pa-0">
-          <v-btn :ripple="false" icon text tile width="16" @click="handleClickItemMenu(item, itemIndex)">
+          <v-btn :ripple="false" icon plain tile width="16" @click="handleClickItemMenu(item, itemIndex)">
             <v-icon dense small style="width: 16px">mdi-chevron-down</v-icon>
           </v-btn>
         </td>
@@ -91,7 +91,7 @@
     </v-bottom-sheet>
 
     <!-- Dialog ajout colonne -->
-    <v-dialog v-model="pr_dialogAddColumn" :width="$vuetify.breakpoint.mdAndDown ? '100vw': '60vw'">
+    <v-dialog v-model="pr_dialogAddColumn" :width="$vuetify.breakpoint.mdAndDown ? '100vw': '60vw'" @click:outside="handleHideDialogAddColumn">
       <validation-observer ref="validatorAddColumn" #default="{invalid}">
         <v-card v-if="pr_newField != null">
           <v-card-title>Ajout d'une nouvelle colonne</v-card-title>
@@ -99,12 +99,12 @@
             <v-row>
               <v-col cols="12" md="6">
                 <validation-provider #default="{invalid, errors}" name="nom" rules="required" slim>
-                  <v-text-field v-model="pr_newField.label" :error="invalid" :error-messages="errors[0]" dense label="Nom" outlined></v-text-field>
+                  <v-text-field v-model="pr_newField.label" :error="invalid" :error-messages="errors[0]" dense filled label="Nom" outlined></v-text-field>
                 </validation-provider>
               </v-col>
               <v-col cols="12" md="6">
                 <validation-provider #default="{invalid, errors}" name="type" rules="required" slim>
-                  <v-select v-model="pr_newField.type" :error="invalid" :error-messages="errors[0]" :items="pr_columnTypes" dense item-text="text" item-value="type" label="Type" outlined></v-select>
+                  <v-select v-model="pr_newField.type" :error="invalid" :error-messages="errors[0]" :items="pr_columnTypes" dense filled item-text="text" item-value="type" label="Type" outlined></v-select>
                 </validation-provider>
               </v-col>
             </v-row>
@@ -112,7 +112,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="red" text @click="pr_dialogAddColumn = false">Annuler</v-btn>
+            <v-btn color="red" text @click="handleHideDialogAddColumn">Annuler</v-btn>
             <v-btn :disabled="invalid" color="green" text @click="handleSubmitNewField">Ajouter</v-btn>
           </v-card-actions>
         </v-card>
@@ -145,7 +145,7 @@ interface FieldType {
 }
 
 @Component({
-  data () {
+  data() {
     return {
       ...this.$props.module.state,
     }
@@ -157,7 +157,7 @@ export default class PPTable extends mixins(stateMixin) {
   public validatorAddColumn!: ValidationContext
 
   public fields: Field[] = [
-    { id: 0, label: '', fixed: true, type: 'pp-column-text', props: { required: true } }
+    {id: 0, label: '', fixed: true, type: 'pp-column-text', props: {required: true}},
   ]
   public items: any[] = []
   public lastFieldId = 0
@@ -170,7 +170,7 @@ export default class PPTable extends mixins(stateMixin) {
   public pr_sheetTableField = false
   public pr_sheetTableItem = false
 
-  created () {
+  created() {
     this.pr_columnTypes = [
       {type: 'pp-column-badge', icon: 'mdi-format-color-text', text: 'Badge', size: '100px', centered: true},
       {type: 'pp-column-checkbox', icon: 'mdi-format-color-text', text: 'Case à cocher', size: '100px', centered: true},
@@ -182,12 +182,12 @@ export default class PPTable extends mixins(stateMixin) {
     ]
   }
 
-  async handleClickAddNewElement () {
+  async handleClickAddNewElement() {
     this.items.push({})
     await this.saveState()
   }
 
-  async handleClickAddNewField (columnType: FieldType) {
+  async handleClickAddNewField(columnType: FieldType) {
     this.pr_newField = {type: columnType.type}
     if (columnType.size != null) {
       this.pr_newField.thStyles = {'width': columnType.size}
@@ -198,29 +198,34 @@ export default class PPTable extends mixins(stateMixin) {
     this.pr_dialogAddColumn = true
   }
 
-  async handleClickDeleteItem () {
+  async handleClickDeleteItem() {
     this.items.splice(this.pr_selectedItem.itemIndex, 1)
     this.pr_sheetTableItem = false
     await this.saveState()
   }
 
-  async handleClickDeleteField () {
+  async handleClickDeleteField() {
     this.fields.splice(this.pr_selectedField.fieldIndex, 1)
     this.pr_sheetTableField = false
     await this.saveState()
   }
 
-  handleClickFieldMenu (field, fieldIndex) {
-    this.pr_selectedField = { field, fieldIndex }
+  handleClickFieldMenu(field, fieldIndex) {
+    this.pr_selectedField = {field, fieldIndex}
     this.pr_sheetTableField = true
   }
 
-  handleClickItemMenu (item, itemIndex) {
-    this.pr_selectedItem = { item, itemIndex }
+  handleClickItemMenu(item, itemIndex) {
+    this.pr_selectedItem = {item, itemIndex}
     this.pr_sheetTableItem = true
   }
 
-  async handleSubmitNewField () {
+  handleHideDialogAddColumn() {
+    this.pr_dialogAddColumn = false
+    this.pr_newField = null
+  }
+
+  async handleSubmitNewField() {
     const valid = await this.validatorAddColumn.validate()
 
     if (valid) {
@@ -228,17 +233,16 @@ export default class PPTable extends mixins(stateMixin) {
       this.fields.push(this.pr_newField)
       await this.saveState()
 
-      this.pr_dialogAddColumn = false
-      this.pr_newField = null
+      this.handleHideDialogAddColumn()
     }
   }
 
-  async handleUpdateField (field, value) {
+  async handleUpdateField(field, value) {
     this.$set(field, 'label', value)
     await this.saveState()
   }
 
-  async handleUpdateItem (item, field, value) {
+  async handleUpdateItem(item, field, value) {
     this.$set(item, field, value)
     await this.saveState()
   }

@@ -12,4 +12,14 @@ export default async () => {
   Object.keys(rules).forEach(rule => {
     extend(rule, rules[rule])
   })
+
+  extend('empty', {
+    validate(value) {
+      console.log('hasElement', value)
+      return value.length > 0
+    },
+    message: (fieldName, placeholders) => {
+      return 'La collection ne peut pas être vide'
+    },
+  })
 }
